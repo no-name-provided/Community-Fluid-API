@@ -8,10 +8,10 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Neo's config APIs
+// Creates and parses the server config, which is copied from the server to all clients during multiplayer.
+// This overwrites any server configuration file they may have.
 @EventBusSubscriber(modid = FunFluids.MODID)
-public class CommonConfig {
+public class ServerConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     private static final ModConfigSpec.BooleanValue CF_VISIBILITY = BUILDER.comment("Should the configurable fluid be invisible?").define("cFVisibility", false);
@@ -19,7 +19,7 @@ public class CommonConfig {
     private static final ModConfigSpec.BooleanValue CF_HYDRATE = BUILDER.comment("Should the configurable fluid hydrate things?").define("cFHydration", true);
     private static final ModConfigSpec.BooleanValue CF_INFINITE = BUILDER.comment("Should the configurable fluid be infinite?").define("cFInfinite", true);
     private static final ModConfigSpec.BooleanValue CF_EXTINGUISHES = BUILDER.comment("Should the configurable fluid put out fires?").define("cExtinguish", true);
-    private static final ModConfigSpec.BooleanValue CF_EVAPORATE_IN_NETHER = BUILDER.comment("Should the configurable evaporate in the nether?").define("cFEvaporateInNether", false);
+    private static final ModConfigSpec.BooleanValue CF_EVAPORATE_IN_NETHER = BUILDER.comment("Should the configurable fluid evaporate in the nether?").define("cFEvaporateInNether", false);
     private static final ModConfigSpec.BooleanValue CF_RIDE_UNDER = BUILDER.comment("Should players be able to ride under the configurable fluid?").define("cFRideUnder", true);
     private static final ModConfigSpec.BooleanValue CF_DROWN = BUILDER.comment("Can the configurable fluid drown players?").define("cFDrown", true);
     private static final ModConfigSpec.BooleanValue CF_SWIM = BUILDER.comment("Can you swim in the configurable fluid?").define("cFSwim", true);
@@ -58,7 +58,7 @@ public class CommonConfig {
     static void onConfigUpdate(final ModConfigEvent event) {
         // A common crash on server stop is caused by trying to check values that have already been unloaded.
         // #BlameTheNeoForgeTeam
-        if (!(event instanceof ModConfigEvent.Unloading) && event.getConfig().getType() == ModConfig.Type.COMMON) {
+        if (!(event instanceof ModConfigEvent.Unloading) && event.getConfig().getType() == ModConfig.Type.SERVER) {
             cFVisibility = CF_VISIBILITY.get();
             cFBoating = CF_BOATING.get();
             cFHydrate = CF_HYDRATE.get();

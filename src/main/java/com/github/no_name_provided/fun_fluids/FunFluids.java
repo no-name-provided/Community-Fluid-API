@@ -2,7 +2,8 @@ package com.github.no_name_provided.fun_fluids;
 
 import com.github.no_name_provided.fun_fluids.client.ClientConfig;
 import com.github.no_name_provided.fun_fluids.client.registries.ParticleRegistry;
-import com.github.no_name_provided.fun_fluids.common.CommonConfig;
+import com.github.no_name_provided.fun_fluids.client.screens.SensibleConfigurationScreen;
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
@@ -15,6 +16,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -66,9 +69,26 @@ public class FunFluids {
         ParticleRegistry.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
-        // Register config file(s). It's recommended to use common, as the other types don't synchronize in multiplayer.
-        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        // Register config file(s). Use SERVER for values that should be the same for all players,
+        // as the other types don't synchronize in multiplayer.
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        // You should probably never use CLIENT, as it's strictly inferior to COMMON, and it's bad form
+        // to force players to juggle extra config files. However, we do in this case because we don't need
+        // the extra functionality of COMMON for any variable in CLIENT (we don't need to make these variables
+        // available on dedicated servers). For all but the most configurable mods, it's better to put everything
+        // in COMMON than to have both a COMMON and a CLIENT config for players to sort through.
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+
+        // Register a sensible in-game config editing screen.
+        // This isn't specific to fluids. It's just a good practice in general.
+        modContainer.registerExtensionPoint(
+                IConfigScreenFactory.class,
+                (container, parent) -> new ConfigurationScreen(
+                        container,
+                        parent,
+                        SensibleConfigurationScreen::new
+                )
+        );
     }
 
 }

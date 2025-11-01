@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
-import com.github.no_name_provided.fun_fluids.common.CommonConfig;
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -57,7 +57,7 @@ public class BlockRegistry {
                             .replaceable()
                             .noCollission()
                             .strength(100.0f)
-                            .lightLevel(state -> CommonConfig.cFLight)
+                            .lightLevel(state -> ServerConfig.cFLight)
                             .pushReaction(PushReaction.DESTROY)
                             .noLootTable()
                             .liquid()

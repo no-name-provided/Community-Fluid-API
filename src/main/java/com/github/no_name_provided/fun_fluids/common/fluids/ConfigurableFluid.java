@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.common.fluids;
 
-import com.github.no_name_provided.fun_fluids.common.CommonConfig;
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
@@ -48,12 +48,12 @@ public abstract class ConfigurableFluid extends FlowingFluid {
 
     @Override
     protected boolean canConvertToSource(Level level) {
-        return CommonConfig.cFInfinite;
+        return ServerConfig.cFInfinite;
     }
 
     @Override
     protected int getSlopeFindDistance(LevelReader level) {
-        return CommonConfig.cFSLopeFindDistance;
+        return ServerConfig.cFSLopeFindDistance;
     }
 
     @Override
@@ -73,7 +73,7 @@ public abstract class ConfigurableFluid extends FlowingFluid {
 
     @Override
     public int getTickDelay(LevelReader level) {
-        return CommonConfig.cFResponsiveness;
+        return ServerConfig.cFResponsiveness;
     }
 
     @Override

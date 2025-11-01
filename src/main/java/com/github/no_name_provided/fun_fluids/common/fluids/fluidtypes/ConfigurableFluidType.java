@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
-import com.github.no_name_provided.fun_fluids.common.CommonConfig;
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -40,7 +40,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public int getLightLevel() {
-        return CommonConfig.cFLight;
+        return ServerConfig.cFLight;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public double motionScale(Entity entity) {
-        return CommonConfig.cFPushStrength;
+        return ServerConfig.cFPushStrength;
     }
 
     /**
@@ -63,7 +63,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canSwim(Entity entity) {
-        return CommonConfig.cFSwim;
+        return ServerConfig.cFSwim;
     }
 
     /**
@@ -78,7 +78,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public float getFallDistanceModifier(Entity entity) {
-        return CommonConfig.cFDamageMultiplier;
+        return ServerConfig.cFDamageMultiplier;
     }
 
     /**
@@ -89,7 +89,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canDrownIn(LivingEntity entity) {
-        return CommonConfig.cFDrown;
+        return ServerConfig.cFDrown;
     }
 
     /**
@@ -99,7 +99,7 @@ public class ConfigurableFluidType extends FluidType {
      * @return {@code true} if the boat can be used, {@code false} otherwise
      */
     @Override public boolean supportsBoating(Boat boat) {
-        return CommonConfig.cFBoating;
+        return ServerConfig.cFBoating;
     }
 
     /**
@@ -112,7 +112,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canRideVehicleUnder(Entity vehicle, Entity rider) {
-        return CommonConfig.cFRideUnder;
+        return ServerConfig.cFRideUnder;
     }
 
     /**
@@ -125,7 +125,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canExtinguish(FluidState state, BlockGetter getter, BlockPos pos) {
-        return CommonConfig.cExtinguish;
+        return ServerConfig.cExtinguish;
     }
 
     /**
@@ -136,7 +136,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canConvertToSource(FluidStack stack) {
-        return CommonConfig.cFInfinite;
+        return ServerConfig.cFInfinite;
     }
 
     /**
@@ -149,7 +149,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public boolean canHydrate(FluidStack stack) {
-        return CommonConfig.cFHydrate;
+        return ServerConfig.cFHydrate;
     }
 
     /**
@@ -162,7 +162,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @Override
     public Rarity getRarity(FluidStack stack) {
-        return CommonConfig.cFRarity;
+        return ServerConfig.cFRarity;
     }
 
     /**
@@ -179,7 +179,7 @@ public class ConfigurableFluidType extends FluidType {
      */
     @SuppressWarnings("deprecation") @Override public boolean
     isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
-        return CommonConfig.cFEvaporateInNether && level.dimension() == Level.NETHER;
+        return ServerConfig.cFEvaporateInNether && level.dimension() == Level.NETHER;
     }
 
 }

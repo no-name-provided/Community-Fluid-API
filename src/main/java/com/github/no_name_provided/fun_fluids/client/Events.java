@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.client;
 
-import com.github.no_name_provided.fun_fluids.common.CommonConfig;
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -171,7 +171,7 @@ public class Events {
                         // You can use the FastColor class to easily convert
                         // between decimal components and aggregate ARGB values.
                         // Alternatively, here's an online converter: https://argb-int-calculator.netlify.app/.
-                        return CommonConfig.cFColor;
+                        return ServerConfig.cFColor;
                     }
 
                     /**Custom logic run before the fluid renderer. Executed once for each block.
@@ -180,7 +180,7 @@ public class Events {
                     @Override @ParametersAreNonnullByDefault
                     public boolean renderFluid(FluidState fluidState, BlockAndTintGetter getter, BlockPos pos, VertexConsumer vertexConsumer, BlockState blockState) {
                         // Skip the vanilla fluid renderer?
-                        return CommonConfig.cFVisibility;
+                        return ServerConfig.cFVisibility;
                     }
                 },
                 FluidRegistries.FunFluidTypes.C_FLUID
@@ -192,7 +192,7 @@ public class Events {
         // The level and position may be null.
         event.register((stack, tintIndex) -> {
                     if (tintIndex == 1) {
-                        return CommonConfig.cFColor;
+                        return ServerConfig.cFColor;
                     } else {
                         return event.getItemColors().getColor(new ItemStack(Items.BUCKET), 0);
                     }
