@@ -27,6 +27,7 @@ what you want, and follow along while writing your own mod.
     <li><label><input type="checkbox">Finish fluid & type classes by adding references to registry objects</label></li>
     <li><label><input type="checkbox">Register client extensions</label></li>
     <li><label><input type="checkbox">Register tint and color handlers</label></li>
+    <li><label><input type="checkbox">Set the fluid render layers in FMLClientSetupEvent (not LiquidBlock, just Fluid)</label></li>
     <li><label><input type="checkbox">Datagen</label>
         <ul style="list-style: none;">
             <li><label><input type="checkbox">(Language) localization</label></li>
