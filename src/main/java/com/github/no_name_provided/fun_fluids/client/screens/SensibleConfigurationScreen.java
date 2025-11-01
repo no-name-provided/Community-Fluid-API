@@ -1,23 +1,14 @@
 package com.github.no_name_provided.fun_fluids.client.screens;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.Mth;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * This class exists for one purpose: stop NeoForge from replacing our [native language]
