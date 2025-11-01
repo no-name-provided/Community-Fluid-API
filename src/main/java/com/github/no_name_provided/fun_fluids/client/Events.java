@@ -41,7 +41,7 @@ public class Events {
      * */
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // ItemBlockRenderTypes.setRenderLayer is deprecated for regular blocks, and specified in their model files instead.
+        // ItemBlockRenderTypes.setRenderLayer is deprecated for regular blocks, and specified in their json files instead.
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.THICK_AIR_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_CONFIGURABLE_FLUID.get(), RenderType.translucent());
@@ -54,12 +54,12 @@ public class Events {
     @SubscribeEvent
     static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
 
-//        final ResourceLocation UNDER_COOL_LAVA_LOCATION = ResourceLocation.parse("textures/misc/underwater.png");
-        final ResourceLocation COOL_LAVA_STILL = ResourceLocation.withDefaultNamespace("block/lava_still");
-        final ResourceLocation COOL_LAVA_FLOW = ResourceLocation.withDefaultNamespace("block/lava_flow");
-
         event.registerFluidType(
                 new IClientFluidTypeExtensions() {
+
+                    final ResourceLocation COOL_LAVA_STILL = ResourceLocation.withDefaultNamespace("block/lava_still");
+                    final ResourceLocation COOL_LAVA_FLOW = ResourceLocation.withDefaultNamespace("block/lava_flow");
+
                     // Make sure you either use the parameterless methods (a fallback) or the ones
                     // with all parameters. The versions that just take a fluid state are ignored, and,
                     // if those are all you define, you'll get a null pointer error during fluid tesselation.
@@ -188,8 +188,7 @@ public class Events {
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        // Parameters are the item's state, the level the item is in, the block's position, and the tint index.
-        // The level and position may be null.
+        // Parameters are the ItemStack and the tint index.
         event.register((stack, tintIndex) -> {
                     if (tintIndex == 1) {
                         return ServerConfig.cFColor;
