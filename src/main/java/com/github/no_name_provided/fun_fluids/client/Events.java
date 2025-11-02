@@ -174,9 +174,16 @@ public class Events {
                         return ServerConfig.cFColor;
                     }
 
-                    /**Custom logic run before the fluid renderer. Executed once for each block.
-                     * Right now, this override is a placeholder created to help me remember the NeoForge team's
-                     * unfortunate naming conventions.*/
+                    /**
+                     * Custom logic run before the fluid renderer. Executed once for each block.
+                     *
+                     * @param fluidState     the state of the fluid
+                     * @param getter         the getter the fluid can be obtained from
+                     * @param pos            the position of the fluid
+                     * @param vertexConsumer the vertex consumer to emit quads to
+                     * @param blockState     the blockstate at the position of the fluid
+                     * @return               whether vanilla rendering should be skipped
+                     */
                     @Override @ParametersAreNonnullByDefault
                     public boolean renderFluid(FluidState fluidState, BlockAndTintGetter getter, BlockPos pos, VertexConsumer vertexConsumer, BlockState blockState) {
                         // Skip the vanilla fluid renderer?

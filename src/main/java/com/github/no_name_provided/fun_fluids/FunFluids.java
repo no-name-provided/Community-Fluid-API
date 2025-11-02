@@ -16,8 +16,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -49,7 +48,7 @@ public class FunFluids {
     );
 
     // We use this tab for our buckets. This is the most idiomatic way to make them show up in recipe viewers.
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "CodeBlock2Expr"})
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FLUID_TAB = CREATIVE_MODE_TABS.register(
             MODID, () -> CreativeModeTab.builder().title(Component.translatable("item_group." + MODID))
                     .withTabsBefore(CreativeModeTabs.FOOD_AND_DRINKS)
@@ -81,14 +80,10 @@ public class FunFluids {
 
         // Register a sensible in-game config editing screen.
         // This isn't specific to fluids. It's just a good practice in general.
-        modContainer.registerExtensionPoint(
-                IConfigScreenFactory.class,
-                (container, parent) -> new ConfigurationScreen(
-                        container,
-                        parent,
-                        SensibleConfigurationScreen::new
-                )
-        );
+        if (!FMLEnvironment.dist.isDedicatedServer()) {
+            // We need to wrap this in a sidedness check, since it uses a class not available to dedicated servers.
+            SensibleConfigurationScreen.register(modContainer);
+        }
     }
 
 }

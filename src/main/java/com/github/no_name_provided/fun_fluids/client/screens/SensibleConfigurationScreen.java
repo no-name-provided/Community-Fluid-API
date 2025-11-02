@@ -5,8 +5,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -45,6 +47,17 @@ public class SensibleConfigurationScreen extends ConfigurationScreen.Configurati
         } else {
             return Component.literal(key);
         }
+    }
+
+    public static void register(ModContainer modContainer) {
+        modContainer.registerExtensionPoint(
+                IConfigScreenFactory.class,
+                (container, parent) -> new ConfigurationScreen(
+                        container,
+                        parent,
+                        SensibleConfigurationScreen::new
+                )
+        );
     }
 
 }
