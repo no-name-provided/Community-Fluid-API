@@ -177,8 +177,8 @@ public class ConfigurableFluidType extends FluidType {
      * @return {@code true} if this fluid should be vaporized on placement, {@code false} otherwise
      * @see BucketItem#emptyContents(Player, Level, BlockPos, BlockHitResult)
      */
-    @SuppressWarnings("deprecation") @Override public boolean
-    isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
+    @SuppressWarnings("deprecation") @Override
+    public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
         return ServerConfig.cFEvaporateInNether && level.dimension() == Level.NETHER;
     }
 

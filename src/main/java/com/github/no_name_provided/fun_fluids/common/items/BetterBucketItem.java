@@ -31,6 +31,9 @@ import static net.minecraft.world.item.Items.BUCKET;
  * (#Blame the NeoForged team), BucketItems don't check for fluid capabilities and cauldrons use an inflexible
  * interaction scheme that <i>also</i> doesn't check for capabilities.
  * <p>
+ *     As an alternative, consider enqueuing a call to CauldronInteraction#addDefaultInteractions in common setup.
+ * </p>
+ * <p>
  * Also sets basic parameters, like stack size and the crafting remainder.
  * */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault

@@ -29,7 +29,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * what you want, and follow along while writing your own mod. A list of fluids (and what they demonstrate) can
  * be found in the readme.
  * <p>
- * Disclaimer: This mod is the product of my personal experience, made in isolation.
+ * Disclaimer: This mod is the product of my personal experience, made in near isolation.
  * It may have errors or inconsistencies. Feel free to make suggestions. Just remember - word of god doesn't mean
  * anything when it comes to (Neo)Forge. Don't tell me I'm wrong until you've checked for yourself.
  * </p>

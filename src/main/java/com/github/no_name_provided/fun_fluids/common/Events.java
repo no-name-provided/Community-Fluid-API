@@ -8,6 +8,7 @@ import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegis
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -32,16 +33,18 @@ public class Events {
     }
 
     /**
-     * Runs immediately before the server starts (presumably during the world loading screen).
+     * Runs during common setup.
      * <p>
      * This is where we register all fluid interactions that don't involve falling. Arbitrary, I know.
+     * Suggested by ChiefArug.
      * </p>
      *
      */
     @SubscribeEvent
-    static void onServerAboutToStart(ServerAboutToStartEvent event) {
+    static void onCommonSetup(FMLCommonSetupEvent event) {
         // They seem to work if we "register" them here, so we might as well. For whatever reason, the (Neo)Forge team
         // decided to use a bespoke "registry" (not deferred) with a basic synchronized static addition method.
+        // Something about registries not handling "arbitrary obj -> thing" mappings.
         // This may cause lag if a bunch of mods try to add fluid interactions at the same time.
         FluidInteractionRegistry.addInteraction(
                 FluidRegistries.FunFluidTypes.COOL_LAVA.get(),
