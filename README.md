@@ -1,3 +1,5 @@
+Now with [wiki][wiki]!
+
 <b>Fun</b><sub>ctional</sub> <b>Fluids</b> is an example/tutorial mod that demonstrates fluid registration and the
 implementation of associated
 functionality (cauldrons, buckets, etc.). It was created as a response to the state of fluid
@@ -43,3 +45,5 @@ what you want, and follow along while writing your own mod.
   It may have errors or inconsistencies. Feel free to make suggestions. Just remember - word of god doesn't mean
   anything when it comes to (Neo)Forge. Don't tell me I'm wrong until you've checked for yourself.
   </p>
+
+[wiki]: https://github.com/no-name-provided/Functional_Fluids/wiki/Start-Here
