@@ -46,4 +46,4 @@ what you want, and follow along while writing your own mod.
   anything when it comes to (Neo)Forge. Don't tell me I'm wrong until you've checked for yourself.
   </p>
 
-[wiki]: https://github.com/no-name-provided/Functional_Fluids/wiki/Start-Here
+[wiki]: https://github.com/no-name-provided/Functional_Fluids/wiki
