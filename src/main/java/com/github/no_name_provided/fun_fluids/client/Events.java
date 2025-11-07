@@ -166,7 +166,7 @@ public class Events {
                         // Many other vanilla colors can be found in BiomeColors.
 
                         // Alpha value will be ignored unless you change the render layer to transparent in the
-                        // completely unrelated client setup event.
+                        // unrelated client setup event.
 
                         // You can use the FastColor class to easily convert
                         // between decimal components and aggregate ARGB values.
@@ -195,7 +195,8 @@ public class Events {
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        // Parameters are the ItemStack and the tint index.
+        // An ItemColor is a functional interface that accepts an ItemStack and a tint index int
+        // and returns a color as an ARGB int.
         event.register((stack, tintIndex) -> {
                     if (tintIndex == 1) {
                         return ServerConfig.cFColor;
