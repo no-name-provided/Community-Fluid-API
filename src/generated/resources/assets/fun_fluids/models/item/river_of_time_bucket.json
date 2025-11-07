@@ -1,0 +1,8 @@
+{
+  "parent": "neoforge:item/bucket",
+  "apply_fluid_luminosity": true,
+  "cover_is_mask": false,
+  "flip_gas": false,
+  "fluid": "fun_fluids:river_of_time",
+  "loader": "neoforge:fluid_container"
+}

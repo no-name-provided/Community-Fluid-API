@@ -33,5 +33,9 @@ public class FFBlockStateProvider extends BlockStateProvider {
                 CONFIGURABLE_FLUID_BLOCK.get(),
                 models().getExistingFile(mcLoc("water"))
         );
+        simpleBlock(
+                RIVER_OF_TIME_BLOCK.get(),
+                models().getExistingFile(mcLoc("water"))
+        );
     }
 }

@@ -45,5 +45,13 @@ public class FFRecipeProvider extends RecipeProvider {
                 .requires(Items.CAMPFIRE)
                 .unlockedBy("has_ice", has(Items.ICE))
                 .save(recipeOutput);
+        ShapelessRecipeBuilder.shapeless(
+                        RecipeCategory.MISC,
+                        new ItemStack(ItemRegistry.RIVER_OF_TIME_BUCKET)
+                ).requires(Items.ENDER_PEARL)
+                .requires(Items.BUCKET)
+                .requires(Items.CAMPFIRE)
+                .unlockedBy("has_pearl", has(Items.ENDER_PEARL))
+                .save(recipeOutput);
     }
 }

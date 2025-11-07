@@ -24,6 +24,13 @@ public class ItemRegistry {
             "configurable_fluid_bucket",
             () -> new BetterBucketItem(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(), new Item.Properties())
     );
+    public static final DeferredHolder<Item, BucketItem> RIVER_OF_TIME_BUCKET = ITEMS.register(
+            "river_of_time_bucket",
+            // We use a regular BucketItem here because BaseFlowingFluid is incompatible with a basic BetterBucketItem.
+            // Not sure why - think there's something wierd about how it defines its bucket that forces a capability
+            // check. BucketItems have capabilities by default
+            () -> new BucketItem(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), new Item.Properties())
+    );
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);

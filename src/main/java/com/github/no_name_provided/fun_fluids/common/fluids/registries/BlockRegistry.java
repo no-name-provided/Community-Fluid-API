@@ -64,6 +64,22 @@ public class BlockRegistry {
                             .sound(SoundType.EMPTY)
             )
     );
+    public static final DeferredHolder<Block, LiquidBlock> RIVER_OF_TIME_BLOCK = FLUID_BLOCKS.register(
+            "river_of_time_block",
+            () -> new LiquidBlock(
+                    FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(),
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_CYAN)
+                            .replaceable()
+                            .noCollission()
+                            .strength(100.0f)
+                            .lightLevel(state -> 2)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noLootTable()
+                            .liquid()
+                            .sound(SoundType.EMPTY)
+            )
+    );
 
     public static final DeferredRegister.Blocks SOLID_BLOCKS = DeferredRegister.createBlocks(MODID);
 

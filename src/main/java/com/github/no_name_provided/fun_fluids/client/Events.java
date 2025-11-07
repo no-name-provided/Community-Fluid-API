@@ -45,6 +45,8 @@ public class Events {
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.THICK_AIR_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_CONFIGURABLE_FLUID.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_RIVER_OF_TIME_FLUID.get(), RenderType.translucent());
     }
 
     /**
@@ -192,6 +194,47 @@ public class Events {
                 },
                 FluidRegistries.FunFluidTypes.C_FLUID
         );
+        event.registerFluidType(
+                new IClientFluidTypeExtensions() {
+
+                    final ResourceLocation RIVER_OF_TIME_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
+                    final ResourceLocation RIVER_OF_TIME_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
+                    final ResourceLocation RIVER_OF_TIME_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+                    final ResourceLocation RIVER_OF_TIME_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png");
+
+                    @Override
+                    public ResourceLocation getStillTexture() {
+                        return RIVER_OF_TIME_STILL;
+                    }
+
+                    @Override
+                    public ResourceLocation getFlowingTexture() {
+                        return RIVER_OF_TIME_FLOW;
+                    }
+
+                    @Override
+                    public ResourceLocation getOverlayTexture() {
+                        return RIVER_OF_TIME_OVERLAY;
+                    }
+
+                    @Override
+                    public ResourceLocation getRenderOverlayTexture(Minecraft minecraft) {
+                        return RIVER_OF_TIME_LOCATION;
+                    }
+
+                    /**
+                     * Only used as a fallback? Might only apply if biome doesn't have a water color set.
+                     *  */
+                    @Override
+                    public int getTintColor() {
+                        // You can use the FastColor class to easily convert
+                        // between decimal components and aggregate ARGB values.
+                        // Alternatively, here's an online converter: https://argb-int-calculator.netlify.app/.
+                        return -937847206;
+                    }
+                },
+                FluidRegistries.FunFluidTypes.RIVER_OF_TIME
+        );
     }
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
@@ -205,6 +248,15 @@ public class Events {
                     }
                 },
                 ItemRegistry.CONFIGURABLE_FLUID_BUCKET.get()
+        );
+        event.register((stack, tintIndex) -> {
+                    if (tintIndex == 1) {
+                        return -937847206;
+                    } else {
+                        return event.getItemColors().getColor(new ItemStack(Items.BUCKET), 0);
+                    }
+                },
+                ItemRegistry.RIVER_OF_TIME_BUCKET.get()
         );
     }
 }

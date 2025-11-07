@@ -33,6 +33,12 @@ public class FFItemModelProvider extends ItemModelProvider {
                 // or the fluid will be untinted. #BlameThe(Neo)ForgeTeam
                 .applyTint(false);
                 // If you need a reference to the model file, you can add #end to the end of this call chain.
-
+        getBuilder(ItemRegistry.RIVER_OF_TIME_BUCKET.getRegisteredName())
+                .parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("neoforge", "item/bucket")))
+                .customLoader(DynamicFluidContainerModelBuilder::begin)
+                .applyFluidLuminosity(true)
+                .coverIsMask(false)
+                .flipGas(false)
+                .fluid(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get());
     }
 }

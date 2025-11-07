@@ -2,12 +2,15 @@ package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
 import com.github.no_name_provided.fun_fluids.common.fluids.ConfigurableFluid;
 import com.github.no_name_provided.fun_fluids.common.fluids.CoolLavaFluid;
+import com.github.no_name_provided.fun_fluids.common.fluids.RiverOfTimeFluid;
 import com.github.no_name_provided.fun_fluids.common.fluids.ThickAirFluid;
 import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.ConfigurableFluidType;
 import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.CoolLavaFluidType;
+import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.RiverOfTimeFluidType;
 import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.ThickAirFluidType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -42,6 +45,14 @@ public class FluidRegistries {
                 "configurable_fluid",
                 ConfigurableFluid.Source::new
         );
+        public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FLOWING_RIVER_OF_TIME_FLUID = FLUIDS.register(
+                "flowing_river_of_time",
+                () -> new RiverOfTimeFluid.Flowing(RiverOfTimeFluid.PROPERTIES)
+        );
+        public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> RIVER_OF_TIME_FLUID = FLUIDS.register(
+                "river_of_time",
+                () -> new RiverOfTimeFluid.Source(RiverOfTimeFluid.PROPERTIES)
+        );
     }
 
     public static class FunFluidTypes {
@@ -58,6 +69,10 @@ public class FluidRegistries {
         public static final DeferredHolder<FluidType, ConfigurableFluidType> C_FLUID = FLUID_TYPES.register(
                 "c_fluid",
                 ConfigurableFluidType::new
+        );
+        public static final DeferredHolder<FluidType, RiverOfTimeFluidType> RIVER_OF_TIME = FLUID_TYPES.register(
+                "river_of_time",
+                RiverOfTimeFluidType::new
         );
     }
 
