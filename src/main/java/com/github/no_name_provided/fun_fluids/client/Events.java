@@ -292,7 +292,7 @@ public class Events {
                         int red = Math.max(FastColor.ARGB32.red(vanillaWaterColor) - offset, 0);
                         int green = Math.max(FastColor.ARGB32.green(vanillaWaterColor) - offset, 0);
                         int blue = Math.max(FastColor.ARGB32.blue(vanillaWaterColor) - offset, 0);
-                        // Haven't checked, but it's likely or-ing with the two highest bits at max inverts the alpha
+                        // Haven't checked, but it's likely that or-ing with the two highest "bits" at max inverts the alpha
                         return  FastColor.ARGB32.color(alpha, red, green, blue) | 0xFF000000;
                     }
                 },
