@@ -1,13 +1,7 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
-import com.github.no_name_provided.fun_fluids.common.fluids.ConfigurableFluid;
-import com.github.no_name_provided.fun_fluids.common.fluids.CoolLavaFluid;
-import com.github.no_name_provided.fun_fluids.common.fluids.RiverOfTimeFluid;
-import com.github.no_name_provided.fun_fluids.common.fluids.ThickAirFluid;
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.ConfigurableFluidType;
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.CoolLavaFluidType;
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.RiverOfTimeFluidType;
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.ThickAirFluidType;
+import com.github.no_name_provided.fun_fluids.common.fluids.*;
+import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
@@ -53,6 +47,14 @@ public class FluidRegistries {
                 "river_of_time",
                 () -> new RiverOfTimeFluid.Source(RiverOfTimeFluid.PROPERTIES)
         );
+        public static final DeferredHolder<Fluid, BaseFlowingFluid> FLOWING_FLOOD_FLUID = FLUIDS.register(
+                "flowing_flood",
+                () -> FloodFluid.FLOWING
+        );
+        public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> FLOOD_FLUID = FLUIDS.register(
+                "flood",
+                () -> FloodFluid.SOURCE
+        );
     }
 
     public static class FunFluidTypes {
@@ -73,6 +75,10 @@ public class FluidRegistries {
         public static final DeferredHolder<FluidType, RiverOfTimeFluidType> RIVER_OF_TIME = FLUID_TYPES.register(
                 "river_of_time",
                 RiverOfTimeFluidType::new
+        );
+        public static final DeferredHolder<FluidType, FloodFluidType> FLOOD = FLUID_TYPES.register(
+                "flood",
+                FloodFluidType::new
         );
     }
 

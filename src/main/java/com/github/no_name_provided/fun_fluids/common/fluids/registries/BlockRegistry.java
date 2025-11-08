@@ -80,6 +80,22 @@ public class BlockRegistry {
                             .sound(SoundType.EMPTY)
             )
     );
+    public static final DeferredHolder<Block, LiquidBlock> FLOOD_BLOCK = FLUID_BLOCKS.register(
+            "flood_block",
+            () -> new LiquidBlock(
+                    FluidRegistries.FunFluids.FLOOD_FLUID.get(),
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.WATER)
+                            .replaceable()
+                            .noCollission()
+                            .strength(100.0f)
+                            .lightLevel(state -> 0)
+                            .pushReaction(PushReaction.DESTROY)
+                            .noLootTable()
+                            .liquid()
+                            .sound(SoundType.EMPTY)
+            )
+    );
 
     public static final DeferredRegister.Blocks SOLID_BLOCKS = DeferredRegister.createBlocks(MODID);
 

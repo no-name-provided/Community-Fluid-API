@@ -53,5 +53,7 @@ public class FFRecipeProvider extends RecipeProvider {
                 .requires(Items.CAMPFIRE)
                 .unlockedBy("has_pearl", has(Items.ENDER_PEARL))
                 .save(recipeOutput);
+
+        // No default recipe for buckets of Flood because they're too dangerous
     }
 }

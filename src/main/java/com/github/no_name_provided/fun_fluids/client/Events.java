@@ -6,6 +6,7 @@ import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegis
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -234,6 +235,53 @@ public class Events {
                     }
                 },
                 FluidRegistries.FunFluidTypes.RIVER_OF_TIME
+        );
+        event.registerFluidType(
+                new IClientFluidTypeExtensions() {
+
+                    final ResourceLocation FLOOD_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
+                    final ResourceLocation FLOOD_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
+                    final ResourceLocation FLOOD_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+                    final ResourceLocation FLOOD_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png");
+
+                    @Override
+                    public ResourceLocation getStillTexture() {
+                        return FLOOD_STILL;
+                    }
+
+                    @Override
+                    public ResourceLocation getFlowingTexture() {
+                        return FLOOD_FLOW;
+                    }
+
+                    @Override
+                    public ResourceLocation getOverlayTexture() {
+                        return FLOOD_OVERLAY;
+                    }
+
+                    @Override
+                    public ResourceLocation getRenderOverlayTexture(Minecraft minecraft) {
+                        return FLOOD_LOCATION;
+                    }
+
+                    /**
+                     * Fallback. <i>Probably</i> unused.
+                     **/
+                    @Override
+                    public int getTintColor() {
+                        // Taken from net.neoforged.neoforge.client.ClientNeoForgedMod water_type
+                        return 0xFF3F76E4;
+                    }
+
+                    /**
+                     * Example of more advanced, position dependant coloration.
+                     **/
+                    @Override @ParametersAreNonnullByDefault
+                    public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
+                        return BiomeColors.getAverageWaterColor(getter, pos);
+                    }
+                },
+                FluidRegistries.FunFluidTypes.FLOOD
         );
     }
     @SubscribeEvent

@@ -31,6 +31,10 @@ public class ItemRegistry {
             // check. BucketItems have capabilities by default
             () -> new BucketItem(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), new Item.Properties())
     );
+    public static final DeferredHolder<Item, BucketItem> FLOOD_BUCKET = ITEMS.register(
+            "flood_bucket",
+            () -> new BucketItem(FluidRegistries.FunFluids.FLOOD_FLUID.get(), new Item.Properties())
+    );
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
