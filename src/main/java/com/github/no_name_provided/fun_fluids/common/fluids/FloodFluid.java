@@ -1,9 +1,15 @@
 package com.github.no_name_provided.fun_fluids.common.fluids;
 
+import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -35,18 +41,33 @@ public abstract class FloodFluid {
      * Flood to always produce source blocks. This necessitates a source block with an instance
      * initializer and an override.
      * <p>
-     *     Incidentally, this is how you use overrides with BaseFlowingFluid. Note that this would be
-     *     difficult with KaupenJoe's design pattern (demonstrated in RiverOfTimeFluid).
+     * Incidentally, this is how you use overrides with BaseFlowingFluid. Note that this would be
+     * difficult with KaupenJoe's design pattern (demonstrated in RiverOfTimeFluid).
      * </p>
      **/
     public static BaseFlowingFluid FLOWING = new BaseFlowingFluid.Source(PROPERTIES) {
-        {registerDefaultState(getStateDefinition().any().setValue(LEVEL, 8));}
-            @Override
-            public void createFluidStateDefinition(StateDefinition.Builder< Fluid, FluidState > builder) {
+        {
+            registerDefaultState(getStateDefinition().any().setValue(LEVEL, 8));
+        }
+
+        @Override
+        public void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
     };
-    public static BaseFlowingFluid.Source SOURCE = new BaseFlowingFluid.Source(PROPERTIES);
+    public static BaseFlowingFluid.Source SOURCE = new BaseFlowingFluid.Source(PROPERTIES) {
+        /**
+         * Be polite and remove dangerous fluid after it's done spreading.
+         * */
+        @Override
+        protected void spread(Level level, BlockPos pos, FluidState state) {
+            boolean degrade = !ServerConfig.floodDecays || !this.canSpreadTo(level, pos, level.getBlockState(pos), Direction.DOWN, pos.below(), level.getBlockState(pos.below()), level.getFluidState(pos.below()), this.getNewLiquid(level, pos.below(), level.getBlockState(pos.below())).getType());
+            super.spread(level, pos, state);
+            if (degrade) {
+                level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
+            }
+        }
+    };
 
 }

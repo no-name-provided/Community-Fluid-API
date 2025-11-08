@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -277,12 +278,22 @@ public class Events {
 
                     /**
                      * Example of more advanced, position dependant coloration.
-                     * Calculates values for water.
+                     * Also demonstrates usage of the FastColor class to dynamically
+                     * adjust the components of a color.
                      **/
                     @Override @ParametersAreNonnullByDefault
                     public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-                        // Haven't checked, but I it's likely || or-ing with the two highest bits at max inverts the alpha
-                        return BiomeColors.getAverageWaterColor(getter, pos) | 0xFF000000;
+                        // Determines how much blacker our fluid is. Only applied if it decays to water,
+                        // so we get a cool wake effect (and can tell if something goes wrong).
+                        int offset = ServerConfig.floodDecays ? 20 : 0;
+
+                        int vanillaWaterColor = BiomeColors.getAverageWaterColor(getter, pos);
+                        int alpha = FastColor.ARGB32.alpha(vanillaWaterColor);
+                        int red = Math.max(FastColor.ARGB32.red(vanillaWaterColor) - offset, 0);
+                        int green = Math.max(FastColor.ARGB32.green(vanillaWaterColor) - offset, 0);
+                        int blue = Math.max(FastColor.ARGB32.blue(vanillaWaterColor) - offset, 0);
+                        // Haven't checked, but it's likely or-ing with the two highest bits at max inverts the alpha
+                        return  FastColor.ARGB32.color(alpha, red, green, blue) | 0xFF000000;
                     }
                 },
                 FluidRegistries.FunFluidTypes.FLOOD
