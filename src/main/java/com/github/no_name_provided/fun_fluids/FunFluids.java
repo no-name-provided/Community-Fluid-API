@@ -52,7 +52,7 @@ public class FunFluids {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FLUID_TAB = CREATIVE_MODE_TABS.register(
             MODID, () -> CreativeModeTab.builder().title(Component.translatable("item_group." + MODID))
                     .withTabsBefore(CreativeModeTabs.FOOD_AND_DRINKS)
-                    .icon(Items.WATER_BUCKET::getDefaultInstance)
+                    .icon(ItemRegistry.FLOOD_BUCKET.get()::getDefaultInstance)
                     .displayItems((parameters, output) -> {
                         ItemRegistry.ITEMS.getEntries().forEach(item ->
                                 output.accept(item.get())

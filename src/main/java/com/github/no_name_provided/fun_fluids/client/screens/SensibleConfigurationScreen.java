@@ -18,7 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *
  * <p>Alternatively, you could add a bunch of ["config option key": "config option key"] entries
  * to your localization file. That would be brittle and overly verbose, so it's discouraged.</p>
- * */
+ **/
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class SensibleConfigurationScreen extends ConfigurationScreen.ConfigurationSectionScreen {
 
@@ -31,7 +31,7 @@ public class SensibleConfigurationScreen extends ConfigurationScreen.Configurati
      * @param type      The {@link ModConfig.Type} this configuration is for. Only used to generate the title of the screen.
      * @param modConfig The actual config to show and edit.
      * @param title     The title of the screen.
-     */
+     **/
     public SensibleConfigurationScreen(Screen parent, ModConfig.Type type, ModConfig modConfig, Component title) {
         super(parent, type, modConfig, title);
     }
@@ -39,7 +39,7 @@ public class SensibleConfigurationScreen extends ConfigurationScreen.Configurati
     /**
      * Check for the existence of a translation key's definition <i>before</i> replacing our sensible config names
      * with that programmatically generated key. Also bypasses log spam (developer warnings).
-     * */
+     **/
     @Override
     protected MutableComponent getTranslationComponent(String key) {
         if (I18n.exists(key)) {
