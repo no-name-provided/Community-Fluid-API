@@ -12,8 +12,10 @@ what you want, and follow along while writing your own mod.
   </p> 
 <ul>
     <li>Cool Lava - Full recreation of vanilla lava EXCEPT for fire/ignition</li>
-    <li>Thick Air - Fully transparent, non-flowing fluid. Balanced alternative to creative flight. Good for airlocks and underwater bubbles</li>
-    <li>Configurable Fluid - A fluid with properties specified by the common config. Demonstrates datagenning dynamic fluid models, using common textures, and dynamically tinting items.</li>
+    <li>Thick Air - Fully transparent, non-flowing fluid. Balanced alternative to creative flight. Demonstrates custom movement logic, custom flow logic, simply animated textures and how to make particles render/not render behind fluids</li>
+    <li>Configurable Fluid - A fluid with properties specified by the common config. Demonstrates datagenning dynamic fluid models, using common textures, and dynamically tinting items</li>
+    <li>River of Time - Minimal example of a fluid, following KaupenJoe's pattern for BaseFlowingFluid and retinting generic, built-in assets</li>
+    <li>Flood - Minimal example of a fluid, following my recommended pattern for BaseFlowingFluid and retinting generic, built-in assets (Note: read comments - there are a few alterations to demonstrate the effect of common mistakes)</li>
 </ul>
 <p>
     <b>Fluid Registration Checklist</b> (WIP, some steps optional)
