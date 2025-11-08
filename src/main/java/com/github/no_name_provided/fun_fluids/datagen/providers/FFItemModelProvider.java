@@ -40,5 +40,12 @@ public class FFItemModelProvider extends ItemModelProvider {
                 .coverIsMask(false)
                 .flipGas(false)
                 .fluid(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get());
+        getBuilder(ItemRegistry.FLOOD_BUCKET.getRegisteredName())
+                .parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("neoforge", "item/bucket_drip")))
+                .customLoader(DynamicFluidContainerModelBuilder::begin)
+                .applyFluidLuminosity(true)
+                .coverIsMask(false)
+                .flipGas(false)
+                .fluid(FluidRegistries.FunFluids.FLOOD_FLUID.get());
     }
 }

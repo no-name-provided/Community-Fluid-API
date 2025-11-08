@@ -48,6 +48,8 @@ public class Events {
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_CONFIGURABLE_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_RIVER_OF_TIME_FLUID.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOOD_FLUID.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(FluidRegistries.FunFluids.FLOWING_FLOOD_FLUID.get(), RenderType.translucent());
     }
 
     /**
@@ -275,10 +277,12 @@ public class Events {
 
                     /**
                      * Example of more advanced, position dependant coloration.
+                     * Calculates values for water.
                      **/
                     @Override @ParametersAreNonnullByDefault
                     public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-                        return BiomeColors.getAverageWaterColor(getter, pos);
+                        // Haven't checked, but I it's likely || or-ing with the two highest bits at max inverts the alpha
+                        return BiomeColors.getAverageWaterColor(getter, pos) | 0xFF000000;
                     }
                 },
                 FluidRegistries.FunFluidTypes.FLOOD
@@ -305,6 +309,16 @@ public class Events {
                     }
                 },
                 ItemRegistry.RIVER_OF_TIME_BUCKET.get()
+        );
+        event.register((stack, tintIndex) -> {
+                    if (tintIndex == 1) {
+                        // Make this really distinct.
+                        return -939392767;
+                    } else {
+                        return event.getItemColors().getColor(new ItemStack(Items.BUCKET), 0);
+                    }
+                },
+                ItemRegistry.FLOOD_BUCKET.get()
         );
     }
 }

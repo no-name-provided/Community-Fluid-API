@@ -1,0 +1,8 @@
+{
+  "parent": "neoforge:item/bucket_drip",
+  "apply_fluid_luminosity": true,
+  "cover_is_mask": false,
+  "flip_gas": false,
+  "fluid": "fun_fluids:flood",
+  "loader": "neoforge:fluid_container"
+}

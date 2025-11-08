@@ -12,6 +12,7 @@ public class ClientConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     private static final ModConfigSpec.BooleanValue RENDER_THICK_AIR = BUILDER
+            .gameRestart()
             .comment("Should thick air be visible? (Set to true for ease of building.)")
             .define("renderThickAir", false);
     private static final ModConfigSpec.BooleanValue SHOW_THICK_AIR_PARTICLES = BUILDER
@@ -43,7 +44,12 @@ public class ClientConfig {
         // A common crash on server stop is caused by trying to check values that have already been unloaded.
         // #BlameTheNeoForgeTeam
         if (!(event instanceof ModConfigEvent.Unloading) && event.getConfig().getType() == ModConfig.Type.CLIENT) {
-            renderThickAir = RENDER_THICK_AIR.get();
+            if (event instanceof ModConfigEvent.Loading) {
+                // I don't want to force air blocks to rerender on config reload, so I'm flagging this
+                // with #gameRestart() above and conditionally refusing to handle it here.
+                // Otherwise, there'd be a wierd lag after updating this config value in-game
+                renderThickAir = RENDER_THICK_AIR.get();
+            }
             showThickAirParticles = SHOW_THICK_AIR_PARTICLES.get();
             translucentMistParticles = TRANSPARENT_MIST_PARTICLES.get();
             renderUnderThickAirOverlay = RENDER_THICK_AIR_OVERLAY.get();

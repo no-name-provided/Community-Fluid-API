@@ -25,6 +25,7 @@ public class FFLanguageProvider extends LanguageProvider {
         addFluidSet("Thick Air", THICK_AIR_BLOCK, THICK_AIR_BUCKET);
         addFluidSet("Configurable Fluid", CONFIGURABLE_FLUID_BLOCK, CONFIGURABLE_FLUID_BUCKET);
         addFluidSet("River of Time", RIVER_OF_TIME_BLOCK, RIVER_OF_TIME_BUCKET);
+        addFluidSet("Flood", FLOOD_BLOCK, FLOOD_BUCKET);
 
     }
 
