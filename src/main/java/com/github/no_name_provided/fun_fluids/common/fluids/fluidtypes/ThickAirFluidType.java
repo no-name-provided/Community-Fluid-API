@@ -13,10 +13,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-/**
- * <p>The "swimming" logic is a hack job. Still needs work.</p>
- *
- */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class ThickAirFluidType extends FluidType {
 
@@ -40,9 +36,9 @@ public class ThickAirFluidType extends FluidType {
     }
 
     /**
-     * Performs how an entity moves when within the fluid. If using custom
-     * movement logic, the method should return {@code true}. Otherwise, the
-     * movement logic will default to water.
+     * Performs how an entity moves when within the fluid. If the method returns {@code true},
+     * no regular movement logic will be performed (the player will simply stop moving).
+     * Otherwise, the movement logic for water will be run after your code.
      * <p>
      * This is implicitly called in, and optionally disables most of, LivingEntity#travel.
      * I recommend referencing this method when writing your own logic.
