@@ -22,10 +22,10 @@ import java.util.Arrays;
  * This is necessary because the fog system is separate from (and not supported by)
  * the overlay in IClientFluidTypeExtensions.
  * <p>
- *     It may be possible to replace this, with some difficulty, with ViewportEvent.RenderFog
- *     or ComputeFogColor. Despite their names, and where they're thrown, it's <i>possible</i>
- *     these events are actually called each render tick, regardless of whether or not a fog is
- *     being rendered.
+ *     It may be possible to replace this, with some difficulty, with ViewportEvent$RenderFog
+ *     or $ComputeFogColor. Despite their names, and where they're thrown, these events are
+ *     actually called quite frequently, perhaps even each render tick, regardless of whether
+ *     or not a noticeable/special fog is being rendered.
  * </p>
  **/
 @Mixin(Camera.class)

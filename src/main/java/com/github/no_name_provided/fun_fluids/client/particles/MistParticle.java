@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class briefly discusses render methods, and demonstrates a particle that
- * can be configured to render behind translucent fluids.
+ * can be configured to render behind (the surface of) translucent fluids.
  * */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class MistParticle extends TextureSheetParticle {
