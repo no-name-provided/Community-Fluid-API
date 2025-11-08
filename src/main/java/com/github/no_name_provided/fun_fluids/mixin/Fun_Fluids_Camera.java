@@ -21,6 +21,12 @@ import java.util.Arrays;
  * Forces the lava camera fog to render while the player is in CoolLavaFluid.
  * This is necessary because the fog system is separate from (and not supported by)
  * the overlay in IClientFluidTypeExtensions.
+ * <p>
+ *     It may be possible to replace this, with some difficulty, with ViewportEvent.RenderFog
+ *     or ComputeFogColor. Despite their names, and where they're thrown, it's <i>possible</i>
+ *     these events are actually called each render tick, regardless of whether or not a fog is
+ *     being rendered.
+ * </p>
  **/
 @Mixin(Camera.class)
 public abstract class Fun_Fluids_Camera {
