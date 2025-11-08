@@ -34,7 +34,9 @@ public abstract class FloodFluid {
             // as a pho-water reservoir
             .bucket(() -> Items.WATER_BUCKET)
             .explosionResistance(120.0f)
-            .block(BlockRegistry.FLOOD_BLOCK);
+            .block(BlockRegistry.FLOOD_BLOCK)
+            // Half the speed of water
+            .tickRate(10);
 
     /**
      * Normally, this would just be a default instance of $Flowing. However, we specifically want
@@ -56,16 +58,23 @@ public abstract class FloodFluid {
             builder.add(LEVEL);
         }
     };
+    /**
+     * If we weren't supporting courtesy config options, there would be no need for overrides here.
+     **/
     public static BaseFlowingFluid.Source SOURCE = new BaseFlowingFluid.Source(PROPERTIES) {
         /**
          * Be polite and remove dangerous fluid after it's done spreading.
          * */
         @Override
         protected void spread(Level level, BlockPos pos, FluidState state) {
-            boolean degrade = !ServerConfig.floodDecays || !this.canSpreadTo(level, pos, level.getBlockState(pos), Direction.DOWN, pos.below(), level.getBlockState(pos.below()), level.getFluidState(pos.below()), this.getNewLiquid(level, pos.below(), level.getBlockState(pos.below())).getType());
-            super.spread(level, pos, state);
-            if (degrade) {
-                level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
+            if (ServerConfig.destroyFlood) {
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            } else {
+                boolean degrade = !ServerConfig.floodDecays || !this.canSpreadTo(level, pos, level.getBlockState(pos), Direction.DOWN, pos.below(), level.getBlockState(pos.below()), level.getFluidState(pos.below()), this.getNewLiquid(level, pos.below(), level.getBlockState(pos.below())).getType());
+                super.spread(level, pos, state);
+                if (degrade) {
+                    level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
+                }
             }
         }
     };

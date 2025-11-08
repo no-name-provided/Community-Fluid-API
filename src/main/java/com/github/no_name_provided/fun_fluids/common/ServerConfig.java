@@ -30,8 +30,8 @@ public class ServerConfig {
     private static final ModConfigSpec.IntValue CF_RESPONSIVENESS = BUILDER.comment("How responsive should the configurable fluid be (ticks, higher is slower)?").defineInRange("cFResponsiveness", 5, 0, 15);
     private static final ModConfigSpec.IntValue CF_SLOPE_FIND_DISTANCE = BUILDER.comment("How far should the configurable fluid look for height changes before deciding where to flow?").defineInRange("cFHeightChangeDistance", 3, 1, 8);
     private static final ModConfigSpec.EnumValue<Rarity> CF_RARITY = BUILDER.comment("How rare should the configurable fluid be?").defineEnum("cFRarity", Rarity.EPIC);
-    private static final ModConfigSpec.BooleanValue FLOOD_DECAYS = BUILDER.comment("Should flood blocks decay into regular water?").define("flood_decays", true);
-
+    private static final ModConfigSpec.BooleanValue FLOOD_DECAYS = BUILDER.comment("Should flood blocks decay into regular water?").define("floodDecays", true);
+    private static final ModConfigSpec.BooleanValue DESTROY_FLOOD = BUILDER.comment("HELP! I ignored the warnings! (Destroys, but does not reverse the effect of, Flood.)").define("destroyFlood", false);
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
@@ -45,6 +45,7 @@ public class ServerConfig {
     public static boolean cFDrown;
     public static boolean cFSwim;
     public static boolean floodDecays;
+    public static boolean destroyFlood;
     public static double cFPushStrength;
     public static int cFColor;
     public static int cFDamageMultiplier;
@@ -71,6 +72,7 @@ public class ServerConfig {
             cFDrown = CF_DROWN.get();
             cFSwim = CF_SWIM.get();
             floodDecays = FLOOD_DECAYS.get();
+            destroyFlood = DESTROY_FLOOD.get();
             cFPushStrength = CF_PUSH_STRENGTH.get();
             cFColor = CF_COLOR.get();
             cFDamageMultiplier = CF_DAMAGE_MULTIPLIER.get();
