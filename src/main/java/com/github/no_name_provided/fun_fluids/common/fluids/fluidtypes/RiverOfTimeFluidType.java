@@ -33,19 +33,20 @@ public class RiverOfTimeFluidType extends FluidType {
      * <p>
      * 0.014d is the default.
      * </p>
-     */
+     **/
     @Override
     public double motionScale(Entity entity) {
-        if (entity instanceof LivingEntity livingEntity && livingEntity.isBaby()) {
-            // If the entity is a baby, it flows back up the river of time
-            return -0.014d;
+        if (entity instanceof LivingEntity livingEntity) {
+            if (livingEntity.isBaby()) {
+                // If the entity is a baby, it flows back up the river of time
+                return -0.014d;
 
-        } else if (!(entity instanceof Player || entity instanceof AbstractGolem)) {
-            // Adults flow down towards the end of the time stream
-            return 0.014d;
+            } else if (!(entity instanceof Player || entity instanceof AbstractGolem)) {
+                // Adults flow down towards the end of the time stream
+                return 0.014d;
+            }
         }
         // Players, golems and inanimates aren't affected by time
         return 0;
     }
-
 }
