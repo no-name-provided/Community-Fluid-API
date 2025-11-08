@@ -89,6 +89,8 @@ public class ThickAirFluidType extends FluidType {
                         correctedTravelVector.z * (double) f3
                 );
             }
+            // This bit, which requires an Access Transformer, makes sure things can jump off the ground while immersed
+            // With my current setup, this is necessary.
             if (entity.jumping && correctedTravelVector.y() <= 0) {
                 correctedTravelVector = new Vec3(
                         correctedTravelVector.x,
