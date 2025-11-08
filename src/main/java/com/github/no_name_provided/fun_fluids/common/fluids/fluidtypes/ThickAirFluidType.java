@@ -89,6 +89,12 @@ public class ThickAirFluidType extends FluidType {
                         correctedTravelVector.z * (double) f3
                 );
             }
+            if (entity.jumping && correctedTravelVector.y() <= 0) {
+                correctedTravelVector = new Vec3(
+                        correctedTravelVector.x,
+                        0.1,
+                        correctedTravelVector.z);
+            }
         }
 
         // This bit corrects for floating
