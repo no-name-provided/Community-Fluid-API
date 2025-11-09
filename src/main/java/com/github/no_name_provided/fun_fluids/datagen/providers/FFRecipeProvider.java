@@ -27,14 +27,15 @@ public class FFRecipeProvider extends RecipeProvider {
                         RecipeCategory.MISC,
                         new ItemStack(ItemRegistry.COOL_LAVA_BUCKET)
                 ).requires(Items.SNOW_BLOCK)
-                .requires(Items.LAVA_BUCKET)
-                .unlockedBy("has_lava_bucket", has(Items.LAVA_BUCKET))
+                .requires(Items.MAGMA_CREAM)
+                .unlockedBy("has_magma_cream", has(Items.MAGMA_CREAM))
                 .save(recipeOutput);
         ShapelessRecipeBuilder.shapeless(
                         RecipeCategory.MISC,
                         new ItemStack(ItemRegistry.THICK_AIR_BUCKET)
                 ).requires(Items.DRAGON_BREATH)
-                .requires(Items.WATER_BUCKET)
+                .requires(Items.SNOW_BLOCK)
+                .requires(Items.CAMPFIRE)
                 .unlockedBy("has_dragon_breath", has(Items.DRAGON_BREATH))
                 .save(recipeOutput);
         ShapelessRecipeBuilder.shapeless(
