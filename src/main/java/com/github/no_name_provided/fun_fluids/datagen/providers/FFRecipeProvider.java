@@ -28,6 +28,7 @@ public class FFRecipeProvider extends RecipeProvider {
                         new ItemStack(ItemRegistry.COOL_LAVA_BUCKET)
                 ).requires(Items.SNOW_BLOCK)
                 .requires(Items.MAGMA_CREAM)
+                .requires(Items.BUCKET)
                 .unlockedBy("has_magma_cream", has(Items.MAGMA_CREAM))
                 .save(recipeOutput);
         ShapelessRecipeBuilder.shapeless(
@@ -35,6 +36,7 @@ public class FFRecipeProvider extends RecipeProvider {
                         new ItemStack(ItemRegistry.THICK_AIR_BUCKET)
                 ).requires(Items.DRAGON_BREATH)
                 .requires(Items.SNOW_BLOCK)
+                .requires(Items.BUCKET)
                 .requires(Items.CAMPFIRE)
                 .unlockedBy("has_dragon_breath", has(Items.DRAGON_BREATH))
                 .save(recipeOutput);

@@ -8,8 +8,6 @@ import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegis
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -110,9 +108,9 @@ public class ThickAirFluid extends FlowingFluid {
             if (ClientConfig.showThickAirParticles && random.nextInt(ClientConfig.thickAirParticleSlowDownFactor) == 0) {
                 level.addParticle(
                         ParticleRegistry.MIST_PARTICLE.get(),
-                        pos.getX() + nextDouble(-1.5, 0.5),
-                        pos.getY() + nextDouble(-.5, 0.5),
-                        pos.getZ() + nextDouble(-1.5, 0.5),
+                        pos.getX() + nextDouble(-0.5, 1.5),
+                        pos.getY() + nextDouble(-.25, 0.5),
+                        pos.getZ() + nextDouble(-0.5, 1.5),
                         nextDouble(-.01, .01),
                         nextDouble(-.01, .01),
                         nextDouble(-.01, .01)
