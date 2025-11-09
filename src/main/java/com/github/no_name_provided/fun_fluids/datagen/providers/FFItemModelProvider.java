@@ -16,7 +16,8 @@ public class FFItemModelProvider extends ItemModelProvider {
     @Override protected void registerModels() {
         withExistingParent(ItemRegistry.COOL_LAVA_BUCKET.getRegisteredName(), mcLoc("item/lava_bucket"));
 
-        withExistingParent(ItemRegistry.THICK_AIR_BUCKET.getRegisteredName(), mcLoc("item/bucket"));
+        withExistingParent(ItemRegistry.THICK_AIR_BUCKET.getRegisteredName(), mcLoc("item/bucket"))
+                .texture("layer1", mcLoc("item/firework_star_overlay"));
 
         // There's a special (Neo)Forge model type for bucket items.
         // More NeoForge convenience models can be found at neoforge-21.1.[XXX]-merged.jar/assets/neoforge/models.
@@ -40,12 +41,15 @@ public class FFItemModelProvider extends ItemModelProvider {
                 .coverIsMask(false)
                 .flipGas(false)
                 .fluid(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get());
+
         getBuilder(ItemRegistry.FLOOD_BUCKET.getRegisteredName())
                 .parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("neoforge", "item/bucket_drip")))
                 .customLoader(DynamicFluidContainerModelBuilder::begin)
                 .applyFluidLuminosity(true)
                 .coverIsMask(false)
                 .flipGas(false)
-                .fluid(FluidRegistries.FunFluids.FLOOD_FLUID.get());
+                .fluid(FluidRegistries.FunFluids.FLOOD_FLUID.get())
+                .end()
+                .texture("cover", mcLoc("item/barrier"));
     }
 }

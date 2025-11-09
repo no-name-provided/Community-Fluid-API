@@ -1,9 +1,9 @@
-// 1.21.1	2025-11-07T05:25:42.2812229	Recipes
+// 1.21.1	2025-11-08T23:26:56.4548822	Recipes
 1f9b016efdf8dbc8bdebd6dcf489dfcfd95b61dc data/fun_fluids/advancement/recipes/misc/configurable_fluid_bucket.json
-4261e2d188d3f358fb0ef22a78c5fdeb5c0ffe7f data/fun_fluids/advancement/recipes/misc/cool_lava_bucket.json
+6d1c422bdfca492f00fd5b56835bbae88f9132a5 data/fun_fluids/advancement/recipes/misc/cool_lava_bucket.json
 9180a327abf273bd7653f5756f0590c8d44f80d3 data/fun_fluids/advancement/recipes/misc/dense_air_bucket.json
 84c7779b117bd2c8b8c380da6491cd72b9754703 data/fun_fluids/advancement/recipes/misc/river_of_time_bucket.json
 0e8d975c7917e4f4a58e72bc1bd05373b8d1ba70 data/fun_fluids/recipe/configurable_fluid_bucket.json
-986c356900344b6d150819cdcceb0314dfbc0b5d data/fun_fluids/recipe/cool_lava_bucket.json
-c268349246260a8d12e0b3781ccb8295676f5ded data/fun_fluids/recipe/dense_air_bucket.json
+607f292ca6e4df6e9d330e81d03aa4995b9dfc3c data/fun_fluids/recipe/cool_lava_bucket.json
+e775bb479cb785fd2c4829a0f74aa347fb215866 data/fun_fluids/recipe/dense_air_bucket.json
 29d3217d174fade2a0628503376ce1e6f1ee75a6 data/fun_fluids/recipe/river_of_time_bucket.json

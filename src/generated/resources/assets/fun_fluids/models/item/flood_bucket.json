@@ -4,5 +4,8 @@
   "cover_is_mask": false,
   "flip_gas": false,
   "fluid": "fun_fluids:flood",
-  "loader": "neoforge:fluid_container"
+  "loader": "neoforge:fluid_container",
+  "textures": {
+    "cover": "minecraft:item/barrier"
+  }
 }

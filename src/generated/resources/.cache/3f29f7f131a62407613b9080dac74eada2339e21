@@ -1,6 +1,6 @@
-// 1.21.1	2025-11-07T19:41:22.6630867	Item Models: fun_fluids
+// 1.21.1	2025-11-09T00:24:54.4389438	Item Models: fun_fluids
 9ded26f3fda5807e8c35111c3b5db939fa1d82e9 assets/fun_fluids/models/item/configurable_fluid_bucket.json
 c4b7efbd58bb1d4cf2b6723ba89f19457bdccbf2 assets/fun_fluids/models/item/cool_lava_bucket.json
-d76978ab8e529c526d62ff47dbccda8276ca702d assets/fun_fluids/models/item/dense_air_bucket.json
-1dc054d2ad8faee462cf0f20f9c74d4223b10fd9 assets/fun_fluids/models/item/flood_bucket.json
+f31b50e652121d27269e91b3c47172d02f29a30d assets/fun_fluids/models/item/dense_air_bucket.json
+90adc7bed0308a5de89a067cbfe4039985c96bba assets/fun_fluids/models/item/flood_bucket.json
 084bbeb48e943beef0abac40f3c8905bb0c73d97 assets/fun_fluids/models/item/river_of_time_bucket.json
