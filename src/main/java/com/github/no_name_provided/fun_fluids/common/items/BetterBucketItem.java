@@ -63,7 +63,7 @@ public class BetterBucketItem extends BucketItem {
             player.awardStat(Stats.ITEM_USED.get(player.getItemInHand(hand).getItem()));
             level.playSound(null, result.getBlockPos(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.gameEvent(null, GameEvent.FLUID_PICKUP, result.getBlockPos());
-            return new InteractionResultHolder<>(InteractionResult.CONSUME, new ItemStack(Items.BUCKET));
+            return new InteractionResultHolder<>(InteractionResult.CONSUME, player.isCreative() ? player.getItemInHand(hand) : new ItemStack(Items.BUCKET));
         } else {
             return super.use(level, player, hand);
         }

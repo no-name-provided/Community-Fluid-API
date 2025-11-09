@@ -2,6 +2,7 @@ package com.github.no_name_provided.fun_fluids.common;
 
 import com.github.no_name_provided.fun_fluids.client.particles.MistParticle;
 import com.github.no_name_provided.fun_fluids.client.registries.ParticleRegistry;
+import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
@@ -57,12 +58,17 @@ public class Events {
                         (level, currentPos, relativePos, currentState) -> level.getBlockState(currentPos.below()).is(Blocks.SOUL_SOIL) && level.getBlockState(relativePos).is(Blocks.BLUE_ICE),
                         Blocks.BASALT.defaultBlockState())
         );
+        // Needs to be called here, due to an initialization order issue that
+        // <i>appears</i> to not be present in vanilla (and doesn't affect
+        // interactions with vanilla items) #BlameTheNeoForgeTeam
+        event.enqueueWork(() -> CoolLavaCauldronBlock.addCoolLavaCauldronInteractions(CoolLavaCauldronBlock.COOL_LAVA));
     }
 
     /**
      * We only need to add this because we aren't using a vanilla BucketItem.
      * It's normally automatically added by NeoForge.
-     * */
+     *
+     */
     @SubscribeEvent
     static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
@@ -74,7 +80,8 @@ public class Events {
 
     /**
      * Just part of the thick air fancy rendering. Not really fluid code.
-     * */
+     *
+     */
     @SubscribeEvent
     static void registerParticleProviders(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ParticleRegistry.MIST_PARTICLE.get(), MistParticle.Provider::new);
