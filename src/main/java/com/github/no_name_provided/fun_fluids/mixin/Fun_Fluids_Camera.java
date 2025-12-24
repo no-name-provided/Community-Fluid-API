@@ -7,6 +7,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,11 +21,13 @@ import java.util.Arrays;
 
 /**
  * Forces the lava camera fog to render while the player is in CoolLavaFluid.
- * This is necessary because the fog system is separate from (and not supported by)
- * the overlay in IClientFluidTypeExtensions.
+ * This is necessary because the vanilla fog system is separate from (and not fully supported by)
+ * the overlay in IClientFluidTypeExtensions. Unique fog effects can, with some difficulty,
+ * be added via {@link IClientFluidTypeExtensions#modifyFogColor} and
+ * {@link IClientFluidTypeExtensions#modifyFogRender}.
  * <p>
- *     It may be possible to replace this, with some difficulty, with ViewportEvent$RenderFog
- *     or $ComputeFogColor. Despite their names, and where they're thrown, these events are
+ *     It may be possible to replace this, with some difficulty, with {@link ViewportEvent.RenderFog}
+ *     or {@link ViewportEvent.ComputeFogColor}. Despite their names, and where they're thrown, these events are
  *     actually called quite frequently, perhaps even each render tick, regardless of whether
  *     or not a noticeable/special fog is being rendered.
  * </p>

@@ -13,7 +13,8 @@ public class FFItemModelProvider extends ItemModelProvider {
         super(output, modid, existingFileHelper);
     }
 
-    @Override protected void registerModels() {
+    @Override
+    protected void registerModels() {
         withExistingParent(ItemRegistry.COOL_LAVA_BUCKET.getRegisteredName(), mcLoc("item/lava_bucket"));
 
         withExistingParent(ItemRegistry.THICK_AIR_BUCKET.getRegisteredName(), mcLoc("item/bucket"))
