@@ -3,7 +3,9 @@ package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 import com.github.no_name_provided.fun_fluids.common.items.BetterBucketItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -20,27 +22,28 @@ public class ItemRegistry {
 
     public static final DeferredHolder<Item, BucketItem> COOL_LAVA_BUCKET = ITEMS.register(
             "cool_lava_bucket",
-            () -> new BetterBucketItem(FluidRegistries.FunFluids.COOL_LAVA.get(), new Item.Properties())
+            (identifier) -> new BetterBucketItem(FluidRegistries.FunFluids.COOL_LAVA.get(), new Item.Properties(), identifier)
     );
     public static final DeferredHolder<Item, BucketItem> THICK_AIR_BUCKET = ITEMS.register(
             "dense_air_bucket",
-            () -> new BetterBucketItem(FluidRegistries.FunFluids.THICK_AIR_FLUID.get(), new Item.Properties())
+            (identifier) -> new BetterBucketItem(FluidRegistries.FunFluids.THICK_AIR_FLUID.get(), new Item.Properties(), identifier)
     );
     public static final DeferredHolder<Item, BucketItem> CONFIGURABLE_FLUID_BUCKET = ITEMS.register(
             "configurable_fluid_bucket",
-            () -> new BetterBucketItem(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(), new Item.Properties())
+            (identifier) -> new BetterBucketItem(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(), new Item.Properties(), identifier)
     );
     public static final DeferredHolder<Item, BucketItem> RIVER_OF_TIME_BUCKET = ITEMS.register(
             "river_of_time_bucket",
             // We use a regular BucketItem here because BaseFlowingFluid is incompatible with a basic BetterBucketItem.
             // Not sure why - think there's something wierd about how it defines its bucket that forces a capability
             // check. BucketItems have capabilities by default
-            () -> new BucketItem(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), new Item.Properties())
+            (identifier) -> new BucketItem(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier)))
     );
     public static final DeferredHolder<Item, BucketItem> FLOOD_BUCKET = ITEMS.register(
             "flood_bucket",
-            () -> new BucketItem(
+            (identifier) -> new BucketItem(
                     FluidRegistries.FunFluids.FLOOD_FLUID.get(), new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, identifier))
                     .stacksTo(1)
                     .craftRemainder(Items.BUCKET)
                     // This is just me being nice to players and providing a heads-up

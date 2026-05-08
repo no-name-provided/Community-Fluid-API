@@ -1,7 +1,9 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
-import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -15,15 +17,16 @@ import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 public class BlockRegistry {
     // We use a dedicated register to avoid a bug in datagen. #BlameTheNeoForgedTeam.
     public static final DeferredRegister.Blocks FLUID_BLOCKS = DeferredRegister.createBlocks(MODID);
-
+    
     public static final DeferredHolder<Block, LiquidBlock> COOL_LAVA_BLOCK = FLUID_BLOCKS.register(
             "cool_lava_block",
-            () -> new LiquidBlock(
+            (identifier) -> new LiquidBlock(
                     FluidRegistries.FunFluids.COOL_LAVA.get(),
                     BlockBehaviour.Properties.of()
+                            .setId(ResourceKey.create(Registries.BLOCK, identifier))
                             .mapColor(MapColor.FIRE)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(100.0f)
                             .lightLevel(state -> 15)
                             .pushReaction(PushReaction.DESTROY)
@@ -34,12 +37,13 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> THICK_AIR_BLOCK = FLUID_BLOCKS.register(
             "thick_air_block",
-            () -> new LiquidBlock(
+            (identifier) -> new LiquidBlock(
                     FluidRegistries.FunFluids.THICK_AIR_FLUID.get(),
                     BlockBehaviour.Properties.of()
+                            .setId(ResourceKey.create(Registries.BLOCK, identifier))
                             .mapColor(MapColor.NONE)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(100.0f)
                             .lightLevel(state -> 0)
                             .pushReaction(PushReaction.DESTROY)
@@ -50,12 +54,13 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> CONFIGURABLE_FLUID_BLOCK = FLUID_BLOCKS.register(
             "configurable_fluid_block",
-            () -> new LiquidBlock(
+            (identifier) -> new LiquidBlock(
                     FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(),
                     BlockBehaviour.Properties.of()
+                            .setId(ResourceKey.create(Registries.BLOCK, identifier))
                             .mapColor(MapColor.GLOW_LICHEN)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(100.0f)
                             .lightLevel(state -> ServerConfig.cFLight)
                             .pushReaction(PushReaction.DESTROY)
@@ -66,12 +71,13 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> RIVER_OF_TIME_BLOCK = FLUID_BLOCKS.register(
             "river_of_time_block",
-            () -> new LiquidBlock(
+            (identifier) -> new LiquidBlock(
                     FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(),
                     BlockBehaviour.Properties.of()
+                            .setId(ResourceKey.create(Registries.BLOCK, identifier))
                             .mapColor(MapColor.COLOR_CYAN)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(100.0f)
                             .lightLevel(state -> 2)
                             .pushReaction(PushReaction.DESTROY)
@@ -82,12 +88,13 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> FLOOD_BLOCK = FLUID_BLOCKS.register(
             "flood_block",
-            () -> new LiquidBlock(
+            (identifier) -> new LiquidBlock(
                     FluidRegistries.FunFluids.FLOOD_FLUID.get(),
                     BlockBehaviour.Properties.of()
+                            .setId(ResourceKey.create(Registries.BLOCK, identifier))
                             .mapColor(MapColor.WATER)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(100.0f)
                             .lightLevel(state -> 0)
                             .pushReaction(PushReaction.DESTROY)
@@ -96,18 +103,21 @@ public class BlockRegistry {
                             .sound(SoundType.EMPTY)
             )
     );
-
+    
     public static final DeferredRegister.Blocks SOLID_BLOCKS = DeferredRegister.createBlocks(MODID);
 
 
-    @SuppressWarnings("deprecation")
-    public static final DeferredHolder<Block, AbstractCauldronBlock> COOL_LAVA_CAULDRON = SOLID_BLOCKS.register(
-        "cool_lava_cauldron_block",
-            () -> new CoolLavaCauldronBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.CAULDRON).lightLevel(state -> 15))
-    );
-
-    public static void register(IEventBus bus) {
+//    @SuppressWarnings("deprecation")
+//    public static final DeferredHolder<Block, AbstractCauldronBlock> COOL_LAVA_CAULDRON = SOLID_BLOCKS.register(
+//        "cool_lava_cauldron_block",
+//            () -> new CoolLavaCauldronBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.CAULDRON).lightLevel(state -> 15))
+//    );
+    
+    public static void registerSolids(IEventBus bus) {
         SOLID_BLOCKS.register(bus);
+    }
+    
+    public static void registerLiquids(IEventBus bus) {
         FLUID_BLOCKS.register(bus);
     }
 }

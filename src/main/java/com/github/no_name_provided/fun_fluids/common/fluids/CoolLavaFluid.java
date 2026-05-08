@@ -4,16 +4,19 @@ import com.github.no_name_provided.fun_fluids.common.Events;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.LogUtils;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
@@ -21,6 +24,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.material.*;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +64,7 @@ public abstract class CoolLavaFluid extends FlowingFluid {
 
     @Override
     protected int getSlopeFindDistance(LevelReader worldIn) {
-        return worldIn.dimensionType().ultraWarm() ? 1 : 2;
+        return worldIn.environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 1 : 2;
     }
 
     @Override
@@ -70,12 +74,12 @@ public abstract class CoolLavaFluid extends FlowingFluid {
 
     @Override
     protected int getDropOff(LevelReader worldIn) {
-        return worldIn.dimensionType().ultraWarm() ? 1 : 2;
+        return worldIn.environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 1 : 2;
     }
 
     @Override
     public int getTickDelay(LevelReader worldIn) {
-        return worldIn.dimensionType().ultraWarm() ? 10 : 30;
+        return worldIn.environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 10 : 30;
     }
 
     // End of common boilerplate.
@@ -85,17 +89,17 @@ public abstract class CoolLavaFluid extends FlowingFluid {
         return super.getDripParticle();
     }
 
-    /**
-     * Returns whether the boat can be used on the fluid.
-     *
-     * @param state the state of the fluid
-     * @param boat  the boat trying to be used on the fluid
-     * @return {@code true} if the boat can be used, {@code false} otherwise
-     */
-    @Override
-    public boolean supportsBoating(FluidState state, Boat boat) {
-        return true;
-    }
+//    /**
+//     * Returns whether the boat can be used on the fluid.
+//     *
+//     * @param state the state of the fluid
+//     * @param boat  the boat trying to be used on the fluid
+//     * @return {@code true} if the boat can be used, {@code false} otherwise
+//     */
+//    @Override
+//    public boolean supportsBoating(FluidState state, Boat boat) {
+//        return true;
+//    }
 
     /**
      * Returns whether the block can be extinguished by this fluid.
@@ -117,7 +121,7 @@ public abstract class CoolLavaFluid extends FlowingFluid {
     @Override
     protected void animateTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
         BlockPos blockpos = pos.above();
-        if (level.getBlockState(blockpos).isAir() && !level.getBlockState(blockpos).isSolidRender(level, blockpos)) {
+        if (level.getBlockState(blockpos).isAir() && !level.getBlockState(blockpos).isSolidRender()) {
             if (random.nextInt(100) == 0) {
                 double d0 = (double)pos.getX() + random.nextDouble();
                 double d1 = (double)pos.getY() + 1.0;
@@ -162,7 +166,7 @@ public abstract class CoolLavaFluid extends FlowingFluid {
      * We have to handle any fluid interaction event with fluids below our block here. The idiomatic way to handle
      * every other interaction event is with a - you guessed it - registry. Specifically,
      * a wierd one at FluidInteractionRegistry.java.
-     * @see Events#onServerAboutToStart
+     * @see //Events#onServerAboutToStart
      * */
     @Override
     protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
@@ -180,12 +184,7 @@ public abstract class CoolLavaFluid extends FlowingFluid {
 
         super.spreadTo(level, pos, blockState, direction, fluidState);
     }
-
-    @Override
-    public boolean canConvertToSource(FluidState state, Level level, BlockPos pos) {
-        return canConvertToSource(level);
-    }
-
+    
     @Override
     protected void beforeDestroyingBlock(LevelAccessor level, BlockPos pos, BlockState state) {
         level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
@@ -204,22 +203,21 @@ public abstract class CoolLavaFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return BlockRegistry.COOL_LAVA_BLOCK.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+            return Fluids.EMPTY.defaultFluidState().createLegacyBlock();
     }
-
-
-    @Override
-    protected boolean canConvertToSource(Level level) {
-        return level.getGameRules().getBoolean(GameRules.RULE_LAVA_SOURCE_CONVERSION);
+    
+    @Override protected boolean canConvertToSource(ServerLevel level) {
+        return level.getGameRules().get(GameRules.LAVA_SOURCE_CONVERSION);
     }
 
     public static class Flowing extends CoolLavaFluid {
+        
         @Override
         protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
-
+        
         @Override
         public int getAmount(FluidState state) {
             return state.getValue(LEVEL);

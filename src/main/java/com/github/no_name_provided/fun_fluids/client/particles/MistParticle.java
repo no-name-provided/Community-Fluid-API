@@ -1,10 +1,11 @@
 package com.github.no_name_provided.fun_fluids.client.particles;
 
 import com.github.no_name_provided.fun_fluids.client.ClientConfig;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,10 +15,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * can be configured to render behind (the surface of) translucent fluids.
  * */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-public class MistParticle extends TextureSheetParticle {
+public class MistParticle extends SingleQuadParticle { // TextureSheetParticle {
 
     protected MistParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites) {
-        super(level, x, y, z);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites.first());
         this.scale(1.5f);
         this.setSize(0.2F, 0.2f);
 
@@ -31,7 +32,7 @@ public class MistParticle extends TextureSheetParticle {
         // Always set the initial sprite here (or in the provider)
         // since ticking is not guaranteed to set the sprite before
         // the render method is called.
-        this.pickSprite(sprites);
+        this.setSprite(sprites.get(level.getRandom()));
     }
 
     /**
@@ -54,11 +55,11 @@ public class MistParticle extends TextureSheetParticle {
             this.remove();
         }
     }
-
+    
     public record Provider(SpriteSet sprites) implements ParticleProvider<SimpleParticleType> {
 
         @Override
-        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, RandomSource random) {
             // We use ThreadLocalRandom here for guaranteed multithreaded performance...
             // and because it has a convenience method for doubles.
             ThreadLocalRandom rand = ThreadLocalRandom.current();
@@ -74,14 +75,16 @@ public class MistParticle extends TextureSheetParticle {
             );
         }
     }
-
+    
     @Override
-    public ParticleRenderType getRenderType() {
+    protected Layer getLayer() {
         // If it's translucent, it generally won't render behind (inside) fluids
         if (ClientConfig.translucentMistParticles) {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+            
+            return Layer.TRANSLUCENT;
         } else {
-            return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+            
+            return Layer.OPAQUE;
         }
     }
 

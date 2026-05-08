@@ -4,6 +4,7 @@ import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegi
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -35,7 +36,7 @@ public class CoolLavaFluidType extends FluidType {
                 .canConvertToSource(false)
                 // This "lava" is cool!
                 .temperature(23)
-                .addDripstoneDripping(PointedDripstoneBlock.LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK, ParticleTypes.DRIPPING_DRIPSTONE_LAVA, BlockRegistry.COOL_LAVA_CAULDRON.get(), SoundEvents.POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON)
+//                .addDripstoneDripping(PointedDripstoneBlock.LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK, ParticleTypes.DRIPPING_DRIPSTONE_LAVA, BlockRegistry.COOL_LAVA_CAULDRON.get(), SoundEvents.POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON)
         );
     }
 
@@ -48,7 +49,8 @@ public class CoolLavaFluidType extends FluidType {
      */
     @Override
     public double motionScale(Entity entity) {
-        return entity.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
+//        return entity.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
+        return 1;
     }
 
     @Override
@@ -80,7 +82,8 @@ public class CoolLavaFluidType extends FluidType {
 
         entity.moveRelative(0.02F, travelVector);
         entity.move(MoverType.SELF, entity.getDeltaMovement());
-        if (entity.getFluidTypeHeight(FluidRegistries.FunFluidTypes.COOL_LAVA.get()) <= entity.getFluidJumpThreshold()) {
+        // TODO: Replace with a tag for cool lava
+        if (entity.getFluidHeight(FluidTags.LAVA) <= entity.getFluidJumpThreshold()) {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.8F, 0.5));
             Vec3 vec33 = entity.getFluidFallingAdjustedMovement(gravity, flag, entity.getDeltaMovement());
             entity.setDeltaMovement(vec33);

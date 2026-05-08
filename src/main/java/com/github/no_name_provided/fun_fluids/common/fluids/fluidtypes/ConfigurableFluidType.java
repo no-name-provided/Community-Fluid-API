@@ -1,12 +1,12 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockGetter;
@@ -98,7 +98,7 @@ public class ConfigurableFluidType extends FluidType {
      * @param boat the boat trying to be used on the fluid
      * @return {@code true} if the boat can be used, {@code false} otherwise
      */
-    @Override public boolean supportsBoating(Boat boat) {
+    @Override public boolean supportsBoating(AbstractBoat boat) {
         return ServerConfig.cFBoating;
     }
 
@@ -175,7 +175,7 @@ public class ConfigurableFluidType extends FluidType {
      * @param pos   the position to place the fluid at
      * @param stack the stack holding the fluid being placed
      * @return {@code true} if this fluid should be vaporized on placement, {@code false} otherwise
-     * @see BucketItem#emptyContents(Player, Level, BlockPos, BlockHitResult)
+     * @see //BucketItem#emptyContents(Player, Level, BlockPos, BlockHitResult)
      */
     @SuppressWarnings("deprecation") @Override
     public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {

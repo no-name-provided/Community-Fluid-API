@@ -47,7 +47,7 @@ public class ClientConfig {
             if (event instanceof ModConfigEvent.Loading) {
                 // I don't want to force air blocks to rerender on config reload, so I'm flagging this
                 // with #gameRestart() above and conditionally refusing to handle it here.
-                // Otherwise, there'd be a wierd lag after updating this config value in-game
+                // Otherwise, there'd be a weird lag after updating this config value in-game
                 renderThickAir = RENDER_THICK_AIR.get();
             }
             showThickAirParticles = SHOW_THICK_AIR_PARTICLES.get();

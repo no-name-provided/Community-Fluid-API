@@ -5,9 +5,10 @@ import com.github.no_name_provided.fun_fluids.client.registries.ParticleRegistry
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -104,7 +105,7 @@ public class ThickAirFluid extends FlowingFluid {
      * */
     @Override
     protected void animateTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
-        if (level.isClientSide) { //TODO: make sure this is redundant/this method isn't called on server
+        if (level.isClientSide()) { //TODO: make sure this is redundant/this method isn't called on server
             if (ClientConfig.showThickAirParticles && random.nextInt(ClientConfig.thickAirParticleSlowDownFactor) == 0) {
                 level.addParticle(
                         ParticleRegistry.MIST_PARTICLE.get(),
@@ -134,7 +135,7 @@ public class ThickAirFluid extends FlowingFluid {
     }
 
     @Override
-    protected boolean canConvertToSource(Level level) {
+    protected boolean canConvertToSource(ServerLevel level) {
         return false;
     }
 

@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,9 +67,9 @@ public class ThickAirFluidType extends FluidType {
             //noinspection DataFlowIssue - Shouldn't be null since we just checked for it
             deltaY += (0.05 * (double) (entity.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - correctedTravelVector.y) * 0.2;
         } else //noinspection deprecation - Used in Vanilla/NeoForge
-            if (!entity.level().isClientSide || entity.level().hasChunkAt(blockpos)) {
+            if (!entity.level().isClientSide() || entity.level().hasChunkAt(blockpos)) {
                 deltaY -= gravity;
-            } else if (entity.getY() > (double) entity.level().getMinBuildHeight()) {
+            } else if (entity.level().isInsideBuildHeight(blockpos)) {
                 deltaY = -0.1;
             } else {
                 deltaY = 0.0;

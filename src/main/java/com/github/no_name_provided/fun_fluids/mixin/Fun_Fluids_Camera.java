@@ -2,8 +2,10 @@ package com.github.no_name_provided.fun_fluids.mixin;
 
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
@@ -20,37 +22,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Arrays;
 
 /**
- * Forces the lava camera fog to render while the player is in CoolLavaFluid.
- * This is necessary because the vanilla fog system is separate from (and not fully supported by)
- * the overlay in IClientFluidTypeExtensions. Unique fog effects can, with some difficulty,
- * be added via {@link IClientFluidTypeExtensions#modifyFogColor} and
+ * Forces the lava camera fog to render while the player is in CoolLavaFluid. This is necessary because the vanilla fog
+ * system is separate from (and not fully supported by) the overlay in IClientFluidTypeExtensions. Unique fog effects
+ * can, with some difficulty, be added via {@link IClientFluidTypeExtensions#modifyFogColor} and
  * {@link IClientFluidTypeExtensions#modifyFogRender}.
  * <p>
- *     It may be possible to replace this, with some difficulty, with {@link ViewportEvent.RenderFog}
- *     or {@link ViewportEvent.ComputeFogColor}. Despite their names, and where they're thrown, these events are
- *     actually called quite frequently, perhaps even each render tick, regardless of whether
- *     or not a noticeable/special fog is being rendered.
+ * It may be possible to replace this, with some difficulty, with {@link ViewportEvent.RenderFog} or
+ * {@link ViewportEvent.ComputeFogColor}. Despite their names, and where they're thrown, these events are actually
+ * called quite frequently, perhaps even each render tick, regardless of whether or not a noticeable/special fog is
+ * being rendered.
  * </p>
  **/
 @Mixin(Camera.class)
 public abstract class Fun_Fluids_Camera {
-
+    
     @Shadow
     private boolean initialized;
+    
     @Shadow
-    public abstract Camera.NearPlane getNearPlane();
+    public abstract Camera.NearPlane getNearPlane(float fov);
+    
     @Shadow
     private Vec3 position;
     @Shadow
-    private BlockGetter level;
+    private Level level;
     @Shadow
     @Final
     private Vector3f forwards;
-
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+    
     @Inject(method = "getFluidInCamera()Lnet/minecraft/world/level/material/FogType;", at = @At("RETURN"), cancellable = true)
     void Fun_Fluids_FogType(CallbackInfoReturnable<FogType> cir) {
         if (this.initialized) {
-            Camera.NearPlane nearplane = this.getNearPlane();
+            Camera.NearPlane nearplane = this.getNearPlane(this.minecraft.options.fov().get());
             for (Vec3 vec3 : Arrays.asList(
                     new Vec3(this.forwards).scale(0.05F),
                     nearplane.getTopLeft(),
@@ -61,9 +67,9 @@ public abstract class Fun_Fluids_Camera {
                 Vec3 vec31 = this.position.add(vec3);
                 BlockPos blockpos = BlockPos.containing(vec31);
                 FluidState fluidstate = this.level.getFluidState(blockpos);
-
+                
                 if (fluidstate.getFluidType() == FluidRegistries.FunFluidTypes.COOL_LAVA.get()) {
-                    if (vec31.y <= (double)(fluidstate.getHeight(this.level, blockpos) + (float)blockpos.getY())) {
+                    if (vec31.y <= (double) (fluidstate.getHeight(this.level, blockpos) + (float) blockpos.getY())) {
                         cir.setReturnValue(FogType.LAVA);
                         cir.cancel();
                     }

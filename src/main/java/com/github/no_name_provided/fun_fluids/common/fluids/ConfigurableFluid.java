@@ -4,9 +4,10 @@ import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -44,11 +45,6 @@ public abstract class ConfigurableFluid extends FlowingFluid {
     @Override
     public boolean isSame(Fluid fluid) {
         return fluid == FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get() || fluid == FluidRegistries.FunFluids.FLOWING_CONFIGURABLE_FLUID.get();
-    }
-
-    @Override
-    protected boolean canConvertToSource(Level level) {
-        return ServerConfig.cFInfinite;
     }
 
     @Override
@@ -98,6 +94,12 @@ public abstract class ConfigurableFluid extends FlowingFluid {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
+        
+        @Override
+        protected boolean canConvertToSource(ServerLevel level) {
+            return ServerConfig.cFInfinite;
+        }
+        
         @Override
         public int getAmount(FluidState state) {
             return state.getValue(LEVEL);
@@ -109,6 +111,12 @@ public abstract class ConfigurableFluid extends FlowingFluid {
     }
 
     public static class Source extends ConfigurableFluid{
+
+        @Override
+        protected boolean canConvertToSource(ServerLevel level) {
+            return ServerConfig.cFInfinite;
+        }
+        
         @Override
         public int getAmount(FluidState state) {
             return 8;

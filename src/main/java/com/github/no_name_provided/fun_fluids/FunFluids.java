@@ -51,7 +51,7 @@ public class FunFluids {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FLUID_TAB = CREATIVE_MODE_TABS.register(
             MODID, () -> CreativeModeTab.builder().title(Component.translatable("item_group." + MODID))
                     .withTabsBefore(CreativeModeTabs.FOOD_AND_DRINKS)
-                    .icon(ItemRegistry.FLOOD_BUCKET.get()::getDefaultInstance)
+                    .icon(() -> ItemRegistry.FLOOD_BUCKET.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         ItemRegistry.ITEMS.getEntries().forEach(item ->
                                 output.accept(item.get())
@@ -61,8 +61,9 @@ public class FunFluids {
     // Mod entry point. Mostly used for registration.
     public FunFluids(IEventBus modEventBus, ModContainer modContainer) {
         // Trigger deferred registers
+        BlockRegistry.registerLiquids(modEventBus);
         FluidRegistries.register(modEventBus);
-        BlockRegistry.register(modEventBus);
+        BlockRegistry.registerSolids(modEventBus);
         ItemRegistry.register(modEventBus);
         ParticleRegistry.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
@@ -79,7 +80,7 @@ public class FunFluids {
 
         // Register a sensible in-game config editing screen.
         // This isn't specific to fluids. It's just a good practice in general.
-        if (!FMLEnvironment.dist.isDedicatedServer()) {
+        if (!FMLEnvironment.getDist().isDedicatedServer()) {
             // We need to wrap this in a sidedness check, since it uses a class not available to dedicated servers.
             SensibleConfigurationScreen.register(modContainer);
         }
