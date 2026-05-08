@@ -9,6 +9,7 @@ import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegis
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.RegisterCauldronInteractionEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.fluids.RegisterCauldronFluidContentEvent;
@@ -32,6 +34,8 @@ import net.neoforged.neoforge.transfer.fluid.BucketResourceHandler;
 
 import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 import static com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock.COOL_LAVA_INTERACTION_DISPATCHER;
+import static net.minecraft.core.cauldron.CauldronInteractions.emptyBucket;
+import static net.minecraft.core.cauldron.CauldronInteractions.fillBucket;
 
 @EventBusSubscriber(modid = MODID)
 public class Events {
@@ -78,7 +82,7 @@ public class Events {
     }
     
     @SubscribeEvent
-    static void onRegisterCauldronInteractions(RegisterCauldronInteractionEvent.Dispatcher event) {
+    static void onRegisterCauldronInteractionDispatchers(RegisterCauldronInteractionEvent.Dispatcher event) {
         // We need a custom dispatcher because we return a unique bucket of fluid when our custom cualdron is
         // interacted with by a bucket
         event.register(
@@ -92,15 +96,18 @@ public class Events {
         event.registerToAll(
                 ItemRegistry.COOL_LAVA_BUCKET.get(),
                 (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
-                        InteractionResult.SUCCESS.heldItemTransformedTo(Items.BUCKET.getDefaultInstance())
+                        level.getFluidState(pos.above()).is(Tags.Fluids.WATER)
+                                ? InteractionResult.CONSUME
+                                : emptyBucket(level, pos, player, hand, itemInHand, BlockRegistry.COOL_LAVA_CAULDRON.get().defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA)
         );
         // Needs more work to bring in line with vanilla
         event.register(
                 Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
                 Items.BUCKET,
                 (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
-                        InteractionResult.SUCCESS.heldItemTransformedTo(ItemRegistry.COOL_LAVA_BUCKET.get().getDefaultInstance())
-        );
+                        level.getFluidState(pos.above()).is(Tags.Fluids.WATER)
+                                ? InteractionResult.CONSUME
+                                : emptyBucket(level, pos, player, hand, itemInHand, BlockRegistry.COOL_LAVA_CAULDRON.get().defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA));
     }
     
     /**

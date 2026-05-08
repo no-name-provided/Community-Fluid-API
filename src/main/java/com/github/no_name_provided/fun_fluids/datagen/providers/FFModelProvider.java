@@ -9,73 +9,58 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
-import java.util.stream.Stream;
 
+import static net.minecraft.client.data.models.BlockModelGenerators.createSimpleBlock;
+import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
+
+/**
+ * Not only have our convenience methods generally been removed, or made more verbose, we're now forced to put all our
+ * model generation in a single file.
+ */
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
 public class FFModelProvider extends ModelProvider {
     public FFModelProvider(PackOutput output, String modid) {
         super(output, modid);
     }
-
-//    /**
-//     * Returns a {@link Stream stream} containing all {@link Block blocks} which must have their models/block states
-//     * generated or {@link Stream#empty() empty} if none are desired.
-//     * <p>
-//     * When using providers for specific {@link Block block} usages, it is best to override this method returning the
-//     * exact {@link Block blocks} which must be generated, or {@link Stream#empty() empty} if generating only
-//     * {@link Item item} models.
-//     * <p>
-//     * Default implementation generates models for {@link Block blocks} matching the given {@code modId}.
-//     *
-//     * @see #getKnownItems()
-//     */
-//    @Override
-//    protected Stream<? extends Holder<Block>> getKnownBlocks() {
-//        return BlockRegistry.SOLID_BLOCKS.getEntries().stream();
-//    }
-
-//    /**
-//     * Returns a {@link Stream stream} containing all {@link Item items} which must have their models/client items
-//     * generated or {@link Stream#empty() empty} if none are desired.
-//     * <p>
-//     * When using providers for specific {@link Item item} usages, it is best to override this method returning the
-//     * exact {@link Item items} which must be generated, or {@link Stream#empty() empty} if generating only
-//     * {@link Block block} models (which have no respective {@link Item item}).
-//     * <p>
-//     * Default implementation generates models for {@link Item items} matching the given {@code modId}.
-//     *
-//     * @see #getKnownBlocks()
-//     */
-//    @Override
-//    protected Stream<? extends Holder<Item>> getKnownItems() {
-//        return ItemRegistry.ITEMS.getEntries().stream();
-//    }
     
+    /**
+     * Whatever you do here, do <i>not</i> call super. That will trigger a check for all the vanilla items.
+     *
+     * @param blockModels Access to the BlockModelGenerator.
+     * @param itemModels  Access to the ItemModelGenerator.
+     */
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-//        blockModels.copyModel(Blocks.LAVA_CAULDRON, BlockRegistry.COOL_LAVA_CAULDRON.get());
-        blockModels.createTrivialCube(BlockRegistry.COOL_LAVA_CAULDRON.get());
-        // Not quite right... wrong parent
-//        blockModels.createTrivialCube(BlockRegistry.THICK_AIR_BLOCK.get());
-        
-        BlockRegistry.FLUID_BLOCKS.getEntries().forEach(fluidBlock -> {
-            blockModels.createTrivialCube(fluidBlock.get());
-        });
-        
+        // blockModels#copyModel has problems, so we instead copy the vanilla datagen for lava cauldrons
+        blockModels.blockStateOutput
+                .accept(
+                        createSimpleBlock(
+                                BlockRegistry.COOL_LAVA_CAULDRON.get(),
+                                plainVariant(
+                                        ModelTemplates.CAULDRON_FULL
+                                                .create(BlockRegistry.COOL_LAVA_CAULDRON.get(), TextureMapping.cauldron(TextureMapping.getBlockTexture(Blocks.LAVA, "_still")), blockModels.modelOutput)
+                                )
+                        )
+                );
+        // These aren't used, so they can be anything. We just need them to trick the datagen safeguards
+        // into getting out of our way and suppress vacuous errors in the log. As an alternative, consider
+        // overwriting #getKnownBlocks and #getKnownItems.
+        BlockRegistry.FLUID_BLOCKS.getEntries().forEach(fluidBlock ->
+                blockModels.createTrivialCube(fluidBlock.get())
+        );
+        // Generate a simple bucket, copying an existing texture
         itemModels.generateFlatItem(ItemRegistry.COOL_LAVA_BUCKET.get(), Items.LAVA_BUCKET, ModelTemplates.FLAT_ITEM);
-        
+        // Making dynamic buckets is a bit different in 26.1, and the docs are currently incorrect. This mostly works, but results in a weird outline
         itemModels.itemModelOutput.accept(ItemRegistry.THICK_AIR_BUCKET.get(), ItemModelUtils.plainModel(
                 itemModels.generateLayeredItem(
                         ItemRegistry.THICK_AIR_BUCKET.get(),
@@ -84,7 +69,7 @@ public class FFModelProvider extends ModelProvider {
                 )));
         
         // There's a special (Neo)Forge model type for bucket items.
-        // More NeoForge convenience models can be found at neoforge-21.1.[XXX]-merged.jar/assets/neoforge/models.
+        // More NeoForge convenience assets can be found in your External Libraries folder at net.neoforged\neoforge\26.1.2.42-beta\445b8c102926c24111540bf66f7a2572f7d1638a\neoforge-26.1.2.42-beta-universal.jar!\assets\neoforge\.
         itemModels.itemModelOutput.accept(
                 ItemRegistry.CONFIGURABLE_FLUID_BUCKET.get(),
                 new DynamicFluidContainerModel.Unbaked(
@@ -100,19 +85,6 @@ public class FFModelProvider extends ModelProvider {
                         true
                 )
         );
-//        getBuilder(ItemRegistry.CONFIGURABLE_FLUID_BUCKET.getRegisteredName())
-//                .parent(getExistingFile(Identifier.fromNamespaceAndPath("neoforge","item/bucket")))
-//                .customLoader(DynamicFluidContainerModelBuilder::begin)
-//                .applyFluidLuminosity(true)
-//                .coverIsMask(false)
-//                // Change if the density is negative - really should be dynamically determined. #BlameNeoForge
-//                .flipGas(false)
-//                .fluid(FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get())
-//                // Set to false to remind us that this field is ignored. We must
-//                // register a TintHandler using RegisterColorHandlersEvent.Item
-//                // or the fluid will be untinted. #BlameThe(Neo)ForgeTeam
-//                .applyTint(false);
-//                // If you need a reference to the model file, you can add #end to the end of this call chain.
         itemModels.itemModelOutput.accept(
                 ItemRegistry.RIVER_OF_TIME_BUCKET.get(),
                 new DynamicFluidContainerModel.Unbaked(
@@ -125,16 +97,9 @@ public class FFModelProvider extends ModelProvider {
                         FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(),
                         false,
                         true,
-                        true
+                        false
                 )
         );
-//        getBuilder(ItemRegistry.RIVER_OF_TIME_BUCKET.getRegisteredName())
-//                .parent(getExistingFile(Identifier.fromNamespaceAndPath("neoforge", "item/bucket")))
-//                .customLoader(DynamicFluidContainerModelBuilder::begin)
-//                .applyFluidLuminosity(true)
-//                .coverIsMask(false)
-//                .flipGas(false)
-//                .fluid(FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get());
         itemModels.itemModelOutput.accept(
                 ItemRegistry.FLOOD_BUCKET.get(),
                 new DynamicFluidContainerModel.Unbaked(
@@ -150,16 +115,5 @@ public class FFModelProvider extends ModelProvider {
                         true
                 )
         );
-//        getBuilder(ItemRegistry.FLOOD_BUCKET.getRegisteredName())
-//                .parent(getExistingFile(Identifier.fromNamespaceAndPath("neoforge", "item/bucket_drip")))
-//                .customLoader(DynamicFluidContainerModelBuilder::begin)
-//                .applyFluidLuminosity(true)
-//                .coverIsMask(false)
-//                .flipGas(false)
-//                .fluid(FluidRegistries.FunFluids.FLOOD_FLUID.get())
-//                .end()
-//                .texture("cover", mcLoc("item/barrier"));
-        // Actually run the generators
-//        super.registerModels(blockModels, itemModels);
     }
 }

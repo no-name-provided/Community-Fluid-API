@@ -25,11 +25,13 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.color.item.FluidContentsTint;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.fluid.FluidTintSource;
+import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,7 +89,7 @@ public class Events {
 //                    public Identifier getStillTexture() {
 //                        return THICK_AIR_FLOW;
 //                    }
-                    
+
 //                    /**
 //                     * Returns the location of the texture to apply to the camera when it is
 //                     * within the fluid. If no location is specified, no overlay will be applied.
@@ -124,9 +126,9 @@ public class Events {
                     
                     // THe vanilla water textures are good, grayscale fluid textures. Unless you have an artistic bent,
                     // I'd recommend just using those and applying a tint.
-
-                    final Identifier UNDER_C_FLUID_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
                     
+                    final Identifier UNDER_C_FLUID_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
+
 //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return C_FLUID_STILL;
@@ -146,7 +148,7 @@ public class Events {
                     public Identifier getRenderOverlayTexture(Minecraft minecraft) {
                         return UNDER_C_FLUID_LOCATION;
                     }
-                    
+
 //                    /**
 //                     * Only used as a fallback? Might only apply if biome doesn't have a water color set.
 //                     *  */
@@ -190,7 +192,7 @@ public class Events {
                     final Identifier RIVER_OF_TIME_FLOW = Identifier.withDefaultNamespace("block/water_flow");
                     final Identifier RIVER_OF_TIME_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
                     final Identifier RIVER_OF_TIME_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-                    
+
 //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return RIVER_OF_TIME_STILL;
@@ -210,7 +212,7 @@ public class Events {
                     public Identifier getRenderOverlayTexture(Minecraft minecraft) {
                         return RIVER_OF_TIME_LOCATION;
                     }
-                    
+
 //                    /**
 //                     * Only used as a fallback? Might only apply if biome doesn't have a water color set.
 //                     *  */
@@ -231,7 +233,7 @@ public class Events {
                     final Identifier FLOOD_FLOW = Identifier.withDefaultNamespace("block/water_flow");
                     final Identifier FLOOD_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
                     final Identifier FLOOD_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-                    
+
 //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return FLOOD_STILL;
@@ -251,7 +253,7 @@ public class Events {
                     public Identifier getRenderOverlayTexture(Minecraft minecraft) {
                         return FLOOD_LOCATION;
                     }
-                    
+
 //                    /**
 //                     * Fallback. <i>Probably</i> unused.
 //                     **/
@@ -310,8 +312,8 @@ public class Events {
         final Identifier C_FLUID_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
         event.register(
                 new FluidModel.Unbaked(
-                        new Material(Identifier.fromNamespaceAndPath(MODID, "block/configurable_fluid_still")),
-                        new Material(Identifier.fromNamespaceAndPath(MODID, "block/configurable_fluid_flow")),
+                        new Material(Identifier.withDefaultNamespace("block/water_still")),
+                        new Material(Identifier.withDefaultNamespace("block/water_flow")),
                         null,
                         _ -> ServerConfig.cFColor
                 ),
@@ -340,13 +342,11 @@ public class Events {
         );
     }
     
-//    @SubscribeEvent
-//    public static void registerItemColorHandlers(RegisterColorHandlersEvent.ItemTintSources event) {
-//        // An ItemColor is a functional interface that accepts an ItemStack and a tint index int
-//        // and returns a color as an ARGB int.
-//        event.register(Identifier.fromNamespaceAndPath(MODID, ),
-//                 MapCodec.unit(),
-//                ItemRegistry.CONFIGURABLE_FLUID_BUCKET.get()
+    @SubscribeEvent
+    public static void registerItemColorHandlers(RegisterColorHandlersEvent.ItemTintSources event) {
+//        event.register(
+//                ItemRegistry.CONFIGURABLE_FLUID_BUCKET.getId(),
+//                FluidContentsTint.MAP_CODEC
 //        );
 //        event.register((stack, tintIndex) -> {
 //                    if (tintIndex == 1) {
@@ -367,5 +367,5 @@ public class Events {
 //                },
 //                ItemRegistry.FLOOD_BUCKET.get()
 //        );
-//    }
+    }
 }
