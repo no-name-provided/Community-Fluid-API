@@ -21,7 +21,7 @@ public class FFLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("item_group." + MODID, "Functional Fluids");
 
-//        addFluidSet("Cool Lava", COOL_LAVA_BLOCK, COOL_LAVA_BUCKET, COOL_LAVA_CAULDRON);
+        addFluidSet("Cool Lava", COOL_LAVA_BLOCK, COOL_LAVA_BUCKET, COOL_LAVA_CAULDRON);
         addFluidSet("Thick Air", THICK_AIR_BLOCK, THICK_AIR_BUCKET);
         addFluidSet("Configurable Fluid", CONFIGURABLE_FLUID_BLOCK, CONFIGURABLE_FLUID_BUCKET);
         addFluidSet("River of Time", RIVER_OF_TIME_BLOCK, RIVER_OF_TIME_BUCKET);

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "fun_fluids:block/cool_lava_block"
+    "all": "fun_fluids:block/flood_block"
   }
 }

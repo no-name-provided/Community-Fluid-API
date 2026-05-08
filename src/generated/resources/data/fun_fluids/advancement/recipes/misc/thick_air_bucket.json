@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fun_fluids:dense_air_bucket"
+        "recipe": "fun_fluids:thick_air_bucket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "fun_fluids:dense_air_bucket"
+      "fun_fluids:thick_air_bucket"
     ]
   }
 }

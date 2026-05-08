@@ -3,15 +3,17 @@ package com.github.no_name_provided.fun_fluids.datagen.providers;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class FFRecipeProvider extends RecipeProvider {
@@ -26,7 +28,7 @@ public class FFRecipeProvider extends RecipeProvider {
     protected void buildRecipes() {
         shapeless(
                 RecipeCategory.MISC,
-                ItemStackTemplate.fromNonEmptyStack(new ItemStack(ItemRegistry.COOL_LAVA_BUCKET))
+                new ItemStackTemplate(ItemRegistry.COOL_LAVA_BUCKET)
         ).requires(Items.SNOW_BLOCK)
                 .requires(Items.MAGMA_CREAM)
                 .requires(Items.BUCKET)
@@ -59,5 +61,21 @@ public class FFRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
         
         // No default recipe for buckets of Flood because they're too dangerous
+    }
+    
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+            super(output, lookupProvider);
+        }
+        
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput output) {
+            return new FFRecipeProvider(provider, output);
+        }
+        
+        @Override
+        public String getName() {
+            return MODID + "_recipe_provider";
+        }
     }
 }

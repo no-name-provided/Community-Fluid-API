@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:ice",
+    "minecraft:dragon_breath",
+    "minecraft:snow_block",
     "minecraft:bucket",
     "minecraft:campfire"
   ],
   "result": {
-    "id": "fun_fluids:configurable_fluid_bucket"
+    "id": "fun_fluids:thick_air_bucket"
   }
 }

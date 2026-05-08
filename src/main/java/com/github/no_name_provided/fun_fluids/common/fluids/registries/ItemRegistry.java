@@ -25,7 +25,7 @@ public class ItemRegistry {
             (identifier) -> new BetterBucketItem(FluidRegistries.FunFluids.COOL_LAVA.get(), new Item.Properties(), identifier)
     );
     public static final DeferredHolder<Item, BucketItem> THICK_AIR_BUCKET = ITEMS.register(
-            "dense_air_bucket",
+            "thick_air_bucket",
             (identifier) -> new BetterBucketItem(FluidRegistries.FunFluids.THICK_AIR_FLUID.get(), new Item.Properties(), identifier)
     );
     public static final DeferredHolder<Item, BucketItem> CONFIGURABLE_FLUID_BUCKET = ITEMS.register(

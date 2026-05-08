@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/bucket",
-  "textures": {
-    "layer1": "minecraft:item/firework_star_overlay"
-  }
-}

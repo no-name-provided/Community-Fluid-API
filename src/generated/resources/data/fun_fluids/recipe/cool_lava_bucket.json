@@ -2,18 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:snow_block"
-    },
-    {
-      "item": "minecraft:magma_cream"
-    },
-    {
-      "item": "minecraft:bucket"
-    }
+    "minecraft:snow_block",
+    "minecraft:magma_cream",
+    "minecraft:bucket"
   ],
   "result": {
-    "count": 1,
     "id": "fun_fluids:cool_lava_bucket"
   }
 }

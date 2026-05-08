@@ -1,9 +1,0 @@
-{
-  "parent": "neoforge:item/bucket",
-  "apply_fluid_luminosity": true,
-  "apply_tint": false,
-  "cover_is_mask": false,
-  "flip_gas": false,
-  "fluid": "fun_fluids:configurable_fluid",
-  "loader": "neoforge:fluid_container"
-}

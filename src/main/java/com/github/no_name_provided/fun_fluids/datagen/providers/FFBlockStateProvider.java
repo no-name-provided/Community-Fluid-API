@@ -3,10 +3,9 @@
 //import net.minecraft.data.PackOutput;
 //import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 //import net.neoforged.neoforge.client.model.generators.*;
-//import net.neoforged.neoforge.common.data.ExistingFileHelper;
-//
-//import static com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry.*;
-//
+
+import static com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry.*;
+
 ///**
 // * Note: import the NeoForge BlockStateProvider.
 // */
@@ -20,7 +19,7 @@
 //                COOL_LAVA_CAULDRON.get(),
 //                models().getExistingFile(mcLoc("lava_cauldron"))
 //        );
-//
+
 //        //Not necessary. Eliminates some undefined/missing blockstate warnings.
 //        simpleBlock(
 //                COOL_LAVA_BLOCK.get(),
