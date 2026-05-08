@@ -75,10 +75,6 @@ public class Events {
                         (level, currentPos, relativePos, currentState) -> level.getBlockState(currentPos.below()).is(Blocks.SOUL_SOIL) && level.getBlockState(relativePos).is(Blocks.BLUE_ICE),
                         Blocks.BASALT.defaultBlockState())
         );
-//         Needs to be called here, due to an initialization order issue that
-//         <i>appears</i> to not be present in vanilla (and doesn't affect
-//         interactions with vanilla items) #BlameTheNeoForgeTeam
-//        event.enqueueWork(() -> CoolLavaCauldronBlock.addCoolLavaCauldronInteractions(CoolLavaCauldronBlock.COOL_LAVA));
     }
     
     @SubscribeEvent
@@ -100,20 +96,17 @@ public class Events {
                                 ? InteractionResult.CONSUME
                                 : emptyBucket(level, pos, player, hand, itemInHand, BlockRegistry.COOL_LAVA_CAULDRON.get().defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA)
         );
-        // Needs more work to bring in line with vanilla
         event.register(
                 Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
                 Items.BUCKET,
                 (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
-                        level.getFluidState(pos.above()).is(Tags.Fluids.WATER)
-                                ? InteractionResult.CONSUME
-                                : emptyBucket(level, pos, player, hand, itemInHand, BlockRegistry.COOL_LAVA_CAULDRON.get().defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA));
+                        fillBucket(state, level, pos, player, hand, itemInHand, new ItemStack(ItemRegistry.COOL_LAVA_BUCKET.get()), var0x -> true, SoundEvents.BUCKET_FILL_LAVA)
+        );
     }
     
     /**
      * We only need to add this because we aren't using a vanilla BucketItem. It's normally automatically added by
      * NeoForge.
-     *
      */
     @SubscribeEvent
     static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
