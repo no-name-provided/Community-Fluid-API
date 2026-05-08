@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.*;
@@ -89,17 +90,17 @@ public abstract class CoolLavaFluid extends FlowingFluid {
         return super.getDripParticle();
     }
 
-//    /**
-//     * Returns whether the boat can be used on the fluid.
-//     *
-//     * @param state the state of the fluid
-//     * @param boat  the boat trying to be used on the fluid
-//     * @return {@code true} if the boat can be used, {@code false} otherwise
-//     */
-//    @Override
-//    public boolean supportsBoating(FluidState state, Boat boat) {
-//        return true;
-//    }
+    /**
+     * Returns whether the boat can be used on the fluid.
+     *
+     * @param state the state of the fluid
+     * @param boat  the boat trying to be used on the fluid
+     * @return {@code true} if the boat can be used, {@code false} otherwise
+     */
+    @Override
+    public boolean supportsBoating(FluidState state, AbstractBoat boat) {
+        return true;
+    }
 
     /**
      * Returns whether the block can be extinguished by this fluid.
@@ -203,7 +204,7 @@ public abstract class CoolLavaFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-            return Fluids.EMPTY.defaultFluidState().createLegacyBlock();
+            return BlockRegistry.COOL_LAVA_BLOCK.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
     
     @Override protected boolean canConvertToSource(ServerLevel level) {

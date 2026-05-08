@@ -35,15 +35,15 @@ import static com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauld
 
 @EventBusSubscriber(modid = MODID)
 public class Events {
-//    @SubscribeEvent
-//    static void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
-//        event.register(
-//                BlockRegistry.COOL_LAVA_CAULDRON.get(),
-//                FluidRegistries.FunFluids.COOL_LAVA.get(),
-//                1000,
-//                null
-//        );
-//    }
+    @SubscribeEvent
+    static void registerCauldronFluidContent(RegisterCauldronFluidContentEvent event) {
+        event.register(
+                BlockRegistry.COOL_LAVA_CAULDRON.get(),
+                FluidRegistries.FunFluids.COOL_LAVA.get(),
+                1000,
+                null
+        );
+    }
     
     /**
      * Runs during common setup.
@@ -59,21 +59,21 @@ public class Events {
         // decided to use a bespoke "registry" (not deferred) with a basic synchronized static addition method.
         // Something about registries not handling "arbitrary obj -> thing" mappings.
         // This may cause lag if a bunch of mods try to add fluid interactions at the same time.
-//        FluidInteractionRegistry.addInteraction(
-//                FluidRegistries.FunFluidTypes.COOL_LAVA.get(),
-//                new FluidInteractionRegistry.InteractionInformation(
-//                        NeoForgeMod.WATER_TYPE.value(),
-//                        fluidState -> fluidState.isSource() ? Blocks.OBSIDIAN.defaultBlockState() : Blocks.COBBLESTONE.defaultBlockState())
-//        );
-//        FluidInteractionRegistry.addInteraction(
-//                FluidRegistries.FunFluidTypes.COOL_LAVA.get(),
-//                new FluidInteractionRegistry.InteractionInformation(
-//                        (level, currentPos, relativePos, currentState) -> level.getBlockState(currentPos.below()).is(Blocks.SOUL_SOIL) && level.getBlockState(relativePos).is(Blocks.BLUE_ICE),
-//                        Blocks.BASALT.defaultBlockState())
-//        );
-        // Needs to be called here, due to an initialization order issue that
-        // <i>appears</i> to not be present in vanilla (and doesn't affect
-        // interactions with vanilla items) #BlameTheNeoForgeTeam
+        FluidInteractionRegistry.addInteraction(
+                FluidRegistries.FunFluidTypes.COOL_LAVA.get(),
+                new FluidInteractionRegistry.InteractionInformation(
+                        NeoForgeMod.WATER_TYPE.value(),
+                        fluidState -> fluidState.isSource() ? Blocks.OBSIDIAN.defaultBlockState() : Blocks.COBBLESTONE.defaultBlockState())
+        );
+        FluidInteractionRegistry.addInteraction(
+                FluidRegistries.FunFluidTypes.COOL_LAVA.get(),
+                new FluidInteractionRegistry.InteractionInformation(
+                        (level, currentPos, relativePos, currentState) -> level.getBlockState(currentPos.below()).is(Blocks.SOUL_SOIL) && level.getBlockState(relativePos).is(Blocks.BLUE_ICE),
+                        Blocks.BASALT.defaultBlockState())
+        );
+//         Needs to be called here, due to an initialization order issue that
+//         <i>appears</i> to not be present in vanilla (and doesn't affect
+//         interactions with vanilla items) #BlameTheNeoForgeTeam
 //        event.enqueueWork(() -> CoolLavaCauldronBlock.addCoolLavaCauldronInteractions(CoolLavaCauldronBlock.COOL_LAVA));
     }
     

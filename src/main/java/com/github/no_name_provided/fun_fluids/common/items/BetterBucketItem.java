@@ -1,7 +1,6 @@
 package com.github.no_name_provided.fun_fluids.common.items;
 
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -23,14 +22,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import java.util.List;
 
 import static net.minecraft.world.item.Items.BUCKET;
 
@@ -59,22 +55,29 @@ public class BetterBucketItem extends BucketItem {
     }
     
     /**
-     * Special case cauldron interactions and use their fluid capability.
+     * Special case cauldron interactions and use their fluid handler.
      */
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (result.getType() == HitResult.Type.BLOCK && level.getBlockState(result.getBlockPos()).is(Blocks.CAULDRON)) {
-            //noinspection DataFlowIssue - We know this block has a cauldron capability.
-            level.getCapability(Capabilities.Fluid.BLOCK, result.getBlockPos(), null)
-                    .insert(FluidResource.of(new FluidStack(content, 1000)), 1000, Transaction.openRoot());
-            player.awardStat(Stats.USE_CAULDRON);
-            player.awardStat(Stats.ITEM_USED.get(player.getItemInHand(hand).getItem()));
-            level.playSound(null, result.getBlockPos(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.BLOCKS, 1.0F, 1.0F);
-            level.gameEvent(null, GameEvent.FLUID_PICKUP, result.getBlockPos());
-            return InteractionResult.CONSUME.heldItemTransformedTo(player.isCreative() ? player.getItemInHand(hand) : new ItemStack(Items.BUCKET));
-        } else {
+//        BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+//        if (result.getType() == HitResult.Type.BLOCK && level.getBlockState(result.getBlockPos()).is(Blocks.CAULDRON)) {
+//            //We use the autocloseable here - generally a bad idea in Minecraft, but these transactions are screwy, undocumented sources of instability
+//            try {
+//                Transaction root = Transaction.openRoot();
+//                ResourceHandler<FluidResource> handler = level.getCapability(Capabilities.Fluid.BLOCK, result.getBlockPos(), Blocks.CAULDRON.defaultBlockState(), null, null);
+//                if (handler != null) {
+//                    handler.insert(FluidResource.of(new FluidStack(content, 1000)), 1000, root);
+//                }
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//            player.awardStat(Stats.USE_CAULDRON);
+//            player.awardStat(Stats.ITEM_USED.get(player.getItemInHand(hand).getItem()));
+//            level.playSound(null, result.getBlockPos(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.BLOCKS, 1.0F, 1.0F);
+//            level.gameEvent(null, GameEvent.FLUID_PICKUP, result.getBlockPos());
+//            return InteractionResult.CONSUME.heldItemTransformedTo(player.isCreative() ? player.getItemInHand(hand) : new ItemStack(Items.BUCKET));
+//        } else {
             return super.use(level, player, hand);
-        }
+//        }
     }
 }

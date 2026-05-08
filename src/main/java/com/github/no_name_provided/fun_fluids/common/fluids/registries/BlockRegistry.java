@@ -1,6 +1,7 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
+import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -107,11 +108,16 @@ public class BlockRegistry {
     public static final DeferredRegister.Blocks SOLID_BLOCKS = DeferredRegister.createBlocks(MODID);
 
 
-//    @SuppressWarnings("deprecation")
-//    public static final DeferredHolder<Block, AbstractCauldronBlock> COOL_LAVA_CAULDRON = SOLID_BLOCKS.register(
-//        "cool_lava_cauldron_block",
-//            () -> new CoolLavaCauldronBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.CAULDRON).lightLevel(state -> 15))
-//    );
+    @SuppressWarnings("deprecation")
+    public static final DeferredHolder<Block, AbstractCauldronBlock> COOL_LAVA_CAULDRON = SOLID_BLOCKS.register(
+        "cool_lava_cauldron_block",
+            (identifier) ->
+                    new CoolLavaCauldronBlock(
+                            BlockBehaviour.Properties.ofLegacyCopy(Blocks.CAULDRON)
+                                    .setId(ResourceKey.create(Registries.BLOCK, identifier))
+                                    .lightLevel(state -> 15)
+                    )
+    );
     
     public static void registerSolids(IEventBus bus) {
         SOLID_BLOCKS.register(bus);
