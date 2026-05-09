@@ -32,7 +32,7 @@ public class FFFluidTagsProvider extends FluidTagsProvider {
         tag(THICK_AIR).add(FunFluids.THICK_AIR_FLUID.get());
         tag(CONFIGURABLE_FLUID).add(FunFluids.CONFIGURABLE_FLUID.get(), FunFluids.FLOWING_CONFIGURABLE_FLUID.get());
         tag(FLOOD_FLUID).add(FunFluids.FLOOD_FLUID.get(), FunFluids.FLOWING_FLOOD_FLUID.get());
-        tag(RIVER_OF_TIME).add(FunFluids.RIVER_OF_TIME_FLUID.get(), FunFluids.RIVER_OF_TIME_FLUID.get());
+        tag(RIVER_OF_TIME).add(FunFluids.RIVER_OF_TIME_FLUID.get(), FunFluids.FLOWING_RIVER_OF_TIME_FLUID.get());
     }
     
     private static TagKey<Fluid> create(String name) {
