@@ -85,28 +85,24 @@ public class CoolLavaFluidType extends TaggedFluidType {
      */
     @Override
     public boolean move(FluidState state, LivingEntity entity, Vec3 travelVector, double gravity) {
-        // The following code is copied, with minimal changes, from LivingEntity#travel.
-        double entityHeight = entity.getY();
-        boolean flag = entity.getDeltaMovement().y <= 0.0;
-
+        boolean isFalling = entity.getDeltaMovement().y <= 0.0;
+        double oldY = entity.getY();
+        // The following code is copied, with minimal changes, from LivingEntity#travelInLava.
         entity.moveRelative(0.02F, travelVector);
         entity.move(MoverType.SELF, entity.getDeltaMovement());
         if (entity.getFluidHeight(FFFluidTagsProvider.COOL_LAVA) <= entity.getFluidJumpThreshold()) {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.8F, 0.5));
-            Vec3 vec33 = entity.getFluidFallingAdjustedMovement(gravity, flag, entity.getDeltaMovement());
-            entity.setDeltaMovement(vec33);
+            Vec3 movement = entity.getFluidFallingAdjustedMovement(gravity, isFalling, entity.getDeltaMovement());
+            entity.setDeltaMovement(movement);
         } else {
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
         }
-
+        
         if (gravity != 0.0) {
             entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, -gravity / 4.0, 0.0));
         }
-
-        Vec3 vec34 = entity.getDeltaMovement();
-        if (entity.horizontalCollision && entity.isFree(vec34.x, vec34.y + 0.6F - entity.getY() + entityHeight, vec34.z)) {
-            entity.setDeltaMovement(vec34.x, 0.3F, vec34.z);
-        }
+        
+        entity.jumpOutOfFluid(oldY);
         return true;
     }
 }
