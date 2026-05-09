@@ -27,7 +27,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(LivingEntity.class)
 abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension {
@@ -300,6 +303,21 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
         }
         
         ci.cancel();
+    }
+    
+    /**
+     * Allow drowning logic to apply to custom fluids.
+     */
+    @Redirect(method = "baseTick()V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
+    private boolean Fun_Fluids_baseTick(LivingEntity instance, TagKey<Fluid> tagKey) {
+        AtomicBoolean result = new AtomicBoolean(instance.isEyeInFluid(tagKey));
+        NeoForgeRegistries.FLUID_TYPES.forEach(type -> {
+            if (type.canDrownIn((LivingEntity) (Object) this)) {
+                result.set(true);
+            }
+        });
+        return result.get();
     }
 
 //    @ModifyVariable(method = "aiStep()V",
