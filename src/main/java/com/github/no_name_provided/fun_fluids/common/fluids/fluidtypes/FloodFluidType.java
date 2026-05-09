@@ -1,14 +1,16 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
+import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.SoundActions;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-public class FloodFluidType extends FluidType {
+public class FloodFluidType extends TaggedFluidType {
     public FloodFluidType() {
         super(Properties.create()
                 // Taken from net.neoforged.neoforge.common.NeoForgeMod.WATER_TYPE
@@ -22,5 +24,13 @@ public class FloodFluidType extends FluidType {
                 .canHydrate(true)
         );
     }
-
+    
+    /**
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
+     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     */
+    @Override
+    public TagKey<Fluid> getTag() {
+        return FFFluidTagsProvider.FLOOD_FLUID;
+    }
 }

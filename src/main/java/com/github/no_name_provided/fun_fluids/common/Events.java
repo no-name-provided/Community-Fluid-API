@@ -2,12 +2,10 @@ package com.github.no_name_provided.fun_fluids.common;
 
 import com.github.no_name_provided.fun_fluids.client.particles.MistParticle;
 import com.github.no_name_provided.fun_fluids.client.registries.ParticleRegistry;
-import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -17,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -37,6 +35,8 @@ import static com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauld
 import static net.minecraft.core.cauldron.CauldronInteractions.emptyBucket;
 import static net.minecraft.core.cauldron.CauldronInteractions.fillBucket;
 
+
+@SuppressWarnings("unused") // We leave this in for documentary purposes, so other folks can see what's available
 @EventBusSubscriber(modid = MODID)
 public class Events {
     @SubscribeEvent
@@ -55,7 +55,6 @@ public class Events {
      * This is where we register all fluid interactions that don't involve falling. Arbitrary, I know. Suggested by
      * ChiefArug.
      * </p>
-     *
      */
     @SubscribeEvent
     static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -89,6 +88,7 @@ public class Events {
     
     @SubscribeEvent
     static void onRegisterCauldronInteractions(RegisterCauldronInteractionEvent.Interaction event) {
+        // This makes our bucket work with all the other cauldrons
         event.registerToAll(
                 ItemRegistry.COOL_LAVA_BUCKET.get(),
                 (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
@@ -96,6 +96,33 @@ public class Events {
                                 ? InteractionResult.CONSUME
                                 : emptyBucket(level, pos, player, hand, itemInHand, BlockRegistry.COOL_LAVA_CAULDRON.get().defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA)
         );
+        // Since we're no longer supposed to directly call the vanilla method,
+        // we need to duplicate a lot of vanilla code here.
+        event.register(
+                Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
+                Items.WATER_BUCKET,
+                (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
+                        level.getFluidState(pos.above()).is(Tags.Fluids.LAVA)
+                                ? InteractionResult.CONSUME
+                                : emptyBucket(level, pos, player, hand, itemInHand, Blocks.WATER_CAULDRON.defaultBlockState(), SoundEvents.BUCKET_EMPTY)
+        );
+        event.register(
+                Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
+                Items.LAVA_BUCKET,
+                (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
+                        level.getFluidState(pos.above()).is(Tags.Fluids.WATER)
+                                ? InteractionResult.CONSUME
+                                : emptyBucket(level, pos, player, hand, itemInHand, Blocks.LAVA_CAULDRON.defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA)
+        );
+        event.register(
+                Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
+                Items.POWDER_SNOW_BUCKET,
+                (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
+                        level.getFluidState(pos.above()).is(Tags.Fluids.WATER)
+                                ? InteractionResult.CONSUME
+                                : emptyBucket(level, pos, player, hand, itemInHand, Blocks.POWDER_SNOW_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3), SoundEvents.BUCKET_EMPTY_POWDER_SNOW)
+        );
+        // This lets us empty our cauldron
         event.register(
                 Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
                 Items.BUCKET,
@@ -119,7 +146,6 @@ public class Events {
     
     /**
      * Just part of the thick air fancy rendering. Not really fluid code.
-     *
      */
     @SubscribeEvent
     static void registerParticleProviders(RegisterParticleProvidersEvent event) {

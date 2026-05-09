@@ -1,25 +1,25 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.BlockRegistry;
-import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
+import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.SoundActions;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class CoolLavaFluidType extends FluidType {
+public class CoolLavaFluidType extends TaggedFluidType {
     public CoolLavaFluidType() {
         super(Properties.create()
                 .fallDistanceModifier(0.0f)
@@ -39,7 +39,16 @@ public class CoolLavaFluidType extends FluidType {
                 .addDripstoneDripping(PointedDripstoneBlock.LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK, ParticleTypes.DRIPPING_DRIPSTONE_LAVA, BlockRegistry.COOL_LAVA_CAULDRON.get(), SoundEvents.POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON)
         );
     }
-
+    
+    /**
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
+     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     */
+    @Override
+    public TagKey<Fluid> getTag() {
+        return FFFluidTagsProvider.COOL_LAVA;
+    }
+    
     /**
      * Returns how much the velocity of the fluid should be scaled by
      * when applied to an entity.
@@ -82,8 +91,7 @@ public class CoolLavaFluidType extends FluidType {
 
         entity.moveRelative(0.02F, travelVector);
         entity.move(MoverType.SELF, entity.getDeltaMovement());
-        // TODO: Replace with a tag for cool lava
-        if (entity.getFluidHeight(FluidTags.LAVA) <= entity.getFluidJumpThreshold()) {
+        if (entity.getFluidHeight(FFFluidTagsProvider.COOL_LAVA) <= entity.getFluidJumpThreshold()) {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.8F, 0.5));
             Vec3 vec33 = entity.getFluidFallingAdjustedMovement(gravity, flag, entity.getDeltaMovement());
             entity.setDeltaMovement(vec33);

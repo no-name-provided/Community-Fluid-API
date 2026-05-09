@@ -1,20 +1,22 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
+import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-public class ThickAirFluidType extends FluidType {
+public class ThickAirFluidType extends TaggedFluidType {
 
     public ThickAirFluidType() {
         super(Properties.create()
@@ -34,7 +36,16 @@ public class ThickAirFluidType extends FluidType {
                 .lightLevel(0)
         );
     }
-
+    
+    /**
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
+     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     */
+    @Override
+    public TagKey<Fluid> getTag() {
+        return FFFluidTagsProvider.THICK_AIR;
+    }
+    
     /**
      * Performs how an entity moves when within the fluid. If the method returns {@code true},
      * no regular movement logic will be performed (the player will simply stop moving).

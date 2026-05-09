@@ -27,14 +27,10 @@ public class Generators {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-
-        // If it's a server resource (goes in the data folder) include the server.
+        
         generator.addProvider(true, new FFRecipeProvider.Runner(packOutput, lookupProvider));
-
-        // If it's a client resource (goes in the assets folder) include the client.
-//        generator.addProvider(event.includeDev(), new FFBlockModelProvider(packOutput, MODID));
         generator.addProvider(true, new FFModelProvider(packOutput, MODID));
-//        generator.addProvider(event.includeDev(), new FFBlockStateProvider(packOutput, MODID));
+        generator.addProvider(true, new FFFluidTagsProvider(packOutput, lookupProvider));
         generator.addProvider(true, new FFLanguageProvider(packOutput, MODID, Locale.US.toString().toLowerCase()));
         generator.addProvider(true, new FFParticleDescriptionProvider(packOutput));
     }

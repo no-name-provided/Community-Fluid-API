@@ -1,8 +1,10 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
+import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -11,22 +13,31 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
-public class ConfigurableFluidType extends FluidType {
+public class ConfigurableFluidType extends TaggedFluidType {
     public ConfigurableFluidType() {
         super(Properties.create()
                 .canPushEntity(true)
                 .canExtinguish(true)
         );
     }
-
+    
+    /**
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type. This
+     * greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     */
+    @Override
+    public TagKey<Fluid> getTag() {
+        return FFFluidTagsProvider.CONFIGURABLE_FLUID;
+    }
+    
     /**
      * Returns the light level emitted by the fluid.
      *
@@ -181,5 +192,4 @@ public class ConfigurableFluidType extends FluidType {
     public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
         return ServerConfig.cFEvaporateInNether && level.dimension() == Level.NETHER;
     }
-
 }

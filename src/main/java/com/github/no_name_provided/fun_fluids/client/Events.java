@@ -2,38 +2,18 @@ package com.github.no_name_provided.fun_fluids.client;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
-import com.github.no_name_provided.fun_fluids.common.fluids.registries.ItemRegistry;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.color.item.FluidContentsTint;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.client.fluid.FluidTintSource;
-import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -228,7 +208,6 @@ public class Events {
         );
         event.registerFluidType(
                 new IClientFluidTypeExtensions() {
-                    
                     final Identifier FLOOD_STILL = Identifier.withDefaultNamespace("block/water_still");
                     final Identifier FLOOD_FLOW = Identifier.withDefaultNamespace("block/water_flow");
                     final Identifier FLOOD_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
@@ -314,7 +293,8 @@ public class Events {
                 new FluidModel.Unbaked(
                         new Material(Identifier.withDefaultNamespace("block/water_still")),
                         new Material(Identifier.withDefaultNamespace("block/water_flow")),
-                        null,
+                        // These overlays don't seem to work...
+                        new Material(C_FLUID_OVERLAY),
                         _ -> ServerConfig.cFColor
                 ),
                 FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(),
@@ -334,7 +314,7 @@ public class Events {
                 new FluidModel.Unbaked(
                         new Material(Identifier.withDefaultNamespace("block/water_still")),
                         new Material(Identifier.withDefaultNamespace("block/water_flow")),
-                        null,
+                        new Material(C_FLUID_OVERLAY),
                         _ -> 0xFF3F76E4
                 ),
                 FluidRegistries.FunFluids.FLOOD_FLUID.get(),

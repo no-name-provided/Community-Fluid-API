@@ -1,18 +1,20 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 
+import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.golem.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.SoundActions;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-public class RiverOfTimeFluidType extends FluidType {
+public class RiverOfTimeFluidType extends TaggedFluidType {
     public RiverOfTimeFluidType() {
         super(Properties.create()
                 // Taken from net.neoforged.neoforge.common.NeoForgeMod.WATER_TYPE
@@ -26,7 +28,15 @@ public class RiverOfTimeFluidType extends FluidType {
                 .canHydrate(true)
         );
     }
-
+    /**
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
+     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     */
+    @Override
+    public TagKey<Fluid> getTag() {
+        return FFFluidTagsProvider.RIVER_OF_TIME;
+    }
+    
     /**
      * Scales the effect of fluid velocity on the velocity of submerged
      * entities (determines how hard the fluid pushes).
