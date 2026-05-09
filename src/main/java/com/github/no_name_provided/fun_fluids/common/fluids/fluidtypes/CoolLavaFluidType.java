@@ -5,6 +5,7 @@ import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvi
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -58,8 +59,7 @@ public class CoolLavaFluidType extends TaggedFluidType {
      */
     @Override
     public double motionScale(Entity entity) {
-//        return entity.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
-        return 1;
+        return entity.level().environmentAttributes().getDimensionValue(EnvironmentAttributes.FAST_LAVA) ? 0.007D : 0.0023333333333333335D;
     }
 
     @Override
