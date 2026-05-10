@@ -2,8 +2,8 @@ package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
+import com.github.no_name_provided.fun_fluids.common.blocks.ThickAirBlock;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -38,7 +38,7 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> THICK_AIR_BLOCK = FLUID_BLOCKS.register(
             "thick_air_block",
-            (identifier) -> new LiquidBlock(
+            (identifier) -> new ThickAirBlock(
                     FluidRegistries.FunFluids.THICK_AIR_FLUID.get(),
                     BlockBehaviour.Properties.of()
                             .setId(ResourceKey.create(Registries.BLOCK, identifier))

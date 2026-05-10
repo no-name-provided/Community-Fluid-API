@@ -9,7 +9,9 @@
     "Fun_Fluids_LivingEntity"
   ],
   "client": [
-    "Fun_Fluids_Camera"
+    "Fun_Fluids_Camera",
+    ,
+    "Fun_Fluids_FluidRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

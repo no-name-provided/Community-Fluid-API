@@ -119,7 +119,7 @@ public class ThickAirFluid extends FlowingFluid {
             }
         }
     }
-
+    
     // Overrides associated with flowing fluids
     /**
      * Here we tell the game to just use a source block anytime it would try to generate a flowing block.
