@@ -10,8 +10,8 @@
   ],
   "client": [
     "Fun_Fluids_Camera",
-    ,
-    "Fun_Fluids_FluidRenderer"
+    "Fun_Fluids_FluidRenderer",
+    "Fun_Fluids_LocalPlayer"
   ],
   "injectors": {
     "defaultRequire": 1

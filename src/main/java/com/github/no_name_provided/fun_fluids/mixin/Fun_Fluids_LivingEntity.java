@@ -89,7 +89,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
     abstract protected void lerpHeadRotationStep(int lerpHeadSteps, double targetYHeadRot);
     
     @Unique
-    private TagKey<Fluid> typeWeAreIn = null;
+    private TagKey<Fluid> functionalFluids$typeWeAreIn = null;
     
     public Fun_Fluids_LivingEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -117,7 +117,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
         // We iterate over our FluidType registry. This may be replaced with a callback or event later, to support other mods
         NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
             if (fluidType instanceof TaggedFluidType taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
-                typeWeAreIn = taggedFluidType.getTag();
+                functionalFluids$typeWeAreIn = taggedFluidType.getTag();
                 // Patch back in fall damage modifier
                 entity.fallDistance *= taggedFluidType.getFallDistanceModifier(entity);
                 // Conditional has side effects. Returns true if vanilla logic should be skipped.
@@ -209,9 +209,6 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                         ).findFirst().orElse(FluidRegistries.FunFluidTypes.RIVER_OF_TIME.get())).getTag()
                 );
             }
-
-//            boolean inWaterAndHasFluidHeight = entity.isInWater() && fluidHeight > 0.0;
-//            double fluidJumpThreshold = entity.getFluidJumpThreshold();
             if (entity.onGround() && fluidHeight < entity.getFluidJumpThreshold()) {
                 entity.jumpFromGround();
                 noJumpDelay = 10;
@@ -225,25 +222,12 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                 } else if (isInWater()) {
                     entity.jumpInFluid(NeoForgeMod.WATER_TYPE.value());
                 } else {
-                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(typeWeAreIn).iterator();
+                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(functionalFluids$typeWeAreIn).iterator();
                     if (iterator.hasNext()) {
                         entity.jumpInFluid(iterator.next().value().getFluidType());
                     }
                 }
             }
-
-//            if (!inWaterAndHasFluidHeight || entity.onGround() && !(fluidHeight > fluidJumpThreshold)) {
-//                if (!entity.isInLava() || entity.onGround() && !(fluidHeight > fluidJumpThreshold)) {
-//                    if ((entity.onGround() || inWaterAndHasFluidHeight && fluidHeight <= fluidJumpThreshold) && noJumpDelay == 0) {
-//                        entity.jumpFromGround();
-//                        noJumpDelay = 10;
-//                    }
-//                } else {
-//                    entity.jumpInFluid(net.neoforged.neoforge.common.NeoForgeMod.LAVA_TYPE.value());
-//                }
-//            } else {
-//                entity.jumpInFluid(net.neoforged.neoforge.common.NeoForgeMod.WATER_TYPE.value());
-//            }
         } else {
             noJumpDelay = 0;
         }
@@ -317,11 +301,6 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                 .findFirst().ifPresent(a -> result.set(true));
         return result.get();
     }
-
-//    @ModifyVariable(method = "aiStep()V",
-//    at = @At(value ="STORE"), name = "fluidHeight")
-//    private double Fun_Fluids_aiStep(double fluidHeight) {
-//
-//        return typeWeAreIn != null ? getFluidHeight(typeWeAreIn) : fluidHeight;
-//    }
+    
+    
 }
