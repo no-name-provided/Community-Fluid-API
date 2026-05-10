@@ -3,10 +3,18 @@ package com.github.no_name_provided.fun_fluids.client;
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -14,6 +22,8 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.joml.Vector4f;
+import org.jspecify.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -108,7 +118,24 @@ public class Events {
                     // I'd recommend just using those and applying a tint.
                     
                     final Identifier UNDER_C_FLUID_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-
+                    
+                    @Override
+                    public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+                        fluidFogColor.set(ARGB.vector4fFromARGB32(ServerConfig.cFColor));
+                    }
+                    
+                    @Override
+                    public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fog) {
+                        float partialTicks = DeltaTracker.ONE.getGameTimeDeltaPartialTick(false);
+                        fog.environmentalStart = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_START_DISTANCE, partialTicks);
+                        fog.environmentalEnd = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_END_DISTANCE, partialTicks);
+                        if (camera.entity() instanceof LocalPlayer player) {
+                            fog.environmentalEnd = fog.environmentalEnd * Math.max(0.25F, player.getWaterVision());
+                        }
+                        
+                        fog.skyEnd = fog.environmentalEnd;
+                        fog.cloudEnd = fog.environmentalEnd;
+                    }
 //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return C_FLUID_STILL;
@@ -172,7 +199,25 @@ public class Events {
                     final Identifier RIVER_OF_TIME_FLOW = Identifier.withDefaultNamespace("block/water_flow");
                     final Identifier RIVER_OF_TIME_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
                     final Identifier RIVER_OF_TIME_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-
+                    
+                    @Override
+                    public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+                        fluidFogColor.set(new Vector4f(153f/255, 1, 188f/255, 1));
+                    }
+                    
+                    @Override
+                    public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fog) {
+                        float partialTicks = DeltaTracker.ONE.getGameTimeDeltaPartialTick(false);
+                        fog.environmentalStart = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_START_DISTANCE, partialTicks);
+                        fog.environmentalEnd = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_END_DISTANCE, partialTicks);
+                        if (camera.entity() instanceof LocalPlayer player) {
+                            fog.environmentalEnd = fog.environmentalEnd * Math.max(0.25F, player.getWaterVision());
+                        }
+                        
+                        fog.skyEnd = fog.environmentalEnd;
+                        fog.cloudEnd = fog.environmentalEnd;
+                    }
+                    
 //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return RIVER_OF_TIME_STILL;
@@ -212,8 +257,26 @@ public class Events {
                     final Identifier FLOOD_FLOW = Identifier.withDefaultNamespace("block/water_flow");
                     final Identifier FLOOD_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
                     final Identifier FLOOD_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");
-
-//                    @Override
+                    
+                    @Override
+                    public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+                        fluidFogColor.set(camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_COLOR, camera.getCameraEntityPartialTicks(DeltaTracker.ONE)));
+                    }
+                    
+                    @Override
+                    public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fog) {
+                        float partialTicks = DeltaTracker.ONE.getGameTimeDeltaPartialTick(false);
+                        fog.environmentalStart = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_START_DISTANCE, partialTicks);
+                        fog.environmentalEnd = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_END_DISTANCE, partialTicks);
+                        if (camera.entity() instanceof LocalPlayer player) {
+                            fog.environmentalEnd = fog.environmentalEnd * Math.max(0.25F, player.getWaterVision());
+                        }
+                        
+                        fog.skyEnd = fog.environmentalEnd;
+                        fog.cloudEnd = fog.environmentalEnd;
+                    }
+                    
+                    //                    @Override
 //                    public Identifier getStillTexture() {
 //                        return FLOOD_STILL;
 //                    }
@@ -304,7 +367,7 @@ public class Events {
                 new FluidModel.Unbaked(
                         new Material(Identifier.withDefaultNamespace("block/water_still")),
                         new Material(Identifier.withDefaultNamespace("block/water_flow")),
-                        null,
+                        new Material(Identifier.withDefaultNamespace("block/water_overlay")),
                         _ -> -937847206
                 ),
                 FluidRegistries.FunFluids.RIVER_OF_TIME_FLUID.get(),
