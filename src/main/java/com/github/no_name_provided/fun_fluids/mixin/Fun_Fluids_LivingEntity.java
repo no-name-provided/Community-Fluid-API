@@ -202,7 +202,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
             } else {
                 fluidHeight = entity.getFluidHeight(
                         ((TaggedFluidType) NeoForgeRegistries.FLUID_TYPES.stream().filter(fluidType ->
-                                        fluidType instanceof TaggedFluidType tagged && entity.isEyeInFluid(tagged.getTag())
+                                        fluidType instanceof TaggedFluidType tagged && entity.fluidInteraction.isInFluid(tagged.getTag())
                                 // Iffy choice of default here; should probably use
                                 // interface injection to make Neoforge's water type a TaggedFluidType
                                 // (which would then be an interface, not a subclass)
@@ -301,6 +301,4 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                 .findFirst().ifPresent(a -> result.set(true));
         return result.get();
     }
-    
-    
 }

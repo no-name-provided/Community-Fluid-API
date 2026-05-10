@@ -28,6 +28,5 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
                         type instanceof TaggedFluidType tagged &&
                                 this.fluidInteraction.isInFluid(tagged.getTag())
                 );
-        
     }
 }
