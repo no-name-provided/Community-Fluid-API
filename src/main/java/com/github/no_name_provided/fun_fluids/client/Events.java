@@ -114,7 +114,7 @@ public class Events {
         event.registerFluidType(
                 new IClientFluidTypeExtensions() {
                     
-                    // THe vanilla water textures are good, grayscale fluid textures. Unless you have an artistic bent,
+                    // The vanilla water textures are good, grayscale fluid textures. Unless you have an artistic bent,
                     // I'd recommend just using those and applying a tint.
                     
                     final Identifier UNDER_C_FLUID_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png");

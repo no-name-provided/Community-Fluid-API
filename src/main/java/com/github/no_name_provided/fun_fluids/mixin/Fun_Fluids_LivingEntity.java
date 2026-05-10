@@ -131,7 +131,8 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
     }
     
     /**
-     * Some weird choices were made by vanilla here, so we just overwrite the whole thing.
+     * Some weird choices were made by vanilla here, so we just overwrite the whole thing. This fixes the fluid jumping
+     * mechanics... partly, anyway.
      */
     @Inject(method = "aiStep()V", at = @At(value = "HEAD"), cancellable = true)
     private void Fun_Fluids_aiStep(CallbackInfo ci) {
@@ -201,7 +202,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
             } else {
                 fluidHeight = entity.getFluidHeight(
                         ((TaggedFluidType) NeoForgeRegistries.FLUID_TYPES.stream().filter(fluidType ->
-                                        fluidType instanceof TaggedFluidType
+                                        fluidType instanceof TaggedFluidType tagged && entity.isEyeInFluid(tagged.getTag())
                                 // Iffy choice of default here; should probably use
                                 // interface injection to make Neoforge's water type a TaggedFluidType
                                 // (which would then be an interface, not a subclass)
@@ -225,8 +226,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                     entity.jumpInFluid(NeoForgeMod.WATER_TYPE.value());
                 } else {
                     var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(typeWeAreIn).iterator();
-                    boolean isPresent = iterator.hasNext();
-                    if (isPresent) {
+                    if (iterator.hasNext()) {
                         entity.jumpInFluid(iterator.next().value().getFluidType());
                     }
                 }
