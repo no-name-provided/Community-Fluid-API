@@ -5,6 +5,7 @@ import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvi
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -67,7 +68,8 @@ public class ConfigurableFluidType extends TaggedFluidType {
     }
 
     /**
-     * Returns whether the entity can swim in the fluid.
+     * Returns whether the entity can swim in the fluid. For players, this is specifically
+     * whether it can sprintswim (not whether it's buoyant).
      *
      * @param entity the entity in the fluid
      * @return {@code true} if the entity can swim in the fluid, {@code false} otherwise
@@ -188,8 +190,8 @@ public class ConfigurableFluidType extends TaggedFluidType {
      * @return {@code true} if this fluid should be vaporized on placement, {@code false} otherwise
      * @see //BucketItem#emptyContents(Player, Level, BlockPos, BlockHitResult)
      */
-    @SuppressWarnings("deprecation") @Override
+    @Override
     public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
-        return ServerConfig.cFEvaporateInNether && level.dimension() == Level.NETHER;
+        return ServerConfig.cFEvaporateInNether && level.environmentAttributes().getDimensionValue(EnvironmentAttributes.WATER_EVAPORATES);
     }
 }
