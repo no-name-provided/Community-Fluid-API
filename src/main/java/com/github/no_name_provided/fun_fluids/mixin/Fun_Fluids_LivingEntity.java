@@ -103,7 +103,11 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
         return original | (!fluidState.isEmpty() && entity.isAffectedByFluids() && !entity.canStandOnFluid(fluidState));
     }
     
-    
+    /**
+     *
+     * @param input Movement vector representing the keys pressed by the local player.
+     * @param fluidState Vanilla calls always pass in an empty FluidState, which is ignored.
+     */
     @Inject(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
             at = @At("HEAD"), cancellable = true)
     private void Fun_Fluids_travel_in_fluid(Vec3 input, FluidState fluidState, CallbackInfo ci) {

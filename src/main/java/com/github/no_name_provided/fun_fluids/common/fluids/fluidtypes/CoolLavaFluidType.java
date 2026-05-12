@@ -77,7 +77,7 @@ public class CoolLavaFluidType extends TaggedFluidType {
      *     I recommend referencing this method when writing your own logic.
      * </p>
      *
-     * @param state          the state of the fluid
+     * @param state          <s>the state of the fluid</s> Fluids.EMPTY#defaultState, unless called by a mod.
      * @param entity         the entity moving within the fluid
      * @param travelVector the velocity of how the entity wants to move
      * @param gravity        the gravity to apply to the entity

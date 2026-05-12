@@ -3,6 +3,7 @@ package com.github.no_name_provided.fun_fluids.mixin;
 import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.TaggedFluidType;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
@@ -86,6 +87,21 @@ abstract class Fun_Fluids_Entity {
     @ModifyExpressionValue(method = "canSpawnSprintParticle()Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isInWater()Z"))
     private boolean Fun_Fluids_canSpawnSprintParticle_fixIsInWater(boolean original) {
+        return original || NeoForgeRegistries.FLUID_TYPES.stream()
+                .anyMatch(type ->
+                        type instanceof TaggedFluidType tagged &&
+                                this.fluidInteraction.isInFluid(tagged.getTag())
+                );
+    }
+    
+    /**
+     * Check for other liquids.
+     * @param original A check for water and lava, done by vanilla.
+     * @return True if in liquid, false otherwise.
+     */
+    @ModifyReturnValue(method = "isInLiquid()Z",
+    at = @At("RETURN"))
+    private boolean Fun_Fluids_isInLiquid(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type instanceof TaggedFluidType tagged &&

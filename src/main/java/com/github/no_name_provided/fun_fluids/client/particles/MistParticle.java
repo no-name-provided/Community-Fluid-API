@@ -3,7 +3,10 @@ package com.github.no_name_provided.fun_fluids.client.particles;
 import com.github.no_name_provided.fun_fluids.client.ClientConfig;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 
@@ -11,33 +14,35 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * This class briefly discusses render methods, and demonstrates a particle that
- * can be configured to render behind (the surface of) translucent fluids.
- * */
+ * This class briefly discusses render methods, and demonstrates a particle that can be configured to render behind (the
+ * surface of) translucent fluids.
+ *
+ */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class MistParticle extends SingleQuadParticle { // TextureSheetParticle {
-
+    
     protected MistParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites.first());
         this.scale(1.5f);
         this.setSize(0.2F, 0.2f);
-
+        
         this.gravity = 3.5E-6f;
         this.xd = xSpeed;
         this.yd = ySpeed + (double) (this.random.nextFloat() / 500.0f);
         this.zd = zSpeed;
-
+        
         this.lifetime = 60;
-
+        
         // Always set the initial sprite here (or in the provider)
         // since ticking is not guaranteed to set the sprite before
         // the render method is called.
         this.setSprite(sprites.get(level.getRandom()));
     }
-
+    
     /**
      * Copied from net.minecraft.client.particle.CampfireSmokeParticle.
-     * */
+     *
+     */
     @Override
     public void tick() {
         this.xo = this.x;
@@ -57,7 +62,7 @@ public class MistParticle extends SingleQuadParticle { // TextureSheetParticle {
     }
     
     public record Provider(SpriteSet sprites) implements ParticleProvider<SimpleParticleType> {
-
+        
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, RandomSource random) {
             // We use ThreadLocalRandom here for guaranteed multithreaded performance...
@@ -87,5 +92,4 @@ public class MistParticle extends SingleQuadParticle { // TextureSheetParticle {
             return Layer.OPAQUE;
         }
     }
-
 }
