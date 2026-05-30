@@ -16,7 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(LocalPlayer.class)
 abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
     
-    @Shadow public abstract boolean isUnderWater();
+    @Shadow
+    public abstract boolean isUnderWater();
     
     public Fun_Fluids_LocalPlayer(ClientLevel level, GameProfile gameProfile) {
         super(level, gameProfile);
@@ -31,8 +32,8 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
 //                        type.canSwim(this) &&
-                        type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                                type instanceof TaggedFluidType tagged &&
+                                        this.fluidInteraction.isInFluid(tagged.getTag())
                 );
     }
     
@@ -40,7 +41,7 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
      * Don't stop swimsprinting if we're in one of our fluids.
      */
     @ModifyExpressionValue(method = "shouldStopSwimSprinting()Z",
-    at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInWater()Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInWater()Z"))
     private boolean Fun_Fluids_shouldStopSwimSprinting(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
@@ -53,7 +54,7 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
      *
      */
     @ModifyExpressionValue(method = "isSprintingPossible(Z)Z",
-    at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInShallowWater()Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInShallowWater()Z"))
     private boolean Fun_Fluids_isSprintingPossible_FixShallowWaterCheck(boolean original) {
         // Find out which fluid we're actually in
         FluidType fluidType = NeoForgeRegistries.FLUID_TYPES.stream()
