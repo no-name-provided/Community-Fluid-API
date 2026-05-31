@@ -4,7 +4,6 @@ import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.TaggedFlu
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
 import net.minecraft.world.level.material.FluidState;
@@ -51,9 +50,11 @@ abstract class Fun_Fluids_Entity {
     @ModifyExpressionValue(method = "updateSwimming()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isInWater()Z"))
     private boolean Fun_Fluids_updateSwimming_fixIsInWater(boolean original) {
+        //noinspection ConstantValue - this is a verified compiler error (caused by casting this class to Entity?)
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type instanceof TaggedFluidType tagged &&
+                        type.canSwim((Entity) (Object) (this)) &&
+                                type instanceof TaggedFluidType tagged &&
                                 this.fluidInteraction.isInFluid(tagged.getTag())
                 );
     }
@@ -64,21 +65,24 @@ abstract class Fun_Fluids_Entity {
     @ModifyExpressionValue(method = "updateSwimming()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isUnderWater()Z"))
     private boolean Fun_Fluids_updateSwimming_fixIsUnderWater(boolean original) {
+        Entity entity = (Entity) (Object) (this);
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type instanceof TaggedFluidType tagged &&
+                        type.canSwim(entity) &&
+                                type instanceof TaggedFluidType tagged &&
                                 this.fluidInteraction.isEyeInFluid(tagged.getTag())
                 );
     }
     
     /**
-     * A player may continue swimming if they're in any non-lava, nonempty fluid block, so we map those to one that'll
-     * pass the downstream vanilla tag check.
+     * A player may continue swimming if they're in any swimmable fluid block, so we map those to one that'll pass the
+     * downstream vanilla tag check. The rest we map to lava (which fails that tag check).
      */
     @ModifyExpressionValue(method = "updateSwimming()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getFluidState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;"))
     private FluidState Fun_Fluids_updateSwimming_skipBlockStateCheck(FluidState original) {
-        return original.isEmpty() || original.is(FluidTags.LAVA) ? original : Fluids.WATER.defaultFluidState();
+        Entity entity = (Entity) (Object) this;
+        return !original.getType().getFluidType().canSwim(entity) ? Fluids.LAVA.defaultFluidState() : Fluids.WATER.defaultFluidState();
     }
     
     /**
@@ -96,11 +100,12 @@ abstract class Fun_Fluids_Entity {
     
     /**
      * Check for other liquids.
+     *
      * @param original A check for water and lava, done by vanilla.
      * @return True if in liquid, false otherwise.
      */
     @ModifyReturnValue(method = "isInLiquid()Z",
-    at = @At("RETURN"))
+            at = @At("RETURN"))
     private boolean Fun_Fluids_isInLiquid(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->

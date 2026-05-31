@@ -10,14 +10,10 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LocalPlayer.class)
 abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
-    
-    @Shadow
-    public abstract boolean isUnderWater();
     
     public Fun_Fluids_LocalPlayer(ClientLevel level, GameProfile gameProfile) {
         super(level, gameProfile);
@@ -31,27 +27,49 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
     private boolean isInWater(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-//                        type.canSwim(this) &&
-                                type instanceof TaggedFluidType tagged &&
-                                        this.fluidInteraction.isInFluid(tagged.getTag())
-                );
-    }
-    
-    /**
-     * Don't stop swimsprinting if we're in one of our fluids.
-     */
-    @ModifyExpressionValue(method = "shouldStopSwimSprinting()Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInWater()Z"))
-    private boolean Fun_Fluids_shouldStopSwimSprinting(boolean original) {
-        return original || NeoForgeRegistries.FLUID_TYPES.stream()
-                .anyMatch(type ->
                         type instanceof TaggedFluidType tagged &&
                                 this.fluidInteraction.isInFluid(tagged.getTag())
                 );
     }
     
     /**
-     *
+     * Don't stop swimsprinting if we're in one of our fluids and can swim.
+     */
+    @ModifyExpressionValue(method = "shouldStopSwimSprinting()Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInWater()Z"))
+    private boolean Fun_Fluids_shouldStopSwimSprinting(boolean original) {
+        LocalPlayer player = (LocalPlayer) (Object) this;
+        
+        return original || NeoForgeRegistries.FLUID_TYPES.stream()
+                .anyMatch(type ->
+                        type.canSwim(player) &&
+                                type instanceof TaggedFluidType tagged &&
+                                this.fluidInteraction.isInFluid(tagged.getTag())
+                );
+    }
+    
+    /**
+     * Extends underwater check to apply to all fluids that can be swum in.
+     * <p>
+     * Note: in Minecraft's internal parlance, "swim" means "swimsprint".
+     * </p>
+     * <p>
+     * Currently has no effect, since this isn't where vanilla stops players from swimming in invalid fluids.
+     * </p>
+     */
+    @ModifyExpressionValue(method = "canStartSprinting()Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUnderWater()Z"))
+    private boolean Fun_Fluids_canStartSprinting_fixUnderWaterCheck(boolean original) {
+        return original || NeoForgeRegistries.FLUID_TYPES.stream()
+                .anyMatch(type ->
+                        type.canSwim(this) &&
+                                type instanceof TaggedFluidType tagged &&
+                                this.fluidInteraction.isInFluid(tagged.getTag())
+                );
+    }
+    
+    /**
+     * Check to see if the player is standing in any shallow fluid. Well, any modded one or water.
      */
     @ModifyExpressionValue(method = "isSprintingPossible(Z)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInShallowWater()Z"))

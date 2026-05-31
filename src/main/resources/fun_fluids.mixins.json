@@ -6,6 +6,7 @@
   "mixins": [
     "Fun_Fluids_Entity",
     "Fun_Fluids_EntityFluidInteraction",
+    "Fun_Fluids_FluidType",
     "Fun_Fluids_LivingEntity"
   ],
   "client": [

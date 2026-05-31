@@ -16,6 +16,10 @@ import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 
 @ParametersAreNonnullByDefault
 public class FFFluidTagsProvider extends FluidTagsProvider {
+    // Strangely, there's no vanilla (or Neo) tag for empty fluids. Perhaps to discourage making alternate empty fluids.
+    // Recommended you don't use this tag, either for labeling or checking
+    public static final TagKey<Fluid> EMPTY = create("empty");
+    
     public static final TagKey<Fluid> COOL_LAVA = create("cool_lava");
     public static final TagKey<Fluid> THICK_AIR = create("thick_air");
     public static final TagKey<Fluid> CONFIGURABLE_FLUID = create("configurable_fluid");

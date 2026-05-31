@@ -10,8 +10,11 @@ public abstract class TaggedFluidType extends FluidType {
     }
     
     /**
-     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
-     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type. This
+     * greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     * <p>
+     * This is required, even with interface injections, because our compiler won't otherwise allow @Override.
+     * </p>
      */
     abstract public TagKey<Fluid> getTag();
 }
