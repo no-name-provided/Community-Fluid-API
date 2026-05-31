@@ -20,6 +20,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -39,7 +40,7 @@ import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
  * Handles client-only events.
  */
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-@EventBusSubscriber(modid = MODID)
+@EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
 public class Events {
     
     /**
