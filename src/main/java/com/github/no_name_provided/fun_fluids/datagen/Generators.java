@@ -19,7 +19,6 @@ import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
  * <p>
  * Note: this is the "basic" approach. If your datagen classes need to share information, you'll need to add a few lines
  * or use methods that bypass the ExistingFileHelper (the "helper" bit is a misnomer).
- *
  */
 @EventBusSubscriber(modid = MODID)
 public class Generators {

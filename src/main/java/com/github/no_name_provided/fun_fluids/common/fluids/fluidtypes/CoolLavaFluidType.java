@@ -24,6 +24,7 @@ public class CoolLavaFluidType extends TaggedFluidType {
     public CoolLavaFluidType() {
         super(Properties.create()
                 .fallDistanceModifier(0.0f)
+                .canDrown(false)
                 .canSwim(false)
                 .pathType(PathType.LAVA)
                 .adjacentPathType(null)

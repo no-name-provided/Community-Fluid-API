@@ -30,8 +30,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @Mixin(LivingEntity.class)
 abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension {
     @Shadow
@@ -105,7 +103,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
     
     /**
      *
-     * @param input Movement vector representing the keys pressed by the local player.
+     * @param input      Movement vector representing the keys pressed by the local player.
      * @param fluidState Vanilla calls always pass in an empty FluidState, which is ignored.
      */
     @Inject(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
@@ -294,15 +292,13 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
     }
     
     /**
-     * Allow drowning logic to apply to custom fluids.
+     * Allow drowning logic to apply to custom fluids. Respect #canDrown.
      */
     @Redirect(method = "baseTick()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
     private boolean Fun_Fluids_baseTick(LivingEntity instance, TagKey<Fluid> tagKey) {
-        AtomicBoolean result = new AtomicBoolean(instance.isEyeInFluid(tagKey));
-        NeoForgeRegistries.FLUID_TYPES.stream()
-                .filter(fluidType -> fluidType instanceof TaggedFluidType taggedType && isEyeInFluid(taggedType.getTag()))
-                .findFirst().ifPresent(a -> result.set(true));
-        return result.get();
+        return instance.isEyeInFluid(tagKey) || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(fluidType ->
+                fluidType.canDrownIn(instance) && fluidType instanceof TaggedFluidType taggedType && isEyeInFluid(taggedType.getTag())
+        );
     }
 }
