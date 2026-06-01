@@ -23,7 +23,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -329,32 +328,5 @@ public class Events {
                 FluidRegistries.FunFluids.FLOOD_FLUID.get(),
                 FluidRegistries.FunFluids.FLOWING_FLOOD_FLUID.get()
         );
-    }
-    
-    @SubscribeEvent
-    public static void registerItemColorHandlers(RegisterColorHandlersEvent.ItemTintSources event) {
-//        event.register(
-//                ItemRegistry.CONFIGURABLE_FLUID_BUCKET.getId(),
-//                FluidContentsTint.MAP_CODEC
-//        );
-//        event.register((stack, tintIndex) -> {
-//                    if (tintIndex == 1) {
-//                        return -937847206;
-//                    } else {
-//                        return event.getItemColors().getColor(new ItemStack(Items.BUCKET), 0);
-//                    }
-//                },
-//                ItemRegistry.RIVER_OF_TIME_BUCKET.get()
-//        );
-//        event.register((stack, tintIndex) -> {
-//                    if (tintIndex == 1) {
-//                        // Make this really distinct.
-//                        return -939392767;
-//                    } else {
-//                        return event.getItemColors().getColor(new ItemStack(Items.BUCKET), 0);
-//                    }
-//                },
-//                ItemRegistry.FLOOD_BUCKET.get()
-//        );
     }
 }
