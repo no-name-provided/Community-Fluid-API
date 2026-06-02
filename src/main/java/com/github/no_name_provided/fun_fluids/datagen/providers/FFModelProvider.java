@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 import static net.minecraft.client.data.models.BlockModelGenerators.createSimpleBlock;
 import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
 
@@ -79,7 +80,7 @@ public class FFModelProvider extends ModelProvider {
                                 Optional.of(new Material(mcLocation("item/bucket"))),
                                 Optional.of(new Material(mcLocation("item/bucket"))),
                                 Optional.of(new Material(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid"))),
-                                Optional.of(new Material(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid_cover")))
+                                Optional.of(new Material(Identifier.fromNamespaceAndPath("neoforge", "item/bucket_fluid_cover")))
                         ),
                         FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(),
                         false,
@@ -89,14 +90,16 @@ public class FFModelProvider extends ModelProvider {
         );
         
         // Since the official system has a weird outline, and the Neo team has
-        // no interest in fixing it, we'll use functional models for the rest of our bucket items.
-        // This will precent the outline, but will also fail to provide the full fluid texturing.
+        // no interest in fixing it, we'll use simple models for the rest of our bucket items.
+        // This will prevent the "glass pane" outline, but will also fail to copy the full fluid texturing
+        // or mimic its motion.
+        //
         // You can compare the results in-game.
         itemModels.itemModelOutput.accept(ItemRegistry.RIVER_OF_TIME_BUCKET.get(), ItemModelUtils.tintedModel(
                 itemModels.generateLayeredItem(
                         ItemRegistry.RIVER_OF_TIME_BUCKET.get(),
                         new Material(mcLocation("item/bucket")),
-                        new Material(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid"))
+                        new Material(Identifier.fromNamespaceAndPath(MODID, "item/generic_fluid_in_bucket"))
                 ),
                 ItemModelUtils.constantTint(-1),
                 new FluidTint()
@@ -105,7 +108,7 @@ public class FFModelProvider extends ModelProvider {
                 itemModels.generateLayeredItem(
                         ItemRegistry.FLOOD_BUCKET.get(),
                         new Material(mcLocation("item/bucket")),
-                        new Material(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid"))
+                        new Material(Identifier.fromNamespaceAndPath(MODID, "item/generic_fluid_in_bucket"))
                 ),
                 ItemModelUtils.constantTint(-1),
                 new FluidTint()
