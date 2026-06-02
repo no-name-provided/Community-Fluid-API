@@ -18,7 +18,7 @@ import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
-
+    
     public static final DeferredHolder<Item, BucketItem> COOL_LAVA_BUCKET = ITEMS.register(
             "cool_lava_bucket",
             (identifier) -> new BucketItem(FluidRegistries.FunFluids.COOL_LAVA.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier)))
@@ -45,12 +45,12 @@ public class ItemRegistry {
                     // This is just me being nice to players and providing a heads-up
                     .component(
                             DataComponents.LORE, ItemLore.EMPTY
-                            .withLineAdded(Component.literal("Extremely Dangerous").withStyle(ChatFormatting.DARK_RED))
+                                    .withLineAdded(Component.literal("Extremely Dangerous").withStyle(ChatFormatting.DARK_RED))
                                     .withLineAdded(Component.literal("A flood in a bucket."))
                     ).rarity(Rarity.EPIC)
             )
     );
-
+    
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
     }

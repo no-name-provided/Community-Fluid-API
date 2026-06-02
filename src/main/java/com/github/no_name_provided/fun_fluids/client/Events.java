@@ -1,5 +1,6 @@
 package com.github.no_name_provided.fun_fluids.client;
 
+import com.github.no_name_provided.fun_fluids.client.tints.item.FluidTint;
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
 import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -327,6 +329,14 @@ public class Events {
                 ),
                 FluidRegistries.FunFluids.FLOOD_FLUID.get(),
                 FluidRegistries.FunFluids.FLOWING_FLOOD_FLUID.get()
+        );
+    }
+    
+    @SubscribeEvent
+    static void onRegisterItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(
+                Identifier.fromNamespaceAndPath(MODID, "fluid_contents"),
+                FluidTint.CODEC
         );
     }
 }
