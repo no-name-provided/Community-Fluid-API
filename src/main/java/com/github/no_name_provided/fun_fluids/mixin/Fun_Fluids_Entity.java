@@ -45,6 +45,26 @@ abstract class Fun_Fluids_Entity {
     }
     
     /**
+     * Despite its name, this  method is actually used to determine whether a speed debuff should be applied to players.
+     * Without this mixin, swimsprinting players will experience a speed debuff almost exactly equal to the speed buff
+     * they get for "sprinting" underwater.
+     *
+     * @param original The return value of the vanilla method call Entity#isInWater.
+     * @return The modified return value to be used elsewhere in Entity#isVisuallyCrawling.
+     */
+    @ModifyExpressionValue(method = "isVisuallyCrawling()Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isInWater()Z"))
+    private boolean Fun_Fluids_isVisuallyCrawling_fixFluidCheck(boolean original) {
+        //noinspection ConstantValue - this is a verified compiler error (caused by casting this class to Entity?)
+        return original || NeoForgeRegistries.FLUID_TYPES.stream()
+                .anyMatch(type ->
+                        type.canSwim((Entity) (Object) (this)) &&
+                                type instanceof TaggedFluidType tagged &&
+                                this.fluidInteraction.isInFluid(tagged.getTag())
+                );
+    }
+    
+    /**
      * A player is in a fluid if it intersects their bounding box.
      */
     @ModifyExpressionValue(method = "updateSwimming()V",
