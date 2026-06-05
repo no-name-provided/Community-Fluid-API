@@ -123,7 +123,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                 // Patch back in fall damage modifier
                 entity.fallDistance *= taggedFluidType.getFallDistanceModifier(entity);
                 // Conditional has side effects. Returns true if vanilla logic should be skipped.
-                if (!taggedFluidType.move(fluidState, entity, input, getEffectiveGravity())) {
+                if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
                     travelInWater(input, baseGravity, isFalling, oldY);
                     floatInWaterWhileRidden();
                 }
