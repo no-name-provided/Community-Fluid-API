@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.mixin;
 
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.TaggedFluidType;
+import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -27,8 +27,8 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
     private boolean isInWater(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                        !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -43,8 +43,8 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type.canSwim(player) &&
-                                type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                                !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -63,8 +63,8 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type.canSwim(this) &&
-                                type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                                !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -77,14 +77,14 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
         // Find out which fluid we're actually in
         FluidType fluidType = NeoForgeRegistries.FLUID_TYPES.stream()
                 .filter(type ->
-                        type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                        !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 ).findFirst()
                 // But default to the vanilla check
                 .orElse(NeoForgeMod.WATER_TYPE.value());
-        // If it's one of ours, we do a separate check
-        if (fluidType instanceof TaggedFluidType taggedFluidType) {
-            return fluidInteraction.isInFluid(taggedFluidType.getTag()) && !fluidInteraction.isEyeInFluid(taggedFluidType.getTag());
+        // If it's modded, we do a separate check
+        if (!fluidType.isVanilla()) {
+            return fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag()) && !fluidInteraction.isEyeInFluid(((IFluidTypeExtension) fluidType).getTag());
         } else {
             return original;
         }

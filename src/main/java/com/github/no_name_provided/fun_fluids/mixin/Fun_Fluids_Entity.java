@@ -1,7 +1,6 @@
 package com.github.no_name_provided.fun_fluids.mixin;
 
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.TaggedFluidType;
-import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
+import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
@@ -32,11 +31,11 @@ abstract class Fun_Fluids_Entity {
             // Cast the class this code will be injected into to itself,
             // tricking the IDE into not complaining when we reference it
             Entity entity = (Entity) (Object) this;
-            FluidRegistries.FunFluidTypes.FLUID_TYPES.getEntries().forEach(entry -> {
-                if (entry.get() instanceof TaggedFluidType type) {
-                    boolean isInFluid = fluidInteraction.isInFluid(type.getTag());
+            NeoForgeRegistries.FLUID_TYPES.forEach(entry -> {
+                if (!entry.isVanilla()) {
+                    boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) entry).getTag());
                     if (isInFluid) {
-                        fluidInteraction.applyCurrentTo(type.getTag(), entity, type.motionScale(entity));
+                        fluidInteraction.applyCurrentTo(((IFluidTypeExtension) entry).getTag(), entity, entry.motionScale(entity));
                         cir.setReturnValue(true);
                     }
                 }
@@ -59,8 +58,8 @@ abstract class Fun_Fluids_Entity {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type.canSwim((Entity) (Object) (this)) &&
-                                type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                                !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -74,8 +73,8 @@ abstract class Fun_Fluids_Entity {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type.canSwim((Entity) (Object) (this)) &&
-                                type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                                !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -89,8 +88,8 @@ abstract class Fun_Fluids_Entity {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
                         type.canSwim(entity) &&
-                                type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isEyeInFluid(tagged.getTag())
+                                !type.isVanilla() &&
+                                this.fluidInteraction.isEyeInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -113,8 +112,8 @@ abstract class Fun_Fluids_Entity {
     private boolean Fun_Fluids_canSpawnSprintParticle_fixIsInWater(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                        !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
     
@@ -129,8 +128,8 @@ abstract class Fun_Fluids_Entity {
     private boolean Fun_Fluids_isInLiquid(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type instanceof TaggedFluidType tagged &&
-                                this.fluidInteraction.isInFluid(tagged.getTag())
+                        !type.isVanilla() &&
+                                this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
     }
 }
