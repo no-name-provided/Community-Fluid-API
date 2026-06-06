@@ -1,6 +1,7 @@
 package com.github.no_name_provided.fun_fluids.common.fluids.registries;
 
 import com.github.no_name_provided.fun_fluids.common.ServerConfig;
+import com.github.no_name_provided.fun_fluids.common.blocks.ConfigurableFluidBlock;
 import com.github.no_name_provided.fun_fluids.common.blocks.CoolLavaCauldronBlock;
 import com.github.no_name_provided.fun_fluids.common.blocks.ThickAirBlock;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static com.github.no_name_provided.fun_fluids.FunFluids.MODID;
 
+@SuppressWarnings("unused") // Lambda parameter names provided for clarity - this is a tutorial mod
 public class BlockRegistry {
     // We use a dedicated register to avoid a bug in datagen. #BlameTheNeoForgedTeam.
     public static final DeferredRegister.Blocks FLUID_BLOCKS = DeferredRegister.createBlocks(MODID);
@@ -55,7 +57,7 @@ public class BlockRegistry {
     );
     public static final DeferredHolder<Block, LiquidBlock> CONFIGURABLE_FLUID_BLOCK = FLUID_BLOCKS.register(
             "configurable_fluid_block",
-            (identifier) -> new LiquidBlock(
+            (identifier) -> new ConfigurableFluidBlock(
                     FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(),
                     BlockBehaviour.Properties.of()
                             .setId(ResourceKey.create(Registries.BLOCK, identifier))

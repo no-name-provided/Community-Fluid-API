@@ -89,25 +89,29 @@ public class Events {
                     
                     @Override
                     public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-                        fluidFogColor.set(ARGB.vector4fFromARGB32(ServerConfig.cFColor));
+                        if (!ServerConfig.cFVisibility) {
+                            fluidFogColor.set(ARGB.vector4fFromARGB32(ServerConfig.cFColor));
+                        }
                     }
                     
                     @Override
                     public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fog) {
-                        float partialTicks = DeltaTracker.ONE.getGameTimeDeltaPartialTick(false);
-                        fog.environmentalStart = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_START_DISTANCE, partialTicks);
-                        fog.environmentalEnd = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_END_DISTANCE, partialTicks);
-                        if (camera.entity() instanceof LocalPlayer player) {
-                            fog.environmentalEnd = fog.environmentalEnd * Math.max(0.25F, player.getWaterVision());
+                        if (!ServerConfig.cFVisibility) {
+                            float partialTicks = DeltaTracker.ONE.getGameTimeDeltaPartialTick(false);
+                            fog.environmentalStart = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_START_DISTANCE, partialTicks);
+                            fog.environmentalEnd = camera.attributeProbe().getValue(EnvironmentAttributes.WATER_FOG_END_DISTANCE, partialTicks);
+                            if (camera.entity() instanceof LocalPlayer player) {
+                                fog.environmentalEnd = fog.environmentalEnd * Math.max(0.25F, player.getWaterVision());
+                            }
+                            
+                            fog.skyEnd = fog.environmentalEnd;
+                            fog.cloudEnd = fog.environmentalEnd;
                         }
-                        
-                        fog.skyEnd = fog.environmentalEnd;
-                        fog.cloudEnd = fog.environmentalEnd;
                     }
                     
-                    @Override
+                    @Override @Nullable
                     public Identifier getRenderOverlayTexture(Minecraft minecraft) {
-                        return UNDER_C_FLUID_LOCATION;
+                        return ServerConfig.cFVisibility ? UNDER_C_FLUID_LOCATION : null;
                     }
                 },
                 FluidRegistries.FunFluidTypes.C_FLUID
@@ -216,7 +220,7 @@ public class Events {
                                 // You can use the ARGB class to easily convert
                                 // between decimal components and aggregate ARGB values.
                                 // Alternatively, here's an online converter: https://argb-int-calculator.netlify.app/.
-                                ServerConfig.cFColor
+                                ServerConfig.cFVisibility ? -1 : ServerConfig.cFColor
                 ),
                 FluidRegistries.FunFluids.CONFIGURABLE_FLUID.get(),
                 FluidRegistries.FunFluids.FLOWING_CONFIGURABLE_FLUID.get()
