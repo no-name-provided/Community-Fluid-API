@@ -99,12 +99,13 @@ public class Events {
         // Since we're no longer supposed to directly call the vanilla method,
         // we need to duplicate a lot of vanilla code here.
         event.register(
+                // This is an identifier for the dispatcher we're modifying, not an identifier for our interaction
                 Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
                 Items.WATER_BUCKET,
                 (BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemInHand) ->
                         level.getFluidState(pos.above()).is(Tags.Fluids.LAVA)
                                 ? InteractionResult.CONSUME
-                                : emptyBucket(level, pos, player, hand, itemInHand, Blocks.WATER_CAULDRON.defaultBlockState(), SoundEvents.BUCKET_EMPTY)
+                                : emptyBucket(level, pos, player, hand, itemInHand, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL), SoundEvents.BUCKET_EMPTY)
         );
         event.register(
                 Identifier.fromNamespaceAndPath(MODID, "fun_fluids"),
