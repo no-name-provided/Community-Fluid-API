@@ -1,8 +1,8 @@
 {
   "net/neoforged/neoforge/fluids/FluidType": [
-    "com/github/no_name_provided/fun_fluids/mixin_interfaces/TaggedFluidType"
+    "com/github/no_name_provided/fun_fluids/mixin_interfaces/IFluidTypeExtension"
   ],
   "net/minecraft/world/item/Item": [
-    "com/github/no_name_provided/fun_fluids/mixin_interfaces/TaggedFluidType"
+    "com/github/no_name_provided/fun_fluids/mixin_interfaces/IFluidTypeExtension"
   ]
 }

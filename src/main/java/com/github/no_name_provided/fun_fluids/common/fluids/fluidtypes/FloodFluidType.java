@@ -33,4 +33,12 @@ public class FloodFluidType extends TaggedFluidType {
     public TagKey<Fluid> getTag() {
         return FFFluidTagsProvider.FLOOD_FLUID;
     }
+    
+    /**
+     * Is mining speed reduced while immersed in this fluid?
+     */
+    @Override
+    public boolean reducesMiningSpeed() {
+        return true;
+    }
 }

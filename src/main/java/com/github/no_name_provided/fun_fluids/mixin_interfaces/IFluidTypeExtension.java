@@ -16,7 +16,8 @@ import net.neoforged.neoforge.fluids.FluidType;
  * used on Neo's own classes.
  * </p>
  */
-public interface TaggedFluidType {
+@SuppressWarnings("EqualsBetweenInconvertibleTypes") // Neo's static, compile time interface injection silently fails for Neo classes (ie, FluidType), but this interface is still injected at runtime by mixins
+public interface IFluidTypeExtension {
     
     /**
      * If you're making a modded fluid, this should be overwritten. Defaults to net.minecraft.tags.FluidTags#WATER.
@@ -32,10 +33,20 @@ public interface TaggedFluidType {
             return FluidTags.LAVA;
         } else if (thisType == NeoForgeMod.EMPTY_TYPE.value()) {
             return FFFluidTagsProvider.EMPTY;
-        } else if (thisType == NeoForgeMod.MILK_TYPE.value()) {
+            // This type is only conditionally registered... because the Neo team loves conditionally registered objects
+        } else if (NeoForgeMod.MILK_TYPE.isBound() && thisType == NeoForgeMod.MILK_TYPE.value()) {
             return Tags.Fluids.MILK;
         } else {
             return FluidTags.WATER;
         }
+    }
+    
+    /**
+     * When your eye is in this fluid, should your mining speed be decreased? In vanilla, this is true only for water.
+     *
+     * @return True to nerf mining speed, false to leave it alone.
+     */
+    default boolean reducesMiningSpeed() {
+        return this == NeoForgeMod.WATER_TYPE.value();
     }
 }

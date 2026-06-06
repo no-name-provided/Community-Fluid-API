@@ -1,7 +1,6 @@
 package com.github.no_name_provided.fun_fluids.mixin;
 
-import com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes.TaggedFluidType;
-import com.github.no_name_provided.fun_fluids.common.fluids.registries.FluidRegistries;
+import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -116,12 +115,12 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
         double oldY = this.getY();
         double baseGravity = this.getEffectiveGravity();
         
-        // We iterate over our FluidType registry. This may be replaced with a callback or event later, to support other mods
+        // We iterate over the entire FluidType registry, skipping the "vanilla" types
         NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
-            if (fluidType instanceof TaggedFluidType taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
+            if (!fluidType.isVanilla() && fluidType instanceof IFluidTypeExtension taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
                 functionalFluids$typeWeAreIn = taggedFluidType.getTag();
-                // Patch back in fall damage modifier
-                entity.fallDistance *= taggedFluidType.getFallDistanceModifier(entity);
+                // Patch back in fall damage modifier; should technically be handled in Entity#baseTick after #updateFluidInteraction is called
+                entity.fallDistance *= fluidType.getFallDistanceModifier(entity);
                 // Conditional has side effects. Returns true if vanilla logic should be skipped.
                 if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
                     travelInWater(input, baseGravity, isFalling, oldY);
@@ -203,12 +202,9 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
                 fluidHeight = entity.getFluidHeight(FluidTags.WATER);
             } else {
                 fluidHeight = entity.getFluidHeight(
-                        ((TaggedFluidType) NeoForgeRegistries.FLUID_TYPES.stream().filter(fluidType ->
-                                        fluidType instanceof TaggedFluidType tagged && entity.fluidInteraction.isInFluid(tagged.getTag())
-                                // Iffy choice of default here; should probably use
-                                // interface injection to make Neoforge's water type a TaggedFluidType
-                                // (which would then be an interface, not a subclass)
-                        ).findFirst().orElse(FluidRegistries.FunFluidTypes.RIVER_OF_TIME.get())).getTag()
+                        ((IFluidTypeExtension) NeoForgeRegistries.FLUID_TYPES.stream().filter(fluidType ->
+                                entity.fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag())
+                        ).findFirst().orElse(NeoForgeMod.WATER_TYPE.value())).getTag()
                 );
             }
             if (entity.onGround() && fluidHeight < entity.getFluidJumpThreshold()) {
@@ -298,7 +294,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
     private boolean Fun_Fluids_baseTick(LivingEntity instance, TagKey<Fluid> tagKey) {
         return instance.isEyeInFluid(tagKey) || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(fluidType ->
-                fluidType.canDrownIn(instance) && fluidType instanceof TaggedFluidType taggedType && isEyeInFluid(taggedType.getTag())
+                fluidType.canDrownIn(instance) && isEyeInFluid(((IFluidTypeExtension) fluidType).getTag())
         );
     }
 }

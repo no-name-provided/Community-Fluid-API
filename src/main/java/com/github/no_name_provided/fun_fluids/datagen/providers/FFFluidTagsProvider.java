@@ -25,13 +25,14 @@ public class FFFluidTagsProvider extends FluidTagsProvider {
     public static final TagKey<Fluid> CONFIGURABLE_FLUID = create("configurable_fluid");
     public static final TagKey<Fluid> FLOOD_FLUID = create("flood_fluid");
     public static final TagKey<Fluid> RIVER_OF_TIME = create("river_of_time");
-
+    
     public FFFluidTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, MODID);
     }
     
     @Override
     protected void addTags(HolderLookup.Provider registries) {
+        // Group fluids
         tag(COOL_LAVA).add(FunFluids.COOL_LAVA.get(), FunFluids.FLOWING_COOL_LAVA.get());
         tag(THICK_AIR).add(FunFluids.THICK_AIR_FLUID.get());
         tag(CONFIGURABLE_FLUID).add(FunFluids.CONFIGURABLE_FLUID.get(), FunFluids.FLOWING_CONFIGURABLE_FLUID.get());

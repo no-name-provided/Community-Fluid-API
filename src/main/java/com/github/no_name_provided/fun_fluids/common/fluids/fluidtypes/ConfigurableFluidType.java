@@ -194,4 +194,12 @@ public class ConfigurableFluidType extends TaggedFluidType {
     public boolean isVaporizedOnPlacement(Level level, BlockPos pos, FluidStack stack) {
         return ServerConfig.cFEvaporateInNether && level.environmentAttributes().getDimensionValue(EnvironmentAttributes.WATER_EVAPORATES);
     }
+    
+    /**
+     * Is mining speed reduced while immersed in this fluid?
+     */
+    @Override
+    public boolean reducesMiningSpeed() {
+        return true;
+    }
 }

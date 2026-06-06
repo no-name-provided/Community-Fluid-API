@@ -60,4 +60,11 @@ public class RiverOfTimeFluidType extends TaggedFluidType {
         return 0;
     }
     
+    /**
+     * Is mining speed reduced while immersed in this fluid?
+     */
+    @Override
+    public boolean reducesMiningSpeed() {
+        return true;
+    }
 }
