@@ -3,6 +3,7 @@ package com.github.no_name_provided.fun_fluids.common.fluids.fluidtypes;
 import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.SoundActions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -23,6 +25,8 @@ public class ThickAirFluidType extends TaggedFluidType {
                 .temperature(20)
                 .pathType(PathType.BLOCKED)
                 .canConvertToSource(false)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                 // Don't scale fall damage
                 .fallDistanceModifier(1)
                 .canDrown(false)

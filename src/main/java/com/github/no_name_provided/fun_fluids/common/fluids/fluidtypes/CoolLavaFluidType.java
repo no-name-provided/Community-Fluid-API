@@ -33,7 +33,7 @@ public class CoolLavaFluidType extends TaggedFluidType {
                 .viscosity(6000)
                 // No reason you can't boat on lava. It's dense, and this lava won't burn boats
                 .supportsBoating(true)
-                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
                 .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
                 .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
                 .canConvertToSource(false)
