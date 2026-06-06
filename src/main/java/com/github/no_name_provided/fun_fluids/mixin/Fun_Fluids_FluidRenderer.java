@@ -11,8 +11,16 @@ import net.neoforged.fml.util.thread.EffectiveSide;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+/**
+ * Allow conditionally unrendered (invisible) fluids.
+ */
 @Mixin(FluidRenderer.class)
 public class Fun_Fluids_FluidRenderer {
+    /**
+     * Force the tesselator to respect Block#skipRendering.
+     *
+     * @return True if the face should be rendered; otherwise false.
+     */
     @ModifyReturnValue(method = "shouldRenderFace(Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;Lnet/minecraft/world/level/block/state/BlockState;)Z",
             at = @At("RETURN"))
     private static boolean Fun_Fluids_shouldRenderFace(boolean original, FluidState fluidState, BlockState selfState, Direction direction, BlockState otherState) {
