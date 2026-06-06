@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +19,7 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Demonstrates alternative way to use BseFlowingFluid convenience class. Makes it obvious that overrides on this class
+ * Demonstrates alternative way to use BaseFlowingFluid convenience class. Makes it obvious that overrides on this class
  * do nothing, and allows overrides to be applied to the specific subclasses that will actually be instantiated.
  *
  */
@@ -71,7 +70,6 @@ public abstract class FloodFluid {
             if (ServerConfig.destroyFlood) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             } else {
-                BlockState belowState = level.getBlockState(pos.below());
                 FluidState newBelowState = getNewLiquid(level, pos.below(), state);
                 boolean degrade = !ServerConfig.floodDecays || !level.getFluidState(pos.below()).canBeReplacedWith(level, pos.below(), newBelowState.getType(), Direction.DOWN);
                 super.spread(level, pos, state, fluidState);
