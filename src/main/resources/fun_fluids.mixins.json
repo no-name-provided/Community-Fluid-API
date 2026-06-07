@@ -11,7 +11,8 @@
     "Fun_Fluids_FluidType",
     "Fun_Fluids_LivingEntity",
     "Fun_Fluids_Player",
-    "Fun_Fluids_Swim"
+    "Fun_Fluids_Swim",
+    "Fun_Fluids_WalkNodeEvaluator"
   ],
   "client": [
     "Fun_Fluids_Camera",
