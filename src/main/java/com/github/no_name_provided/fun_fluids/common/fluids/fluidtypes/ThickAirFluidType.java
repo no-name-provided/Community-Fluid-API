@@ -19,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 public class ThickAirFluidType extends TaggedFluidType {
-
+    
     public ThickAirFluidType() {
         super(Properties.create()
                 .temperature(20)
@@ -27,6 +27,8 @@ public class ThickAirFluidType extends TaggedFluidType {
                 .canConvertToSource(false)
                 .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
                 .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                .pathType(PathType.DAMAGING)
+                .adjacentPathType(PathType.BLOCKED)
                 // Don't scale fall damage
                 .fallDistanceModifier(1)
                 .canDrown(false)
@@ -42,8 +44,8 @@ public class ThickAirFluidType extends TaggedFluidType {
     }
     
     /**
-     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type.
-     * This greatly simplifies the mixins required to replace the now-retiring Fluid API.
+     * Since vanilla has leaned heavily into the use of tags, we're now associating one with each fluid type. This
+     * greatly simplifies the mixins required to replace the now-retiring Fluid API.
      */
     @Override
     public TagKey<Fluid> getTag() {
@@ -51,12 +53,12 @@ public class ThickAirFluidType extends TaggedFluidType {
     }
     
     /**
-     * Performs how an entity moves when within the fluid. If the method returns {@code true},
-     * no regular movement logic will be performed (the player will simply stop moving).
-     * Otherwise, the movement logic for water will be run after your code.
+     * Performs how an entity moves when within the fluid. If the method returns {@code true}, no regular movement logic
+     * will be performed (the player will simply stop moving). Otherwise, the movement logic for water will be run after
+     * your code.
      * <p>
-     * This is implicitly called in, and optionally disables most of, LivingEntity#travel.
-     * I recommend referencing this method when writing your own logic.
+     * This is implicitly called in, and optionally disables most of, LivingEntity#travel. I recommend referencing this
+     * method when writing your own logic.
      * </p>
      *
      * @param state        <s>the state of the fluid</s> Fluids.EMPTY#defaultState, unless called by a mod.
@@ -69,7 +71,7 @@ public class ThickAirFluidType extends TaggedFluidType {
     public boolean move(FluidState state, LivingEntity entity, Vec3 travelVector, double gravity) {
         // The following code is copied, with significant modifications, from LivingEntity#travel.
         // A more robust alternative would be a well-crafted mixin.
-
+        
         // This bit handles the walking around logic.
         boolean flag = entity.horizontalCollision;
         double entityHeight = entity.getY();
@@ -89,7 +91,7 @@ public class ThickAirFluidType extends TaggedFluidType {
             } else {
                 deltaY = 0.0;
             }
-
+        
         if (entity.onGround()) {
             if (entity.shouldDiscardFriction()) {
                 correctedTravelVector = new Vec3(correctedTravelVector.x, deltaY, correctedTravelVector.z);
@@ -109,7 +111,7 @@ public class ThickAirFluidType extends TaggedFluidType {
                         correctedTravelVector.z);
             }
         }
-
+        
         // This bit corrects for floating
         if (!flag) {
             correctedTravelVector = correctedTravelVector.multiply(0.95, 0.8f, 0.95);
@@ -120,7 +122,7 @@ public class ThickAirFluidType extends TaggedFluidType {
         } else {
             correctedTravelVector = correctedTravelVector.multiply(0.5, 0.1f, 0.5);
         }
-
+        
         // This bit finishes up
         entity.setDeltaMovement(correctedTravelVector);
         return true;
