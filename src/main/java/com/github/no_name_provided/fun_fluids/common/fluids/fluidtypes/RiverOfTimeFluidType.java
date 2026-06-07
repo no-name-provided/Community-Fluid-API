@@ -19,6 +19,7 @@ public class RiverOfTimeFluidType extends TaggedFluidType {
         super(Properties.create()
                 // Taken from net.neoforged.neoforge.common.NeoForgeMod.WATER_TYPE
                 .fallDistanceModifier(0F)
+                .canDrown(false)
                 .canExtinguish(true)
                 .canConvertToSource(true)
                 .supportsBoating(true)

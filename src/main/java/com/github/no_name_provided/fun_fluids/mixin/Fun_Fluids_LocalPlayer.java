@@ -38,11 +38,9 @@ abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
     @ModifyExpressionValue(method = "shouldStopSwimSprinting()Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInWater()Z"))
     private boolean Fun_Fluids_shouldStopSwimSprinting(boolean original) {
-        LocalPlayer player = (LocalPlayer) (Object) this;
-        
         return original || NeoForgeRegistries.FLUID_TYPES.stream()
                 .anyMatch(type ->
-                        type.canSwim(player) &&
+                        type.canSwim(this) &&
                                 !type.isVanilla() &&
                                 this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
