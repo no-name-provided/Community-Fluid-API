@@ -1,6 +1,6 @@
-package com.github.no_name_provided.fun_fluids.mixin;
+package com.github.no_name_provided.cfa.mixin;
 
-import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
+import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.spongepowered.asm.mixin.Mixin;
 

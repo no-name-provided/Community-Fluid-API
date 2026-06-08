@@ -1,6 +1,6 @@
-package com.github.no_name_provided.fun_fluids.mixin;
+package com.github.no_name_provided.cfa.mixin;
 
-import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
+import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
@@ -61,6 +61,7 @@ abstract class Fun_Fluids_WalkNodeEvaluator extends NodeEvaluator {
                     mob.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag()) && type.canSwim(mob)
             )) {
                 while (true) {
+                    //noinspection deprecation - widely used in vanilla and not sure what to replace with
                     if (!blockState.liquid() && !blockState.getFluidState().isSource()) {
                         startY--;
                         break;

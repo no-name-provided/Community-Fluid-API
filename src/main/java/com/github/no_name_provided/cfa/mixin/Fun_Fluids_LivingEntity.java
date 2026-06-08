@@ -1,6 +1,6 @@
-package com.github.no_name_provided.fun_fluids.mixin;
+package com.github.no_name_provided.cfa.mixin;
 
-import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
+import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;

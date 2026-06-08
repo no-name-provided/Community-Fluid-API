@@ -1,6 +1,6 @@
-package com.github.no_name_provided.fun_fluids.mixin_interfaces;
+package com.github.no_name_provided.cfa.mixin_interfaces;
 
-import com.github.no_name_provided.fun_fluids.common.tags.CFAFluid;
+import com.github.no_name_provided.cfa.common.tags.CFAFluid;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;

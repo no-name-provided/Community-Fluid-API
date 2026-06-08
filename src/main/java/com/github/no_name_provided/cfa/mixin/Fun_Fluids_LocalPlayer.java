@@ -1,6 +1,6 @@
-package com.github.no_name_provided.fun_fluids.mixin;
+package com.github.no_name_provided.cfa.mixin;
 
-import com.github.no_name_provided.fun_fluids.mixin_interfaces.IFluidTypeExtension;
+import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;

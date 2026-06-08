@@ -1,10 +1,10 @@
-package com.github.no_name_provided.fun_fluids.common.tags;
+package com.github.no_name_provided.cfa.common.tags;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
-import static com.github.no_name_provided.fun_fluids.CommunityFluidAPI.MODID;
+import static com.github.no_name_provided.cfa.CommunityFluidAPI.MODID;
 
 public class CFAFluid {
     // Strangely, there's no vanilla (or Neo) tag for empty fluids. Perhaps to discourage making alternate empty fluids.
@@ -12,7 +12,7 @@ public class CFAFluid {
     public static final TagKey<net.minecraft.world.level.material.Fluid> EMPTY = create("empty");
     
     
-    private static TagKey<net.minecraft.world.level.material.Fluid> create(String name) {
+    private static TagKey<net.minecraft.world.level.material.Fluid> create(@SuppressWarnings("SameParameterValue") String name) {
         return TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath(MODID, name));
     }
 }

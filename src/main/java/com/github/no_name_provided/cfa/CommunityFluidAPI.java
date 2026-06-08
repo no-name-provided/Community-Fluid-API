@@ -1,4 +1,4 @@
-package com.github.no_name_provided.fun_fluids;
+package com.github.no_name_provided.cfa;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -23,7 +23,7 @@ public class CommunityFluidAPI {
     public static final String MODID = "cfa";
     
     // Mod entry point. Mostly used for registration.
-    public CommunityFluidAPI(IEventBus modEventBus, ModContainer modContainer) {
+    public CommunityFluidAPI(IEventBus ignoredModEventBus, ModContainer ignoredModContainer) {
     
     }
 }

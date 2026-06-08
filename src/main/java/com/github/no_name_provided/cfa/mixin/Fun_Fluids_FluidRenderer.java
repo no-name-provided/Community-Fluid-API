@@ -1,4 +1,4 @@
-package com.github.no_name_provided.fun_fluids.mixin;
+package com.github.no_name_provided.cfa.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;

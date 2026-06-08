@@ -27,6 +27,13 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        // utility that lets me use github repos as sources
+        name = "jitpack.io"
+        url = "https://jitpack.io"
+        content {
+            includeGroup "com.github.no-name-provided" }
+    }
 }
 
 base {
@@ -115,6 +122,10 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+
+    // Use the example mod in testing, so we can make sure our API is working
+//    runtimeOnly("com.github.no-name-provided:Functional_Fluids:master-SNAPSHOT")
+    runtimeOnly("curse.maven:functional-fluids-1374358:8213358")
 
     // compile against the JEI API but do not include it at runtime
 //    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
