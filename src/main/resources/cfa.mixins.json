@@ -15,7 +15,6 @@
     "Fun_Fluids_WalkNodeEvaluator"
   ],
   "client": [
-    "Fun_Fluids_Camera",
     "Fun_Fluids_FluidRenderer",
     "Fun_Fluids_LocalPlayer"
   ],

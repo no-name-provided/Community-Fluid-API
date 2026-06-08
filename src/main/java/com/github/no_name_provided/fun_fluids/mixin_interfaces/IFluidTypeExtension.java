@@ -1,6 +1,6 @@
 package com.github.no_name_provided.fun_fluids.mixin_interfaces;
 
-import com.github.no_name_provided.fun_fluids.datagen.providers.FFFluidTagsProvider;
+import com.github.no_name_provided.fun_fluids.common.tags.CFAFluid;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
@@ -32,7 +32,7 @@ public interface IFluidTypeExtension {
         if (thisType == NeoForgeMod.LAVA_TYPE.value()) {
             return FluidTags.LAVA;
         } else if (thisType == NeoForgeMod.EMPTY_TYPE.value()) {
-            return FFFluidTagsProvider.EMPTY;
+            return CFAFluid.EMPTY;
             // This type is only conditionally registered... because the Neo team loves conditionally registered objects
         } else if (NeoForgeMod.MILK_TYPE.isBound() && thisType == NeoForgeMod.MILK_TYPE.value()) {
             return Tags.Fluids.MILK;
