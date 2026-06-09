@@ -3,6 +3,7 @@ package com.github.no_name_provided.cfa.mixin_interfaces;
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
@@ -47,6 +48,15 @@ public interface IFluidTypeExtension {
      * @return True to nerf mining speed, false to leave it alone.
      */
     default boolean reducesMiningSpeed() {
+        return this == NeoForgeMod.WATER_TYPE.value();
+    }
+    
+    /**
+     * Should aquatic mobs be able to spawn here? Untested.
+     *
+     * @return True id they can spawn, false otherwise.
+     */
+    default boolean canSpawnAquaticMobs(EntityType<?> type) {
         return this == NeoForgeMod.WATER_TYPE.value();
     }
 }
