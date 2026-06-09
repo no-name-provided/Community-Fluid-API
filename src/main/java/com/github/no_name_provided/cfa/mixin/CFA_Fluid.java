@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 @Mixin(Fluid.class)
-abstract class Fun_Fluids_Fluid {
+abstract class CFA_Fluid {
     
     @Shadow
     public abstract FluidType getFluidType();

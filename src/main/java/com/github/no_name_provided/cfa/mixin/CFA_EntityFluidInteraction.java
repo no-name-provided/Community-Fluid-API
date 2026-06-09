@@ -14,7 +14,7 @@ import java.util.Set;
 
 
 @Mixin(EntityFluidInteraction.class)
-abstract class Fun_Fluids_EntityFluidInteraction {
+abstract class CFA_EntityFluidInteraction {
     
     /**
      * Tell the EntityFluidInteraction tracker to watch modded fluids. This allows EntityFluidInteraction#getFluidHeight

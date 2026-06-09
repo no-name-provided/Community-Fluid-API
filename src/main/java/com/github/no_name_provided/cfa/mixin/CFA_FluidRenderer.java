@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
  * Allow conditionally unrendered (invisible) fluids.
  */
 @Mixin(FluidRenderer.class)
-public class Fun_Fluids_FluidRenderer {
+public class CFA_FluidRenderer {
     /**
      * Force the tesselator to respect Block#skipRendering.
      *

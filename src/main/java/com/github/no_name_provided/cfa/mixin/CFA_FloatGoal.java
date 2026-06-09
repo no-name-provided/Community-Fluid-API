@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FloatGoal.class)
-abstract class Fun_Fluids_FloatGoal extends Goal {
+abstract class CFA_FloatGoal extends Goal {
     @Shadow @Final
     private Mob mob;
     

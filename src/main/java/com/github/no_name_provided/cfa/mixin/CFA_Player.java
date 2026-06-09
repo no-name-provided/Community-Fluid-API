@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @Mixin(Player.class) @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-abstract class Fun_Fluids_Player extends Avatar implements ContainerUser, net.neoforged.neoforge.common.extensions.IPlayerExtension {
+abstract class CFA_Player extends Avatar implements ContainerUser, net.neoforged.neoforge.common.extensions.IPlayerExtension {
     
-    protected Fun_Fluids_Player(EntityType<? extends LivingEntity> type, Level level) {
+    protected CFA_Player(EntityType<? extends LivingEntity> type, Level level) {
         super(type, level);
     }
     

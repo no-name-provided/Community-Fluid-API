@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LocalPlayer.class)
-abstract class Fun_Fluids_LocalPlayer extends AbstractClientPlayer {
+abstract class CFA_LocalPlayer extends AbstractClientPlayer {
     
-    public Fun_Fluids_LocalPlayer(ClientLevel level, GameProfile gameProfile) {
+    public CFA_LocalPlayer(ClientLevel level, GameProfile gameProfile) {
         super(level, gameProfile);
     }
     

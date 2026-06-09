@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension {
+abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension {
     @Shadow
     abstract protected double getEffectiveGravity();
     
@@ -88,7 +88,7 @@ abstract class Fun_Fluids_LivingEntity extends Entity implements Attackable, Way
     @Unique
     private TagKey<Fluid> functionalFluids$typeWeAreIn = null;
     
-    public Fun_Fluids_LivingEntity(EntityType<?> type, Level level) {
+    public CFA_LivingEntity(EntityType<?> type, Level level) {
         super(type, level);
     }
     

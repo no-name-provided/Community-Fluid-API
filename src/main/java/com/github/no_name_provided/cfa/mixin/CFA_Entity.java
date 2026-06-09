@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-abstract class Fun_Fluids_Entity {
+abstract class CFA_Entity {
     @Shadow @Final
     public EntityFluidInteraction fluidInteraction;
     

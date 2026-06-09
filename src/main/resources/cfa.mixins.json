@@ -8,24 +8,26 @@
     "CFA_AbstractFish$FishMoveControl",
     "CFA_AbstractNautilus",
     "CFA_AmphibiousNodeEvaluator",
+    "CFA_BlockBehavior",
+    "CFA_Entity",
+    "CFA_EntityFluidInteraction",
+    "CFA_FloatGoal",
+    "CFA_Fluid",
+    "CFA_FluidType",
+    "CFA_LivingEntity",
     "CFA_Nautilus",
+    "CFA_Player",
     "CFA_RandomStroll",
+    "CFA_Swim",
     "CFA_SwimNodeEvaluator",
+    "CFA_WalkNodeEvaluator",
     "CFA_WaterAnimal",
     "CFA_WaterAvoidingRandomStrollGoal",
-    "Fun_Fluids_Entity",
-    "Fun_Fluids_EntityFluidInteraction",
-    "Fun_Fluids_FloatGoal",
-    "Fun_Fluids_Fluid",
-    "Fun_Fluids_FluidType",
-    "Fun_Fluids_LivingEntity",
-    "Fun_Fluids_Player",
-    "Fun_Fluids_Swim",
-    "Fun_Fluids_WalkNodeEvaluator"
+    "CFA_WaterBoundPathNavigation"
   ],
   "client": [
-    "Fun_Fluids_FluidRenderer",
-    "Fun_Fluids_LocalPlayer"
+    "CFA_FluidRenderer",
+    "CFA_LocalPlayer"
   ],
   "injectors": {
     "defaultRequire": 1

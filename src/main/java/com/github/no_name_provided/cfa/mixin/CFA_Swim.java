@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @SuppressWarnings("unused")
 @Mixin(Swim.class)
-abstract class Fun_Fluids_Swim<T extends Mob> {
+abstract class CFA_Swim<T extends Mob> {
     
     /**
      * @author No Name Provided.
