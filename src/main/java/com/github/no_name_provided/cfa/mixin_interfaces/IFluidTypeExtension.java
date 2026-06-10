@@ -21,7 +21,8 @@ import org.jspecify.annotations.Nullable;
  * used on Neo's own classes.
  * </p>
  */
-@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "unused"}) // This is an API; I don't have to use the hooks I provide
+@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "unused"})
+// This is an API; I don't have to use the hooks I provide
 // Neo's static, compile time interface injection silently fails for Neo classes (ie, FluidType), but this interface is still injected at runtime by mixins
 public interface IFluidTypeExtension {
     
