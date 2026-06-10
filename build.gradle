@@ -57,6 +57,10 @@ neoForge {
         publish file("interface_injections.json")
     }
 
+    accessTransformers {
+        publish file("src/main/resources/META-INF/accesstransformer.cfg")
+    }
+
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {

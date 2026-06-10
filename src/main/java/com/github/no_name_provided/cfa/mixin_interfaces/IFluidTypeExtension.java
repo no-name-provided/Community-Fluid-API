@@ -1,13 +1,17 @@
 package com.github.no_name_provided.cfa.mixin_interfaces;
 
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidType;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Used to inject a tag getter into all FluidType subclasses. This way, we don't need to special case vanilla fluids
@@ -17,7 +21,8 @@ import net.neoforged.neoforge.fluids.FluidType;
  * used on Neo's own classes.
  * </p>
  */
-@SuppressWarnings("EqualsBetweenInconvertibleTypes") // Neo's static, compile time interface injection silently fails for Neo classes (ie, FluidType), but this interface is still injected at runtime by mixins
+@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "unused"}) // This is an API; I don't have to use the hooks I provide
+// Neo's static, compile time interface injection silently fails for Neo classes (ie, FluidType), but this interface is still injected at runtime by mixins
 public interface IFluidTypeExtension {
     
     /**
@@ -58,5 +63,24 @@ public interface IFluidTypeExtension {
      */
     default boolean canSpawnAquaticMobs(EntityType<?> type) {
         return this == NeoForgeMod.WATER_TYPE.value();
+    }
+    
+    /**
+     * Can players fish in this fluid? Must be false unless you also return a valid ResourceKey<Lottable> from
+     * #getLootTableKey.
+     *
+     * @return Tru if players can fish in this fluid; otherwise false.
+     */
+    default boolean canFish() {
+        return getLootTableKey() != null;
+    }
+    
+    /**
+     * The loot table to use while fishing in this fluid.
+     *
+     * @return The ResourceKey pointing at the loot table to be used to roll fishing loot.
+     */
+    default @Nullable ResourceKey<LootTable> getLootTableKey() {
+        return this == NeoForgeMod.WATER_TYPE.value() ? BuiltInLootTables.FISHING : null;
     }
 }
