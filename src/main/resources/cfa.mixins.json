@@ -18,8 +18,13 @@
     "CFA_Nautilus",
     "CFA_Player",
     "CFA_RandomStroll",
+    "CFA_SpawnPlacementTypes",
     "CFA_Swim",
     "CFA_SwimNodeEvaluator",
+    "CFA_TropicalFish",
+    "CFA_TryFindLand",
+    "CFA_TryFindLandNearWater",
+    "CFA_TryFindWater",
     "CFA_WalkNodeEvaluator",
     "CFA_WaterAnimal",
     "CFA_WaterAvoidingRandomStrollGoal",
@@ -27,6 +32,7 @@
   ],
   "client": [
     "CFA_FluidRenderer",
+    "CFA_LivingEntityRenderer",
     "CFA_LocalPlayer"
   ],
   "injectors": {
