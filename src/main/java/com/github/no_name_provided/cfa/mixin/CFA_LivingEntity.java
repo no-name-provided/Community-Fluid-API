@@ -1,6 +1,7 @@
 package com.github.no_name_provided.cfa.mixin;
 
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +16,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.waypoints.WaypointTransmitter;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -100,6 +103,14 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         return original | (!fluidState.isEmpty() && entity.isAffectedByFluids() && !entity.canStandOnFluid(fluidState));
     }
     
+    @ModifyExpressionValue(method = "checkFallDamage(DZLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V",
+            at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;fallDistance:D", opcode = Opcodes.GETFIELD))
+    private double cfa_checkFallDamage(double original) {
+        return NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
+                !type.isVanilla() && this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
+        ).findFirst().orElse(Fluids.EMPTY.getFluidType()).getFallDistanceModifier(this) * original;
+    }
+    
     /**
      *
      * @param input      Movement vector representing the keys pressed by the local player.
@@ -119,8 +130,14 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
             if (!fluidType.isVanilla() && fluidType instanceof IFluidTypeExtension taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
                 functionalFluids$typeWeAreIn = taggedFluidType.getTag();
-                // Patch back in fall damage modifier; should technically be handled in Entity#baseTick after #updateFluidInteraction is called
-                entity.fallDistance *= fluidType.getFallDistanceModifier(entity);
+                // HANDLE FALL DAMAGE REDUCTION ----------------------------
+                // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
+                // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
+                // don't account for impulse. Instead, we target
+                // net.minecraft.world.entity.LivingEntity#causeFallDamage... which already has a Neo event injected.
+                // So we just use that event and accept a bit of inneficiency.
+                // ---------------------------------------------------------
+                
                 // Conditional has side effects. Returns true if vanilla logic should be skipped.
                 if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
                     travelInWater(input, baseGravity, isFalling, oldY);
