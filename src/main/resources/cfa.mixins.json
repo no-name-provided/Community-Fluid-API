@@ -19,6 +19,7 @@
     "CFA_FluidStack",
     "CFA_FluidType",
     "CFA_GoalUtils",
+    "CFA_LiquidBlock",
     "CFA_LivingEntity",
     "CFA_Nautilus",
     "CFA_Player",
