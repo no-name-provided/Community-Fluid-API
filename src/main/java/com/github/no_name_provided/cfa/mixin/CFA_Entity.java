@@ -39,7 +39,7 @@ abstract class CFA_Entity {
                 if (!entry.isVanilla() && entity.isPushedByFluid(entry)) {
                     boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) entry).getTag());
                     if (isInFluid) {
-                        fluidInteraction.applyCurrentTo(((IFluidTypeExtension) entry).getTag(), entity, entry.motionScale(entity));
+                        fluidInteraction.applyCurrentTo(((IFluidTypeExtension) entry).getTag(), entity, entity.getFluidMotionScale(entry));
                         cir.setReturnValue(true);
                     }
                 }

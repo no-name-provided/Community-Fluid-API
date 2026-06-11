@@ -21,7 +21,7 @@ abstract class CFA_Zombie extends Monster {
     private boolean cfa_tick(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(type ->
                 !type.isVanilla() &&
-                        type.canDrownIn(this) &&
+                        this.canDrownInFluidType(type) &&
                         fluidInteraction.isEyeInFluid(((IFluidTypeExtension) type).getTag())
         );
     }

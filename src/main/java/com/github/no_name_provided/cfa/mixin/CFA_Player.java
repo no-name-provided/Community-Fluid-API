@@ -28,9 +28,7 @@ abstract class CFA_Player extends Avatar implements ContainerUser, net.neoforged
     @ModifyExpressionValue(method = "tick()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
     private boolean fun_fluids_tick(boolean original) {
-        return original || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(type ->
-                type.canDrownIn(this)
-        );
+        return original || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(this::canDrownInFluidType);
     }
     
     @ModifyExpressionValue(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)F",

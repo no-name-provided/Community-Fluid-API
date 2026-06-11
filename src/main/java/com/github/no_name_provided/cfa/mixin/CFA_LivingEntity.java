@@ -311,7 +311,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
     private boolean Fun_Fluids_baseTick(LivingEntity instance, TagKey<Fluid> tagKey) {
         return instance.isEyeInFluid(tagKey) || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(fluidType ->
-                fluidType.canDrownIn(instance) && isEyeInFluid(((IFluidTypeExtension) fluidType).getTag())
+                instance.canDrownInFluidType(fluidType) && isEyeInFluid(((IFluidTypeExtension) fluidType).getTag())
         );
     }
 }

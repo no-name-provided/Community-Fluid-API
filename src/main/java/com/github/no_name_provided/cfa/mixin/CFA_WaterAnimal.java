@@ -26,8 +26,8 @@ abstract class CFA_WaterAnimal extends PathfinderMob {
     private boolean cfa_handleAirSupply(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(type ->
                 !type.isVanilla() &&
-                        type.canDrownIn(this)
-                        && fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
+                        this.canDrownInFluidType(type) &&
+                        fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
         );
     }
     

@@ -28,7 +28,7 @@ abstract class CFA_AgeableWaterCreature extends AgeableMob {
     private boolean cfa_handleAirSupply(boolean original) {
         return original || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(type ->
                 !type.isVanilla() &&
-                        type.canDrownIn(this) &&
+                        canDrownInFluidType(type) &&
                         fluidInteraction.isInFluid(((IFluidTypeExtension)type).getTag())
                 );
     }
