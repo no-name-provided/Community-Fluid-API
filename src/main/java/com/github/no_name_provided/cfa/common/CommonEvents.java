@@ -18,9 +18,9 @@ public class CommonEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     static void onLivingFall(LivingFallEvent event) {
         LivingEntity entity = event.getEntity();
-        float fallDistanceModifier = NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
+        float fallDistanceModifier = entity.getFluidFallDistanceModifier(NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
                 !type.isVanilla() && entity.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
-        ).findFirst().orElse(Fluids.EMPTY.getFluidType()).getFallDistanceModifier(entity);
+        ).findFirst().orElse(Fluids.EMPTY.getFluidType()));
         event.setDistance(event.getDistance() * fallDistanceModifier);
     }
 }

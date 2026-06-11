@@ -106,9 +106,9 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
     @ModifyExpressionValue(method = "checkFallDamage(DZLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V",
             at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;fallDistance:D", opcode = Opcodes.GETFIELD))
     private double cfa_checkFallDamage(double original) {
-        return NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
+        return this.getFluidFallDistanceModifier(NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
                 !type.isVanilla() && this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
-        ).findFirst().orElse(Fluids.EMPTY.getFluidType()).getFallDistanceModifier(this) * original;
+        ).findFirst().orElse(Fluids.EMPTY.getFluidType())) * original;
     }
     
     /**

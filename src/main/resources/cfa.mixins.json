@@ -16,6 +16,7 @@
     "CFA_FishingHook",
     "CFA_FloatGoal",
     "CFA_Fluid",
+    "CFA_FluidStack",
     "CFA_FluidType",
     "CFA_GoalUtils",
     "CFA_LivingEntity",
