@@ -36,7 +36,7 @@ abstract class CFA_Entity {
             // tricking the IDE into not complaining when we reference it
             Entity entity = (Entity) (Object) this;
             NeoForgeRegistries.FLUID_TYPES.forEach(entry -> {
-                if (!entry.isVanilla()) {
+                if (!entry.isVanilla() && entity.isPushedByFluid(entry)) {
                     boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) entry).getTag());
                     if (isInFluid) {
                         fluidInteraction.applyCurrentTo(((IFluidTypeExtension) entry).getTag(), entity, entry.motionScale(entity));
