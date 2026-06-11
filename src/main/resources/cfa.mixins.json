@@ -28,6 +28,7 @@
     "CFA_Squid",
     "CFA_Squid$SquidFleeGoal",
     "CFA_Squid$SquidRandomMovementGoal",
+    "CFA_Strider",
     "CFA_Swim",
     "CFA_SwimNodeEvaluator",
     "CFA_TropicalFish",

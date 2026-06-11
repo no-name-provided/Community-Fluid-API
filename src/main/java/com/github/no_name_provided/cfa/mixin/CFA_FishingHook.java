@@ -38,7 +38,7 @@ abstract class CFA_FishingHook extends Projectile {
     private ResourceKey<LootTable> cfa_retrieve_fixLootTable(ResourceKey<LootTable> id) {
         FishingHook hook = (FishingHook) (Object) this;
         // This should never be null, because fluids are checked beforehand, but the check is cheap and modders mess up
-        ResourceKey<LootTable> key = ((IFluidTypeExtension) hook.getInBlockState().getFluidState().getFluidType()).getLootTableKey();
+        ResourceKey<LootTable> key = ((IFluidTypeExtension) hook.getInBlockState().getFluidState().getFluidType()).getFishingLootTableKey();
         if (key == null) {
             Logger.getLogger(MODID).warning("Missing loot table key for fluid. Defaulting to BuiltInLootTables.FISHING.");
             return BuiltInLootTables.FISHING;

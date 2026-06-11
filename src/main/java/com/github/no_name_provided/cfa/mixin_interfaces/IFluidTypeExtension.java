@@ -4,6 +4,7 @@ import com.github.no_name_provided.cfa.common.tags.CFAFluid;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -73,7 +74,7 @@ public interface IFluidTypeExtension {
      * @return Tru if players can fish in this fluid; otherwise false.
      */
     default boolean canFish() {
-        return getLootTableKey() != null;
+        return getFishingLootTableKey() != null;
     }
     
     /**
@@ -81,7 +82,24 @@ public interface IFluidTypeExtension {
      *
      * @return The ResourceKey pointing at the loot table to be used to roll fishing loot.
      */
-    default @Nullable ResourceKey<LootTable> getLootTableKey() {
+    default @Nullable ResourceKey<LootTable> getFishingLootTableKey() {
         return this == NeoForgeMod.WATER_TYPE.value() ? BuiltInLootTables.FISHING : null;
+    }
+    
+    /**
+     * Whether an entity can stand on fluids of this type. This just hooks into the vanilla methods, which do not
+     * implement things the way you probably expect. Disables swimming, and alters navigation.
+     * <p>
+     * Not recommended for entities other than striders, unless you inject an equivalent of
+     * net.minecraft.world.entity.monster.Strider#floatStrider() into their #tick. Not for NeoForgeMod.EMPTY_TYPE.
+     * </p>
+     *
+     * @param stander The entity attempting to stand on this fluid.
+     * @return True if the entity can stand on this fluid, false otherwise.
+     */
+    default boolean entityCanStandOn(Entity stander) {
+        // Uncomment for testing
+        // return stander.is(EntityType.STRIDER) && this != NeoForgeMod.EMPTY_TYPE.value();
+        return this == NeoForgeMod.LAVA_TYPE.value() && stander.is(EntityType.STRIDER);
     }
 }

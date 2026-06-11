@@ -3,6 +3,7 @@ package com.github.no_name_provided.cfa.mixin;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
@@ -313,5 +314,11 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         return instance.isEyeInFluid(tagKey) || NeoForgeRegistries.FLUID_TYPES.stream().anyMatch(fluidType ->
                 instance.canDrownInFluidType(fluidType) && isEyeInFluid(((IFluidTypeExtension) fluidType).getTag())
         );
+    }
+    
+    @ModifyReturnValue(method = "canStandOnFluid(Lnet/minecraft/world/level/material/FluidState;)Z",
+    at = @At("RETURN"))
+    private boolean cfa_canStandOnFluid(boolean original, @Local(name = "fluid", argsOnly = true) FluidState fluid) {
+        return ((IFluidTypeExtension)fluid.getFluidType()).entityCanStandOn(this);
     }
 }
