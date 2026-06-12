@@ -23,6 +23,7 @@
     "CFA_GoalUtils",
     "CFA_LiquidBlock",
     "CFA_LivingEntity",
+    "CFA_Mob",
     "CFA_Nautilus",
     "CFA_Player",
     "CFA_RandomStroll",

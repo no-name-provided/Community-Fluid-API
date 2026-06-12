@@ -196,4 +196,13 @@ public interface IFluidTypeExtension {
     default boolean triggersRipTide() {
         return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
     }
+    
+    /**
+     * Should this fluid prevent burning (applies to mobs that <i>would</i> burn in sunlight).
+     *
+     * @return True if touching this fluid will prevent mobs from burning in sunlight. False otherwise.
+     */
+    default boolean blocksBurning(Entity entity) {
+        return ((FluidType)this).getIsWaterLike() || entity.canFluidExtinguish((FluidType)this);
+    }
 }
