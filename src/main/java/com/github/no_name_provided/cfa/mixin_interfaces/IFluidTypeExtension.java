@@ -8,6 +8,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -155,5 +157,43 @@ public interface IFluidTypeExtension {
      */
     default boolean hurtsEntity(LivingEntity toHurt) {
         return (((FluidType) this).getIsWaterLike() || (((FluidType) this).getTemperature() <= 20)) && toHurt.isSensitiveToWater();
+    }
+    
+    /**
+     * Should projectiles be slowed by this fluid?
+     *
+     * @param projectile The projectile being slowed.
+     * @return True if slowed; otherwise False.
+     */
+    default boolean slowsProjectiles(Projectile projectile) {
+        return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
+    }
+    
+    /**
+     * What speed multiplier should be applied to projectiles moving through this fluid? Does nothing unless
+     * #slowsProjectiles returns True.
+     *
+     * @param projectile The projectile being slowed.
+     * @return The amount to scale its speed by.
+     */
+    default float getInertia(Projectile projectile) {
+        if (this != NeoForgeMod.EMPTY_TYPE.value()) {
+            if (projectile instanceof AbstractArrow arrow) {
+                return arrow.getWaterInertia();
+            } else {
+                return 0.6f;
+            }
+        } else {
+            return 1f;
+        }
+    }
+    
+    /**
+     * Should players be able to trigger the riptide enchantment in this fluid?
+     *
+     * @return True if players can use riptide while touching this fluid. Otherwise, false.
+     */
+    default boolean triggersRipTide() {
+        return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
     }
 }

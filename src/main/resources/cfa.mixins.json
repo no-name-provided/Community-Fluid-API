@@ -4,6 +4,7 @@
   "package": "com.github.no_name_provided.cfa.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "CFA_AbstractArrow",
     "CFA_AbstractFish",
     "CFA_AbstractFish$FishMoveControl",
     "CFA_AbstractNautilus",
@@ -33,6 +34,7 @@
     "CFA_Strider",
     "CFA_Swim",
     "CFA_SwimNodeEvaluator",
+    "CFA_TridentItem",
     "CFA_TropicalFish",
     "CFA_TryFindLand",
     "CFA_TryFindLandNearWater",
