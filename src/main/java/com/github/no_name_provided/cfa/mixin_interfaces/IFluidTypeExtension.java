@@ -7,6 +7,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -144,5 +145,15 @@ public interface IFluidTypeExtension {
         // Uncomment for testing
 //        return this != NeoForgeMod.EMPTY_TYPE.value();
         return ((FluidType) this).getIsWaterLike();
+    }
+    
+    /**
+     * Will touching this fluid hurt this living entity?
+     *
+     * @param toHurt The living entity being hurt.
+     * @return True if the entity should be hurt; otherwise false.
+     */
+    default boolean hurtsEntity(LivingEntity toHurt) {
+        return (((FluidType) this).getIsWaterLike() || (((FluidType) this).getTemperature() <= 20)) && toHurt.isSensitiveToWater();
     }
 }

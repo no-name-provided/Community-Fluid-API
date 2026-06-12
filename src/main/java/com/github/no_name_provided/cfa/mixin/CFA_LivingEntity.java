@@ -235,7 +235,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
                 } else if (isInWater()) {
                     entity.jumpInFluid(NeoForgeMod.WATER_TYPE.value());
                 } else {
-                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(((IFluidTypeExtension)getLastFluid()).getTag()).iterator();
+                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(((IFluidTypeExtension) getLastFluid()).getTag()).iterator();
                     if (iterator.hasNext()) {
                         entity.jumpInFluid(iterator.next().value().getFluidType());
                     }
@@ -295,10 +295,11 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         
         pushEntities();
         profiler.pop();
-        if (entity.level() instanceof ServerLevel serverLevel && entity.isSensitiveToWater() && entity.isInWaterOrRain()) {
+        // More changes here -------------------
+        if (entity.level() instanceof ServerLevel serverLevel && ((entity.isSensitiveToWater() && (entity.isInWaterOrRain()) || ((IFluidTypeExtension) entity.getLastFluid()).hurtsEntity(entity)))) {
             entity.hurtServer(serverLevel, entity.damageSources().drown(), 1.0F);
         }
-        
+        // -------------------------------------
         ci.cancel();
     }
     
@@ -314,8 +315,8 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
     }
     
     @ModifyReturnValue(method = "canStandOnFluid(Lnet/minecraft/world/level/material/FluidState;)Z",
-    at = @At("RETURN"))
+            at = @At("RETURN"))
     private boolean cfa_canStandOnFluid(boolean original, @Local(name = "fluid", argsOnly = true) FluidState fluid) {
-        return ((IFluidTypeExtension)fluid.getFluidType()).entityCanStandOn(this);
+        return ((IFluidTypeExtension) fluid.getFluidType()).entityCanStandOn(this);
     }
 }
