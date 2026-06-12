@@ -127,7 +127,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         // We iterate over the entire FluidType registry, skipping the "vanilla" types
         NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
             if (!fluidType.isVanilla() && fluidType instanceof IFluidTypeExtension taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
-                setLastFluid(taggedFluidType.getTag());
+                setLastFluid(fluidType);
                 // HANDLE FALL DAMAGE REDUCTION ----------------------------
                 // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
                 // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
@@ -235,7 +235,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
                 } else if (isInWater()) {
                     entity.jumpInFluid(NeoForgeMod.WATER_TYPE.value());
                 } else {
-                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(getLastFluid()).iterator();
+                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(((IFluidTypeExtension)getLastFluid()).getTag()).iterator();
                     if (iterator.hasNext()) {
                         entity.jumpInFluid(iterator.next().value().getFluidType());
                     }

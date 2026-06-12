@@ -4,22 +4,23 @@ import com.github.no_name_provided.cfa.mixin_interfaces.CFA_IEntityExtension;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
@@ -34,25 +35,46 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
     
     @Shadow public abstract EntityType<?> getType();
     
+    @Shadow public abstract boolean isInWater();
+    
+    @Shadow public abstract boolean isInLava();
+    
     @Unique
-    private TagKey<Fluid> cfa$typeWeAreIn = ((IFluidTypeExtension) NeoForgeMod.EMPTY_TYPE.value()).getTag();
+    private FluidType cfa$typeWeAreIn = NeoForgeMod.EMPTY_TYPE.value();
     
     @Override
-    public TagKey<Fluid> getLastFluid() {
+    @SuppressWarnings("AddedMixinMembersNamePattern") // this name is appropriate for an interface injection
+    public FluidType getLastFluid() {
         return cfa$typeWeAreIn;
     }
     
     @Override
-    public void setLastFluid(TagKey<Fluid> lastFluid) {
+    @SuppressWarnings("AddedMixinMembersNamePattern") // this name is appropriate for an interface injection
+    public void setLastFluid(FluidType lastFluid) {
         cfa$typeWeAreIn = lastFluid;
     }
     
     /**
-     * Force vanilla to track our registered TaggedFluidTypes.
+     * Suppress vanilla splash logic. This is handled with our injection.
+     */
+    @Redirect(method = "updateFluidInteraction()Z",
+    at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Entity;wasTouchingWater:Z", opcode = Opcodes.GETFIELD))
+    private boolean cfa_updateFluidInteraction_suppressVanillaSplash(Entity instance) {
+        return ((IFluidTypeExtension)getLastFluid()).shouldSplash(getType());
+    }
+    
+    /**
+     * Force vanilla to track our registered TaggedFluidTypes. Also, inject splash particle logic.
      */
     @Inject(method = "updateFluidInteraction()Z",
             at = @At("TAIL"), cancellable = true)
-    private void Fun_Fluids_updateFluidInteraction(CallbackInfoReturnable<Boolean> cir) {
+    private void Fun_Fluids_updateFluidInteraction_injectGeneralizedLogic(CallbackInfoReturnable<Boolean> cir) {
+        if (isInWater()) {
+            setLastFluid(NeoForgeMod.WATER_TYPE.value());
+        } else if (isInLava()) {
+            setLastFluid(NeoForgeMod.LAVA_TYPE.value());
+        }
+        // Will be false if we're in a vanilla fluid.
         // Might as well reduce performance impact by preferring vanilla fluids
         if (!cir.getReturnValue()) {
             // Cast the class this code will be injected into to itself,
@@ -62,17 +84,17 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
                 if (!fluidType.isVanilla() && entity.isPushedByFluid(fluidType)) {
                     boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag());
                     if (isInFluid) {
-                        if (((IFluidTypeExtension)fluidType).shouldSplash(getType()) && ((IFluidTypeExtension)fluidType).getTag() != getLastFluid()) {
+                        if (((IFluidTypeExtension) fluidType).shouldSplash(getType()) && !((IFluidTypeExtension) getLastFluid()).shouldSplash(getType()) && fluidType != getLastFluid()) {
                             doWaterSplashEffect();
                         }
-                        setLastFluid(((IFluidTypeExtension)fluidType).getTag());
+                        setLastFluid(fluidType);
                         fluidInteraction.applyCurrentTo(((IFluidTypeExtension) fluidType).getTag(), entity, entity.getFluidMotionScale(fluidType));
                         cir.setReturnValue(true);
                     }
                 }
             });
             if (!cir.getReturnValue()) {
-                setLastFluid(((IFluidTypeExtension) NeoForgeMod.EMPTY_TYPE.value()).getTag());
+                setLastFluid(NeoForgeMod.EMPTY_TYPE.value());
             }
         }
     }

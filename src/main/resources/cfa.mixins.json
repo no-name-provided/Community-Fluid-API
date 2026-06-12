@@ -44,6 +44,7 @@
     "CFA_Zombie"
   ],
   "client": [
+    "CFA_BubbleParticle",
     "CFA_FluidRenderer",
     "CFA_LivingEntityRenderer",
     "CFA_LocalPlayer"
