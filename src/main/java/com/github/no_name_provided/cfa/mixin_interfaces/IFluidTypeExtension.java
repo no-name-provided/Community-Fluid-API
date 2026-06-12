@@ -131,7 +131,18 @@ public interface IFluidTypeExtension {
     
     default boolean hasUnderWaterMusic() {
         // Uncomment for testing
-//        return true;
+//        return this != NeoForgeMod.EMPTY_TYPE.value();
+        return ((FluidType) this).getIsWaterLike();
+    }
+    
+    /**
+     * Should conduits work in this fluid? And on entities in this fluid?
+     *
+     * @return True if conduits work; otherwise false.
+     */
+    default boolean conduitCompatible() {
+        // Uncomment for testing
+//        return this != NeoForgeMod.EMPTY_TYPE.value();
         return ((FluidType) this).getIsWaterLike();
     }
 }

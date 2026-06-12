@@ -10,6 +10,7 @@
     "CFA_AgeableWaterCreature",
     "CFA_AmphibiousNodeEvaluator",
     "CFA_BlockBehavior",
+    "CFA_ConduitBlockEntity",
     "CFA_DolphinJumpGoal",
     "CFA_Entity",
     "CFA_EntityFluidInteraction",
