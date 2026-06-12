@@ -1,5 +1,6 @@
 package com.github.no_name_provided.cfa.mixin;
 
+import com.github.no_name_provided.cfa.mixin_interfaces.CFA_IEntityExtension;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -27,14 +28,13 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension {
+abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTransmitter, net.neoforged.neoforge.common.extensions.ILivingEntityExtension, CFA_IEntityExtension {
     @Shadow
     abstract protected double getEffectiveGravity();
     
@@ -89,9 +89,6 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
     @Shadow
     abstract protected void lerpHeadRotationStep(int lerpHeadSteps, double targetYHeadRot);
     
-    @Unique
-    private TagKey<Fluid> functionalFluids$typeWeAreIn = null;
-    
     public CFA_LivingEntity(EntityType<?> type, Level level) {
         super(type, level);
     }
@@ -130,7 +127,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         // We iterate over the entire FluidType registry, skipping the "vanilla" types
         NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
             if (!fluidType.isVanilla() && fluidType instanceof IFluidTypeExtension taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
-                functionalFluids$typeWeAreIn = taggedFluidType.getTag();
+                setLastFluid(taggedFluidType.getTag());
                 // HANDLE FALL DAMAGE REDUCTION ----------------------------
                 // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
                 // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
@@ -238,7 +235,7 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
                 } else if (isInWater()) {
                     entity.jumpInFluid(NeoForgeMod.WATER_TYPE.value());
                 } else {
-                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(functionalFluids$typeWeAreIn).iterator();
+                    var iterator = BuiltInRegistries.FLUID.getTagOrEmpty(getLastFluid()).iterator();
                     if (iterator.hasNext()) {
                         entity.jumpInFluid(iterator.next().value().getFluidType());
                     }

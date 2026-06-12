@@ -1,28 +1,46 @@
 package com.github.no_name_provided.cfa.mixin;
 
+import com.github.no_name_provided.cfa.mixin_interfaces.CFA_IEntityExtension;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-abstract class CFA_Entity {
+abstract class CFA_Entity implements CFA_IEntityExtension {
     @Shadow
     public abstract Level level();
     
     @Shadow @Final
     public EntityFluidInteraction fluidInteraction;
+    
+    @Unique
+    private TagKey<Fluid> cfa$typeWeAreIn = ((IFluidTypeExtension) NeoForgeMod.EMPTY_TYPE.value()).getTag();
+    
+    @Override
+    public TagKey<Fluid> getLastFluid() {
+        return cfa$typeWeAreIn;
+    }
+    
+    @Override
+    public void setLastFluid(TagKey<Fluid> lastFluid) {
+        cfa$typeWeAreIn = lastFluid;
+    }
     
     /**
      * Force vanilla to track our registered TaggedFluidTypes.
