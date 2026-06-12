@@ -1,11 +1,13 @@
 package com.github.no_name_provided.cfa.mixin_interfaces;
 
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -20,6 +22,10 @@ import org.jspecify.annotations.Nullable;
  * <p>
  * Unfortunately, we can't add this to development environments because Neo's interface injection silently fails when
  * used on Neo's own classes.
+ * </p>
+ * <p>
+ * Assumes all implementers are (sub)classes of FluidType, and may throw ClassCastExceptions if this assumption is
+ * broken.
  * </p>
  */
 @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "unused"})
@@ -68,13 +74,13 @@ public interface IFluidTypeExtension {
     }
     
     /**
-     * Can players fish in this fluid? Must be false unless you also return a valid ResourceKey<Lottable> from
+     * Can players fish in this fluid? Must be false unless you also return a valid ResourceKey<LootTable> from
      * #getLootTableKey.
      *
-     * @return Tru if players can fish in this fluid; otherwise false.
+     * @return True if players can fish in this fluid; otherwise false.
      */
-    default boolean canFish() {
-        return getFishingLootTableKey() != null;
+    default boolean canFish(Level lureLevel, BlockPos lurePos) {
+        return getFishingLootTableKey(lureLevel, lurePos) != null;
     }
     
     /**
@@ -82,7 +88,7 @@ public interface IFluidTypeExtension {
      *
      * @return The ResourceKey pointing at the loot table to be used to roll fishing loot.
      */
-    default @Nullable ResourceKey<LootTable> getFishingLootTableKey() {
+    default @Nullable ResourceKey<LootTable> getFishingLootTableKey(Level lureLevel, BlockPos lureBlockPos) {
         return this == NeoForgeMod.WATER_TYPE.value() ? BuiltInLootTables.FISHING : null;
     }
     
@@ -111,5 +117,21 @@ public interface IFluidTypeExtension {
      */
     default boolean shouldSplash(EntityType<?> splashingType) {
         return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
+    }
+    
+    /**
+     * Should the fluid make mobs wet?
+     *
+     * @param toWet The type of entity getting wet.
+     * @return True if it should get wet, false otherwise.
+     */
+    default boolean makesWet(EntityType<?> toWet) {
+        return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value() || ((FluidType) this).getIsWaterLike();
+    }
+    
+    default boolean hasUnderWaterMusic() {
+        // Uncomment for testing
+//        return true;
+        return ((FluidType) this).getIsWaterLike();
     }
 }

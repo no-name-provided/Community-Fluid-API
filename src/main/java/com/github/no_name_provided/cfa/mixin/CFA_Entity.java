@@ -58,9 +58,9 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
      * Suppress vanilla splash logic. This is handled with our injection.
      */
     @Redirect(method = "updateFluidInteraction()Z",
-    at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Entity;wasTouchingWater:Z", opcode = Opcodes.GETFIELD))
+            at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Entity;wasTouchingWater:Z", opcode = Opcodes.GETFIELD))
     private boolean cfa_updateFluidInteraction_suppressVanillaSplash(Entity instance) {
-        return ((IFluidTypeExtension)getLastFluid()).shouldSplash(getType());
+        return ((IFluidTypeExtension) getLastFluid()).shouldSplash(getType());
     }
     
     /**
@@ -97,6 +97,20 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
                 setLastFluid(NeoForgeMod.EMPTY_TYPE.value());
             }
         }
+    }
+    
+    /**
+     * Make the game emit appropriate swimming sounds and the swim game event if the player is in <i>any</i> fluid that
+     * allows swimsprinting.
+     *
+     * @param original Whether the player is in water.
+     * @return True if the player can "swim" in this fluid; otherwise, false.
+     */
+    @ModifyExpressionValue(method = "applyMovementEmissionAndPlaySound(Lnet/minecraft/world/entity/Entity$MovementEmission;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isInWater()Z"))
+    private boolean cfa_applyMovementEmissionAndPlaySound_fixIsWater(boolean original) {
+        Entity entity = (Entity) (Object) this;
+        return original || getLastFluid().canSwim(entity);
     }
     
     /**

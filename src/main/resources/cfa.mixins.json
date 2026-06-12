@@ -41,13 +41,15 @@
     "CFA_WaterAnimal",
     "CFA_WaterAvoidingRandomStrollGoal",
     "CFA_WaterBoundPathNavigation",
+    "CFA_Wolf",
     "CFA_Zombie"
   ],
   "client": [
     "CFA_BubbleParticle",
     "CFA_FluidRenderer",
     "CFA_LivingEntityRenderer",
-    "CFA_LocalPlayer"
+    "CFA_LocalPlayer",
+    "CFA_Minecraft"
   ],
   "injectors": {
     "defaultRequire": 1

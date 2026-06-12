@@ -2,7 +2,7 @@
   "net/neoforged/neoforge/fluids/FluidType": [
     "com/github/no_name_provided/cfa/mixin_interfaces/IFluidTypeExtension"
   ],
-  "net/minecraft/world/item/Item": [
-    "com/github/no_name_provided/cfa/mixin_interfaces/IFluidTypeExtension"
+  "net/minecraft/world/entity/Entity": [
+    "com/github/no_name_provided/cfa/mixin_interfaces/CFA_IEntityExtension"
   ]
 }
