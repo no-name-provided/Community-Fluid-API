@@ -102,4 +102,14 @@ public interface IFluidTypeExtension {
         // return stander.is(EntityType.STRIDER) && this != NeoForgeMod.EMPTY_TYPE.value();
         return this == NeoForgeMod.LAVA_TYPE.value() && stander.is(EntityType.STRIDER);
     }
+    
+    /**
+     * Should the entity (type) make splashes when it enters this fluid?
+     *
+     * @param splashingType The type of entity making splashes.
+     * @return True to make splashes; otherwise false.
+     */
+    default boolean shouldSplash(EntityType<?> splashingType) {
+        return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
+    }
 }

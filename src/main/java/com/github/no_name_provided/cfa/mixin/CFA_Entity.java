@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -28,6 +29,10 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
     
     @Shadow @Final
     public EntityFluidInteraction fluidInteraction;
+    
+    @Shadow protected abstract void doWaterSplashEffect();
+    
+    @Shadow public abstract EntityType<?> getType();
     
     @Unique
     private TagKey<Fluid> cfa$typeWeAreIn = ((IFluidTypeExtension) NeoForgeMod.EMPTY_TYPE.value()).getTag();
@@ -53,15 +58,22 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
             // Cast the class this code will be injected into to itself,
             // tricking the IDE into not complaining when we reference it
             Entity entity = (Entity) (Object) this;
-            NeoForgeRegistries.FLUID_TYPES.forEach(entry -> {
-                if (!entry.isVanilla() && entity.isPushedByFluid(entry)) {
-                    boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) entry).getTag());
+            NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
+                if (!fluidType.isVanilla() && entity.isPushedByFluid(fluidType)) {
+                    boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag());
                     if (isInFluid) {
-                        fluidInteraction.applyCurrentTo(((IFluidTypeExtension) entry).getTag(), entity, entity.getFluidMotionScale(entry));
+                        if (((IFluidTypeExtension)fluidType).shouldSplash(getType()) && ((IFluidTypeExtension)fluidType).getTag() != getLastFluid()) {
+                            doWaterSplashEffect();
+                        }
+                        setLastFluid(((IFluidTypeExtension)fluidType).getTag());
+                        fluidInteraction.applyCurrentTo(((IFluidTypeExtension) fluidType).getTag(), entity, entity.getFluidMotionScale(fluidType));
                         cir.setReturnValue(true);
                     }
                 }
             });
+            if (!cir.getReturnValue()) {
+                setLastFluid(((IFluidTypeExtension) NeoForgeMod.EMPTY_TYPE.value()).getTag());
+            }
         }
     }
     
