@@ -134,8 +134,8 @@ public interface IFluidTypeExtension {
     
     default boolean hasUnderWaterMusic() {
         // Uncomment for testing
-//        return this != NeoForgeMod.EMPTY_TYPE.value();
-        return ((FluidType) this).getIsWaterLike();
+        return this != NeoForgeMod.EMPTY_TYPE.value() && this != NeoForgeMod.LAVA_TYPE.value();
+//        return ((FluidType) this).getIsWaterLike();
     }
     
     /**

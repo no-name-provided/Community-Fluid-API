@@ -13,6 +13,7 @@
     "CFA_BlockBehavior",
     "CFA_ConduitBlockEntity",
     "CFA_DolphinJumpGoal",
+    "CFA_Drowned",
     "CFA_Entity",
     "CFA_EntityFluidInteraction",
     "CFA_FishingHook",
@@ -53,7 +54,9 @@
     "CFA_FluidRenderer",
     "CFA_LivingEntityRenderer",
     "CFA_LocalPlayer",
-    "CFA_Minecraft"
+    "CFA_Minecraft",
+    "CFA_UnderwaterAmbientSoundInstances$SubSound",
+    "CFA_UnderwaterAmbientSoundInstances$UnderwaterAmbientSoundInstance"
   ],
   "injectors": {
     "defaultRequire": 1

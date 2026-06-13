@@ -1,5 +1,6 @@
 package com.github.no_name_provided.cfa.mixin;
 
+import com.github.no_name_provided.cfa.mixin_interfaces.CFA_IPlayerExtension;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
@@ -9,17 +10,33 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.extensions.IPlayerExtension;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @Mixin(Player.class) @ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-abstract class CFA_Player extends Avatar implements ContainerUser, net.neoforged.neoforge.common.extensions.IPlayerExtension {
+abstract class CFA_Player extends Avatar implements ContainerUser, IPlayerExtension, CFA_IPlayerExtension {
+    @Unique
+    private Boolean cfa$wasUnderLastFluid = false;
     
     protected CFA_Player(EntityType<? extends LivingEntity> type, Level level) {
         super(type, level);
+    }
+    
+    @SuppressWarnings("AddedMixinMembersNamePattern") // appropriate name for injected interface method
+    @Override
+    public boolean getWasUnderLastFluid() {
+        return cfa$wasUnderLastFluid;
+    }
+    
+    @SuppressWarnings("AddedMixinMembersNamePattern") // appropriate name for injected interface method
+    @Override
+    public void setWasUnderLastFluid(Boolean wasUnder) {
+        cfa$wasUnderLastFluid = wasUnder;
     }
     
     /**

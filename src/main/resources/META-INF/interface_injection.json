@@ -4,5 +4,8 @@
   ],
   "net/minecraft/world/entity/Entity": [
     "com/github/no_name_provided/cfa/mixin_interfaces/CFA_IEntityExtension"
+  ],
+  "net/minecraft/world/entity/player/Player": [
+    "com/github/no_name_provided/cfa/mixin_interfaces/CFA_IPlayerExtension"
   ]
 }
