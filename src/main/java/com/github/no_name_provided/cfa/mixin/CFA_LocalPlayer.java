@@ -105,13 +105,10 @@ abstract class CFA_LocalPlayer extends AbstractClientPlayer {
     @Overwrite
     protected boolean updateIsUnderwater() {
         boolean oldIsUnderwater = getWasUnderLastFluid();
-        setLastFluid(
-                NeoForgeRegistries.FLUID_TYPES.stream().filter(type ->
-                        fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
-                ).findFirst().orElse(NeoForgeMod.EMPTY_TYPE.value())
-        );
-        setWasUnderLastFluid(((IFluidTypeExtension) getLastFluid()).hasUnderWaterMusic() && isEyeInFluid(((IFluidTypeExtension) getLastFluid()).getTag()));
+        // This updates (via injected code) lastFluid and wasUnderLastFluid
+        // Pushing it to the super class mimics vanilla and presumably allows the correct values to be calculated on the server
         super.updateIsUnderwater();
+        
         boolean newIsUnderwater = getWasUnderLastFluid();
         if (!this.isSpectator()) {
             if (!oldIsUnderwater && newIsUnderwater) {
