@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -202,7 +203,18 @@ public interface IFluidTypeExtension {
      *
      * @return True if touching this fluid will prevent mobs from burning in sunlight. False otherwise.
      */
-    default boolean blocksBurning(Entity entity) {
-        return ((FluidType)this).getIsWaterLike() || entity.canFluidExtinguish((FluidType)this);
+    default boolean preventsBurning(Entity entity) {
+        return ((FluidType) this).getIsWaterLike() || entity.canFluidExtinguish((FluidType) this);
+    }
+    
+    /**
+     * Boats are covered in FluidType#supportsBoating. This method is for other vehicles. Minecarts are supported
+     * out-of-the-box. Other vehicles will need to implement support.
+     *
+     * @param vehicle The vehicle to affect.
+     * @return True if the vehicle should be affected by fluids of this type. Otherwise, false.
+     */
+    default boolean affectsVehicle(VehicleEntity vehicle) {
+        return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
     }
 }

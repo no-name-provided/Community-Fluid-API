@@ -24,6 +24,6 @@ abstract class CFA_Mob extends LivingEntity implements Targeting, EquipmentUser,
     private boolean cfa_isSunBurnTick_fixIsInWaterOrRain(boolean original) {
         return original ||
                 canFluidExtinguish(getLastFluid()) ||
-                ((IFluidTypeExtension) getLastFluid()).blocksBurning(this);
+                ((IFluidTypeExtension) getLastFluid()).preventsBurning(this);
     }
 }
