@@ -69,6 +69,8 @@
     "CFA_LivingEntityRenderer",
     "CFA_LocalPlayer",
     "CFA_Minecraft",
+    "CFA_RidingEntitySoundInstance",
+    "CFA_RidingMinecartSoundInstance",
     "CFA_UnderwaterAmbientSoundHandler",
     "CFA_UnderwaterAmbientSoundInstances$SubSound",
     "CFA_UnderwaterAmbientSoundInstances$UnderwaterAmbientSoundInstance"
