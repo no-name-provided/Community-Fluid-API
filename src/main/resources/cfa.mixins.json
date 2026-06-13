@@ -24,6 +24,7 @@
     "CFA_FluidStack",
     "CFA_FluidType",
     "CFA_GoalUtils",
+    "CFA_ItemEntity",
     "CFA_LiquidBlock",
     "CFA_LivingEntity",
     "CFA_MinecartFurnace",
