@@ -2,24 +2,18 @@ package com.github.no_name_provided.cfa.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.UnderwaterAmbientSoundInstances;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
+import net.minecraft.client.resources.sounds.AmbientSoundHandler;
+import net.minecraft.client.resources.sounds.UnderwaterAmbientSoundHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(UnderwaterAmbientSoundInstances.SubSound.class)
-abstract class CFA_UnderwaterAmbientSoundInstances$SubSound extends AbstractTickableSoundInstance {
+@Mixin(UnderwaterAmbientSoundHandler.class)
+abstract class CFA_UnderwaterAmbientSoundHandler implements AmbientSoundHandler {
+    
     @Shadow @Final
     private LocalPlayer player;
-    
-    protected CFA_UnderwaterAmbientSoundInstances$SubSound(SoundEvent event, SoundSource source, RandomSource random) {
-        super(event, source, random);
-    }
     
     @ModifyExpressionValue(method = "tick()V",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUnderWater()Z"))
