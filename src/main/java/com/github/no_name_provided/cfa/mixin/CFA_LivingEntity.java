@@ -110,40 +110,49 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
     }
     
     /**
+     * Force Neo/vanilla to use their own state-sensitive patched in variant directly, with the "correct" FLuidState.
+     * #BlameTheNeoForgedTeam.
+     */
+    @Redirect(method = "travel(Lnet/minecraft/world/phys/Vec3;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;travelInFluid(Lnet/minecraft/world/phys/Vec3;)V"))
+    private void cfa_travel_fixTravelInFluidUsingWrongOverload(LivingEntity instance, Vec3 input) {
+        instance.travelInFluid(input, instance.level().getFluidState(instance.blockPosition()));
+    }
+    
+    /**
+     * Replace the vanilla code with our generalized check. Defaults to #TravelInWater.
      *
      * @param input      Movement vector representing the keys pressed by the local player.
-     * @param fluidState Vanilla calls always pass in an empty FluidState, which is ignored.
+     * @param fluidState Vanilla calls always pass in an empty FluidState, which is ignored. We replace that with a
+     *                   targeted mixin to use the same lazy blockstate check Neo injects into #travel.
      */
     @Inject(method = "travelInFluid(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/material/FluidState;)V",
             at = @At("HEAD"), cancellable = true)
-    private void Fun_Fluids_travel_in_fluid(Vec3 input, FluidState fluidState, CallbackInfo ci) {
+    private void cfa_travelInFluid(Vec3 input, FluidState fluidState, CallbackInfo ci) {
         // Common trick to silence vacuous compiler warnings
         LivingEntity entity = (LivingEntity) (Object) (this);
         
-        boolean isFalling = this.getDeltaMovement().y <= 0.0;
-        double oldY = this.getY();
-        double baseGravity = this.getEffectiveGravity();
-        
-        // We iterate over the entire FluidType registry, skipping the "vanilla" types
-        NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
-            if (!fluidType.isVanilla() && fluidType instanceof IFluidTypeExtension taggedFluidType && entity.fluidInteraction.isInFluid(taggedFluidType.getTag())) {
-                setLastFluid(fluidType);
-                // HANDLE FALL DAMAGE REDUCTION ----------------------------
-                // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
-                // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
-                // don't account for impulse. Instead, we target
-                // net.minecraft.world.entity.LivingEntity#causeFallDamage... which already has a Neo event injected.
-                // So we just use that event and accept a bit of inneficiency.
-                // ---------------------------------------------------------
-                
-                // Conditional has side effects. Returns true if vanilla logic should be skipped.
-                if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
-                    travelInWater(input, baseGravity, isFalling, oldY);
-                    floatInWaterWhileRidden();
-                }
-                ci.cancel();
+        // If we're looking at a vanilla fluid, we can just fall back on vanilla logic
+        if (!fluidState.getFluidType().isVanilla()) {
+            double baseGravity = this.getEffectiveGravity();
+            
+            // HANDLE FALL DAMAGE REDUCTION ----------------------------
+            // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
+            // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
+            // don't account for impulse. Instead, we target
+            // net.minecraft.world.entity.LivingEntity#causeFallDamage... which already has a Neo event injected.
+            // So we just use that event and accept a bit of inneficiency.
+            // ---------------------------------------------------------
+            
+            // Conditional has side effects. Returns true if vanilla logic should be skipped
+            if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
+                boolean isFalling = this.getDeltaMovement().y <= 0.0;
+                double oldY = this.getY();
+                travelInWater(input, baseGravity, isFalling, oldY);
+                floatInWaterWhileRidden();
             }
-        });
+            ci.cancel();
+        }
     }
     
     /**
