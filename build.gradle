@@ -53,9 +53,9 @@ neoForge {
     interfaceInjectionData.from 'src/main/resources/META-INF/interface_injection.json'
     //'src/main/resources/META-INF/interface_injection.json'
 
-    interfaceInjectionData {
-        publish file("interface_injection.json")
-    }
+//    interfaceInjectionData {
+//        publish file("interface_injection.json")
+//    }
 
     accessTransformers {
         publish file("src/main/resources/META-INF/accesstransformer.cfg")
