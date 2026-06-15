@@ -28,13 +28,13 @@ abstract class CFA_TropicalFish extends AbstractSchoolingFish {
     at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/FluidState;is(Lnet/minecraft/tags/TagKey;)Z"))
     private static boolean cfa_checkTropicalFishSpawnRules_fixFluidStateCheck(FluidState instance, TagKey<Fluid> tagKey, Operation<Boolean> original, @Local(name = "level", argsOnly = true)LevelAccessor level, @Local(name = "pos", argsOnly = true) BlockPos pos) {
         // below
-        return ((IFluidTypeExtension)level.getFluidState(pos.below()).getType()).canSpawnAquaticMobs(EntityType.TROPICAL_FISH);
+        return ((IFluidTypeExtension)level.getFluidState(pos.below()).getFluidType()).canSpawnAquaticMobs(EntityType.TROPICAL_FISH);
     }
     
     @WrapOperation(method = "checkTropicalFishSpawnRules(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/EntitySpawnReason;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"))
     private static boolean cfa_checkTropicalFishSpawnRules_fixBlockStateCheck(BlockState instance, Object block, Operation<Boolean> original, @Local(name = "level", argsOnly = true)LevelAccessor level, @Local(name = "pos", argsOnly = true) BlockPos pos) {
         // above
-        return ((IFluidTypeExtension)level.getFluidState(pos.above()).getType()).canSpawnAquaticMobs(EntityType.TROPICAL_FISH);
+        return ((IFluidTypeExtension)level.getFluidState(pos.above()).getFluidType()).canSpawnAquaticMobs(EntityType.TROPICAL_FISH);
     }
 }

@@ -41,7 +41,7 @@ abstract class CFA_WaterAnimal extends PathfinderMob {
     @ModifyExpressionValue(method = "checkSurfaceWaterAnimalSpawnRules(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/EntitySpawnReason;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LevelAccessor;getFluidState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;"))
     private static FluidState cfa_checkSurfaceWaterAnimalSpawnRules_fixFluidStateCheck(FluidState original, @Local(argsOnly = true, name = "type") EntityType<? extends WaterAnimal> type) {
-        boolean canSpawn = ((IFluidTypeExtension) original.getType()).canSpawnAquaticMobs(type);
+        boolean canSpawn = ((IFluidTypeExtension) original.getFluidType()).canSpawnAquaticMobs(type);
         return canSpawn ? Fluids.WATER.defaultFluidState() : Fluids.EMPTY.defaultFluidState();
     }
     
@@ -55,7 +55,7 @@ abstract class CFA_WaterAnimal extends PathfinderMob {
     @ModifyExpressionValue(method = "checkSurfaceWaterAnimalSpawnRules(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/EntitySpawnReason;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LevelAccessor;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private static BlockState cfa_checkSurfaceWaterAnimalSpawnRules_fixBlockStateCheck(BlockState original, @Local(argsOnly = true, name = "type") EntityType<? extends WaterAnimal> type) {
-        boolean canSpawn = ((IFluidTypeExtension) original.getFluidState().getType()).canSpawnAquaticMobs(type);
+        boolean canSpawn = ((IFluidTypeExtension) original.getFluidState().getFluidType()).canSpawnAquaticMobs(type);
         return canSpawn ? Blocks.WATER.defaultBlockState() : Fluids.EMPTY.defaultFluidState().createLegacyBlock();
     }
 }

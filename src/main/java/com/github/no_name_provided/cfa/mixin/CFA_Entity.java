@@ -169,9 +169,9 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
      */
     @ModifyExpressionValue(method = "updateSwimming()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getFluidState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;"))
-    private FluidState Fun_Fluids_updateSwimming_skipBlockStateCheck(FluidState original) {
+    private FluidState cfa_updateSwimming_skipBlockStateCheck(FluidState original) {
         Entity entity = (Entity) (Object) this;
-        return !original.getType().getFluidType().canSwim(entity) ? Fluids.LAVA.defaultFluidState() : Fluids.WATER.defaultFluidState();
+        return !original.getFluidType().canSwim(entity) ? Fluids.LAVA.defaultFluidState() : Fluids.WATER.defaultFluidState();
     }
     
     /**
