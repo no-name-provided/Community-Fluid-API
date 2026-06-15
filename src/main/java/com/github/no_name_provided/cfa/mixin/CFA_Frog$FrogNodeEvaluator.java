@@ -5,7 +5,7 @@ import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.animal.frog.Frog.FrogNodeEvaluator")
+@Mixin(targets = "net.minecraft.world.entity.animal.frog.Frog$FrogNodeEvaluator")
 public class CFA_Frog$FrogNodeEvaluator extends AmphibiousNodeEvaluator {
     
     public CFA_Frog$FrogNodeEvaluator(boolean prefersShallowSwimming) {

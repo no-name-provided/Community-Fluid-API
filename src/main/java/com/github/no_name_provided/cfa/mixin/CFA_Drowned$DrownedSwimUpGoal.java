@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned.DrownedSwimUpGoal")
+@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned$DrownedSwimUpGoal")
 abstract class CFA_Drowned$DrownedSwimUpGoal extends Goal {
     @Shadow @Final
     private Drowned drowned;

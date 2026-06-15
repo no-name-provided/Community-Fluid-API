@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.animal.squid.Squid.SquidFleeGoal")
+@Mixin(targets = "net.minecraft.world.entity.animal.squid.Squid$SquidFleeGoal")
 abstract class CFA_Squid$SquidFleeGoal extends Goal {
     // https://stackoverflow.com/a/76957829 - this is the usual name of the automatic reference to the containing class
     @Shadow @Final

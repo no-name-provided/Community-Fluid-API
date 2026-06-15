@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(targets = "net.minecraft.world.entity.animal.squid.Squid.SquidRandomMovementGoal")
+@Mixin(targets = "net.minecraft.world.entity.animal.squid.Squid$SquidRandomMovementGoal")
 abstract class CFA_Squid$SquidRandomMovementGoal extends Goal {
     @Shadow @Final
     private Squid squid;

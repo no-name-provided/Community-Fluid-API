@@ -9,6 +9,7 @@ version = mod_version
 group = mod_group_id
 
 repositories {
+    flatDir name: 'libs', dirs: "$projectDir/local_libraries"
     mavenLocal()
     maven {
         // location of the maven that hosts JEI files since January 2023
@@ -53,9 +54,9 @@ neoForge {
     interfaceInjectionData.from 'src/main/resources/META-INF/interface_injection.json'
     //'src/main/resources/META-INF/interface_injection.json'
 
-//    interfaceInjectionData {
-//        publish file("interface_injection.json")
-//    }
+    interfaceInjectionData {
+        publish file("interface_injection.json")
+    }
 
     accessTransformers {
         publish file("src/main/resources/META-INF/accesstransformer.cfg")
@@ -66,6 +67,7 @@ neoForge {
     runs {
         client {
             client()
+            // JVM argument to add mixin-edited code to output: -Dmixin.debug.export=true
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -130,9 +132,9 @@ dependencies {
     // Use the example mod in testing, so we can make sure our API is working
 //    runtimeOnly("com.github.no-name-provided:Functional_Fluids:master-SNAPSHOT")
 //    runtimeOnly("curse.maven:functional-fluids-1374358:8231246")
-    runtimeOnly("curse.maven:functional-fluids-1374358:8219167")
+//    runtimeOnly("curse.maven:functional-fluids-1374358:8219167")
 //    runtimeOnly("maven.modrinth:functional-fluids:2.2.0")
-
+runtimeOnly(":fun_fluids:2.2.2")
 
     // compile against the JEI API but do not include it at runtime
 //    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")

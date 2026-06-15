@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned.DrownedMoveControl")
+@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned$DrownedMoveControl")
 abstract class CFA_Drowned$DrownedMoveControl extends MoveControl {
     @Shadow @Final
     private Drowned drowned;

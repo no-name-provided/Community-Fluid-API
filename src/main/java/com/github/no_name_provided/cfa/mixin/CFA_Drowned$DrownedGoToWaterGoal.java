@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned.DrownedGoToWaterGoal")
+@Mixin(targets = "net.minecraft.world.entity.monster.zombie.Drowned$DrownedGoToWaterGoal")
 abstract class CFA_Drowned$DrownedGoToWaterGoal extends Goal {
     @Shadow @Final
     private PathfinderMob mob;
@@ -37,8 +37,8 @@ abstract class CFA_Drowned$DrownedGoToWaterGoal extends Goal {
     @ModifyExpressionValue(method = "getWaterPos()Lnet/minecraft/world/phys/Vec3;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"))
     private boolean cfa_getWaterPos(boolean original, @Local(name = "randomPos") BlockPos randomPos) {
-        FluidType fluid = level.getFluidState(randomPos).getFluidType();
-        return original || (
+        FluidType fluid = level.getBlockState(randomPos).getFluidState().getFluidType();
+        return original || (!fluid.isAir() ||
                 mob.canSwimInFluidType(fluid) &&
                         ((IFluidTypeExtension) fluid).preventsBurning(mob)
         );

@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.animal.parrot.Parrot.ParrotWanderGoal")
+@Mixin(targets = "net.minecraft.world.entity.animal.parrot.Parrot$ParrotWanderGoal")
 abstract class CFA_Parrot$ParrotWanderGoal extends WaterAvoidingRandomFlyingGoal {
     
     public CFA_Parrot$ParrotWanderGoal(PathfinderMob mob, double speedModifier) {
