@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -52,18 +53,18 @@ neoForge {
 
     // Add interface injections
     interfaceInjectionData.from 'src/main/resources/META-INF/interface_injection.json'
-    //'src/main/resources/META-INF/interface_injection.json'
 
+    // Publish injections
     interfaceInjectionData {
         publish file("interface_injection.json")
     }
-
+    // Publish transformers
     accessTransformers {
         publish file("src/main/resources/META-INF/accesstransformer.cfg")
     }
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
+    // Run configurations.
+    // These can be tweaked, removed, or duplicated as needed
     runs {
         client {
             client()
@@ -128,39 +129,9 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-
     // Use the example mod in testing, so we can make sure our API is working
-//    runtimeOnly("com.github.no-name-provided:Functional_Fluids:master-SNAPSHOT")
-//    runtimeOnly("curse.maven:functional-fluids-1374358:8231246")
-//    runtimeOnly("curse.maven:functional-fluids-1374358:8219167")
-//    runtimeOnly("maven.modrinth:functional-fluids:2.2.0")
-runtimeOnly(":fun_fluids:2.2.2")
-
-    // compile against the JEI API but do not include it at runtime
-//    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-    // at runtime, use the full JEI jar for NeoForge
-//    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
-
-    // Example mod dependency with JEI
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
-    // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
-
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-
-    // Example mod dependency using a file as dependency
-    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
-
-    // Example project dependency using a sister or child project:
-    // implementation project(":myproject")
-
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    // Sourced from a local flatDir
+    runtimeOnly(":fun_fluids:2.2.2")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -182,10 +153,6 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     from "src/main/templates"
     into "build/generated/sources/modMetadata"
 }
-
-//interfaceInjections {
-//    file 'src/main/resources/META-INF/interfaceinjection.json'
-//}
 
 // Include the output of "generateModMetadata" as an input directory for the build
 // this works with both building through Gradle and the IDE.

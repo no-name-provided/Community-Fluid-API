@@ -1,6 +1,7 @@
 package com.github.no_name_provided.cfa.mixin_interfaces;
 
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
@@ -55,6 +56,12 @@ public interface IFluidTypeExtension {
         } else if (NeoForgeMod.MILK_TYPE.isBound() && thisType == NeoForgeMod.MILK_TYPE.value()) {
             return Tags.Fluids.MILK;
         } else {
+            // Let devs know they're being criminally sloppy.
+            // You can always override with "return FluidTags.WATER" if this is intentional,
+            // but you should really configure stuff properly.
+            if (thisType != NeoForgeMod.WATER_TYPE.value()) {
+                LogUtils.getLogger().debug("WARNING: Missing fluid tag. Defaulting to water. This will override many settings in FluidType with vanilla behavior.");
+            }
             return FluidTags.WATER;
         }
     }
@@ -78,8 +85,8 @@ public interface IFluidTypeExtension {
     }
     
     /**
-     * Can players fish in this fluid? Must be false unless you also return a valid ResourceKey<LootTable> from
-     * #getLootTableKey.
+     * Can players fish in this fluid? Must be false unless you also return a valid ResourceKey&lt;LootTable&gt; from
+     * {@link IFluidTypeExtension#getFishingLootTableKey(Level, BlockPos)}.
      *
      * @return True if players can fish in this fluid; otherwise false.
      */
@@ -133,6 +140,11 @@ public interface IFluidTypeExtension {
         return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value() || ((FluidType) this).getIsWaterLike();
     }
     
+    /**
+     * Should underwater music play when the player is immersed in this fluid?
+     *
+     * @return True if the music should play, otherwise false.
+     */
     default boolean hasUnderWaterMusic() {
         // Uncomment for testing
         return this != NeoForgeMod.EMPTY_TYPE.value() && this != NeoForgeMod.LAVA_TYPE.value();

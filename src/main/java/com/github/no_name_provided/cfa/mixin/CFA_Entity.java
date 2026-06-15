@@ -68,7 +68,7 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
      */
     @Inject(method = "updateFluidInteraction()Z",
             at = @At("TAIL"), cancellable = true)
-    private void Fun_Fluids_updateFluidInteraction_injectGeneralizedLogic(CallbackInfoReturnable<Boolean> cir) {
+    private void cfa_updateFluidInteraction_injectGeneralizedLogic(CallbackInfoReturnable<Boolean> cir) {
         if (isInWater()) {
             setLastFluid(NeoForgeMod.WATER_TYPE.value());
         } else if (isInLava()) {
@@ -81,7 +81,7 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
             // tricking the IDE into not complaining when we reference it
             Entity entity = (Entity) (Object) this;
             NeoForgeRegistries.FLUID_TYPES.forEach(fluidType -> {
-                if (!fluidType.isVanilla() && entity.isPushedByFluid(fluidType)) {
+                if (!fluidType.isVanilla()) {
                     boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag());
                     if (isInFluid) {
                         if (((IFluidTypeExtension) fluidType).shouldSplash(getType()) && !((IFluidTypeExtension) getLastFluid()).shouldSplash(getType()) && fluidType != getLastFluid()) {
