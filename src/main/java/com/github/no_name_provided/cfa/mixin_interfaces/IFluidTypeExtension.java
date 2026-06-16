@@ -1,9 +1,14 @@
 package com.github.no_name_provided.cfa.mixin_interfaces;
 
+import com.github.no_name_provided.cfa.client.particles.CFAParticleTypes;
+import com.github.no_name_provided.cfa.common.ClientWrappers;
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +25,8 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * Used to inject a tag getter into all FluidType subclasses. This way, we don't need to special case vanilla fluids
@@ -128,6 +135,76 @@ public interface IFluidTypeExtension {
      */
     default boolean shouldSplash(EntityType<?> splashingType) {
         return this != NeoForgeMod.LAVA_TYPE.value() && this != NeoForgeMod.EMPTY_TYPE.value();
+    }
+    
+    /**
+     * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the client.
+     */
+    default void createSplashParticleOnClient(Fluid fluid, Level level, double x, double y, double z, double xAux, double yAux, double zAux) {
+        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
+        if (tint.isPresent()) {
+            level.addParticle(
+                    ColorParticleOption.create(
+                            CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(),
+                            tint.get()
+                    ), x,
+                    y,
+                    z,
+                    xAux,
+                    yAux,
+                    zAux
+            );
+        } else {
+            level.addParticle(ParticleTypes.SPLASH, x, y, z, xAux, yAux, zAux);
+        }
+    }
+    
+    /**
+     * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the server side.
+     */
+    default int createSplashParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
+        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
+        if (tint.isPresent() && !fluid.getFluidType().isVanilla()) {
+            return level.sendParticles(
+                    ColorParticleOption.create(
+                            CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(),
+                            tint.get()
+                    ), x,
+                    y,
+                    z,
+                    count,
+                    xDist,
+                    yDist,
+                    zDist,
+                    speed
+            );
+        } else {
+            return level.sendParticles(ParticleTypes.SPLASH, x, y, z, count, xDist, yDist, zDist, speed);
+        }
+    }
+    
+    /**
+     * Create the particle we use for wake effects (fish approaching fishing bob) on the server side.
+     */
+    default int createWakeParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
+        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
+        if (tint.isPresent() && !fluid.getFluidType().isVanilla()) {
+            return level.sendParticles(
+                    ColorParticleOption.create(
+                            CFAParticleTypes.TINTED_WAKE_PARTICLE.get(),
+                            tint.get()
+                    ), x,
+                    y,
+                    z,
+                    count,
+                    xDist,
+                    yDist,
+                    zDist,
+                    speed
+            );
+        } else {
+            return level.sendParticles(ParticleTypes.FISHING, x, y, z, count, xDist, yDist, zDist, speed);
+        }
     }
     
     /**

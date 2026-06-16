@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "CFA_AbstractArrow",
+    "CFA_AbstractBoat",
     "CFA_AbstractFish",
     "CFA_AbstractFish$FishMoveControl",
     "CFA_AbstractMinecart",

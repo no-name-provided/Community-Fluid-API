@@ -4,10 +4,16 @@ import com.github.no_name_provided.cfa.mixin_interfaces.CFA_IEntityExtension;
 import com.github.no_name_provided.cfa.mixin_interfaces.IFluidTypeExtension;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityFluidInteraction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -85,6 +91,9 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
                     boolean isInFluid = fluidInteraction.isInFluid(((IFluidTypeExtension) fluidType).getTag());
                     if (isInFluid) {
                         if (((IFluidTypeExtension) fluidType).shouldSplash(getType()) && !((IFluidTypeExtension) getLastFluid()).shouldSplash(getType()) && fluidType != getLastFluid()) {
+                            // Update this first, so we can use it in our splash mixin.
+                            // Yes, it is ever-so-slightly inefficient to call it twice
+                            setLastFluid(fluidType);
                             doWaterSplashEffect();
                         }
                         setLastFluid(fluidType);
@@ -98,6 +107,24 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
             }
         }
     }
+    
+    @Redirect(method = "doWaterSplashEffect()V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", ordinal = 1))
+    private void cfa_doWaterSplashEffect(Level level, ParticleOptions particle, double x, double y, double z, double xd, double yd, double zd) {
+        // TODO: make more efficient, support reused fluid types
+        Fluid fluid = BuiltInRegistries.FLUID.stream().filter(f -> f.getFluidType() == getLastFluid()).findFirst().orElse(Fluids.WATER);
+        ((IFluidTypeExtension) getLastFluid()).createSplashParticleOnClient(
+                fluid,
+                level,
+                x,
+                y,
+                z,
+                xd,
+                yd,
+                zd
+        );
+    }
+    
     
     /**
      * Make the game emit appropriate swimming sounds and the swim game event if the player is in <i>any</i> fluid that
@@ -201,5 +228,23 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
                         !type.isVanilla() &&
                                 this.fluidInteraction.isInFluid(((IFluidTypeExtension) type).getTag())
                 );
+    }
+    
+    @Redirect(method = "sendBubbleColumnParticles(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;sendParticles(Lnet/minecraft/core/particles/ParticleOptions;DDDIDDDD)I", ordinal = 0))
+    private static int cfa_sendBubbleColumnParticles(ServerLevel level, ParticleOptions particle, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed, @Local(name = "pos", argsOnly = true) BlockPos pos) {
+        FluidState fluidState = level.getFluidState(pos);
+        return ((IFluidTypeExtension) fluidState.getFluidType()).createSplashParticleOnServer(
+                fluidState.getType(),
+                level,
+                x,
+                y,
+                z,
+                count,
+                xDist,
+                yDist,
+                zDist,
+                speed
+        );
     }
 }

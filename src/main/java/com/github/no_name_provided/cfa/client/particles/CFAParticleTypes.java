@@ -20,9 +20,24 @@ public class CFAParticleTypes {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
             DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     
-    @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the compiler to properly parse the "this"
+    @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the IDE to properly parse the "this"
     public static final DeferredHolder<ParticleType<?>, ParticleType<ColorParticleOption>> TINTED_SPLASH_PARTICLE = PARTICLE_TYPES.register(
             "tinted_splash_particle",
+            () -> new ParticleType<ColorParticleOption>(false) {
+                @Override
+                public @NonNull MapCodec<ColorParticleOption> codec() {
+                    return ColorParticleOption.codec(this);
+                }
+                
+                @Override
+                public @NonNull StreamCodec<? super RegistryFriendlyByteBuf, ColorParticleOption> streamCodec() {
+                    return ColorParticleOption.streamCodec(this);
+                }
+            }
+    );
+    @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the IDE to properly parse the "this"
+    public static final DeferredHolder<ParticleType<?>, ParticleType<ColorParticleOption>> TINTED_WAKE_PARTICLE = PARTICLE_TYPES.register(
+            "tinted_wake_particle",
             () -> new ParticleType<ColorParticleOption>(false) {
                 @Override
                 public @NonNull MapCodec<ColorParticleOption> codec() {

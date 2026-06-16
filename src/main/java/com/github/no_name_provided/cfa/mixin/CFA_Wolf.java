@@ -25,7 +25,15 @@ abstract class CFA_Wolf extends TamableAnimal implements NeutralMob, CFA_IEntity
      */
     @ModifyExpressionValue(method = "tick()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/wolf/Wolf;isInWaterOrRain()Z"))
-    private boolean cfa_tick(boolean original) {
+    private boolean cfa_tick_fixWolfWetting(boolean original) {
         return original || ((IFluidTypeExtension) getLastFluid()).makesWet(getType());
     }
+    
+    // TODO: add an attachment to store the fluid that wet the wolf, so we can use the correct particle color. Low priority.
+//    @Redirect(method = "tick()V",
+//            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
+//    private void cfa_tick_fixWolfShakeParticle(Level instance, ParticleOptions particle, double x, double y, double z, double xd, double yd, double zd) {
+//        Fluid fluid = getData(...
+//        ((IFluidTypeExtension) getLastFluid()).makesWet(getType());
+//    }
 }
