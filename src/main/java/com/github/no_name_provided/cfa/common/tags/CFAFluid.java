@@ -11,7 +11,6 @@ public class CFAFluid {
     // Recommended you don't use this tag, either for labeling or checking
     public static final TagKey<net.minecraft.world.level.material.Fluid> EMPTY = create("empty");
     
-    
     private static TagKey<net.minecraft.world.level.material.Fluid> create(@SuppressWarnings("SameParameterValue") String name) {
         return TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath(MODID, name));
     }

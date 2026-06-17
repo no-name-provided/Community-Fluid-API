@@ -20,6 +20,7 @@
     "CFA_Camel",
     "CFA_ConduitBlockEntity",
     "CFA_Croak",
+    "CFA_Dolphin",
     "CFA_DolphinJumpGoal",
     "CFA_Drowned",
     "CFA_Drowned$DrownedGoToBeachGoal",
@@ -34,6 +35,7 @@
     "CFA_FluidStack",
     "CFA_FluidType",
     "CFA_FlyingPathNavigation",
+    "CFA_Fox",
     "CFA_Frog",
     "CFA_Frog$FrogNodeEvaluator",
     "CFA_GoalUtils",
@@ -83,7 +85,8 @@
     "CFA_WaterAvoidingRandomStrollGoal",
     "CFA_WaterBoundPathNavigation",
     "CFA_Wolf",
-    "CFA_Zombie"
+    "CFA_Zombie",
+    "Dolphin$DolphinSwimToTreasureGoal"
   ],
   "client": [
     "CFA_BubbleParticle",
