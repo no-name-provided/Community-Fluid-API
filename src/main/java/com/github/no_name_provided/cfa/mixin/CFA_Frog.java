@@ -17,6 +17,6 @@ abstract class CFA_Frog extends Animal {
     @ModifyExpressionValue(method = "tick()V",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/frog/Frog;isInWater()Z"))
     private boolean cfa_tick(boolean original) {
-        return original || isPushedByFluid(getLastFluid());
+        return original || canSwimInFluidType(getLastFluid());
     }
 }

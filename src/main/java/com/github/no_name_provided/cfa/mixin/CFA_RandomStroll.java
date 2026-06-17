@@ -13,6 +13,17 @@ import java.util.function.Predicate;
 @Mixin(RandomStroll.class)
 abstract class CFA_RandomStroll {
     
+    /**
+     * This one is iffy. I'm not 100% certain I targeted the right lambda. TODO: validate transformed source file
+     */
+    @ModifyArg(method = "stroll(FZ)Lnet/minecraft/world/entity/ai/behavior/OneShot;",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/behavior/RandomStroll;strollFlyOrSwim(FLjava/util/function/Function;Ljava/util/function/Predicate;)Lnet/minecraft/world/entity/ai/behavior/OneShot;"),
+            index = 2)
+    private static Predicate<PathfinderMob> cfa_stroll_fromWater(Predicate<PathfinderMob> canRun) {
+        // Vanilla checks to see if the mob isn't in water...
+        return mob -> mob.getLastFluid().isAir();
+    }
+    
     @ModifyArg(method = "swim(F)Lnet/minecraft/world/entity/ai/behavior/BehaviorControl;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/behavior/RandomStroll;strollFlyOrSwim(FLjava/util/function/Function;Ljava/util/function/Predicate;)Lnet/minecraft/world/entity/ai/behavior/OneShot;"),
             index = 2)

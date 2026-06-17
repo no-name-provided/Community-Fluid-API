@@ -93,10 +93,22 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
         super(type, level);
     }
     
-    // Allow our fluids to consistently affect entities
+    /**
+     * Used to determine whether impulse context should be reset. Might have contributed to our issues with lingering
+     * fall damage while in fluids that should prevent it.
+     */
+    @ModifyExpressionValue(method = "hasLandedInLiquid()Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isInLiquid()Z"))
+    private boolean cfa_hasLandedInLiquid(boolean original) {
+        return original || !getLastFluid().isAir();
+    }
+    
+    /**
+     * Allow our fluids to consistently affect entities
+     */
     @ModifyReturnValue(method = "shouldTravelInFluid(Lnet/minecraft/world/level/material/FluidState;)Z",
             at = @At("RETURN"))
-    private boolean Fun_Fluids_shouldTravelInFluid(boolean original, FluidState fluidState) {
+    private boolean cfa_shouldTravelInFluid(boolean original, FluidState fluidState) {
         LivingEntity entity = (LivingEntity) (Object) this;
         return original | (!fluidState.isEmpty() && entity.isAffectedByFluids() && !entity.canStandOnFluid(fluidState));
     }
@@ -137,12 +149,16 @@ abstract class CFA_LivingEntity extends Entity implements Attackable, WaypointTr
             double baseGravity = this.getEffectiveGravity();
             
             // HANDLE FALL DAMAGE REDUCTION ----------------------------
-            // Vanilla handles this in Entity#baseTick (lava) and Entity#move (water). We initially tried to handle
-            // it here.However, upstream mixins have consistently failed to have any effect, perhaps because they
-            // don't account for impulse. Instead, we target
+            // Vanilla handles this in Entity#baseTick (lava) and both Entity#move and entity#updateFluidInteraction
+            //  (water). We initially tried to handle it here.However, upstream mixins have consistently failed to
+            // have any effect, perhaps because they don't account for impulse. Instead, we target
             // net.minecraft.world.entity.LivingEntity#causeFallDamage... which already has a Neo event injected.
             // So we just use that event and accept a bit of inneficiency.
+            //
+            // This fixes many problems, but still allows fall damage to "accumulate" while entities bob on a fluid's
+            // surface... so we re-add the fall distance reduction here. That fixes that problem.
             // ---------------------------------------------------------
+            fallDistance *= getLastFluid().getFallDistanceModifier(this);
             
             // Conditional has side effects. Returns true if vanilla logic should be skipped
             if (!entity.moveInFluid(fluidState, input, getEffectiveGravity())) {
