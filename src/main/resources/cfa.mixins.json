@@ -22,6 +22,7 @@
     "CFA_ConduitBlockEntity",
     "CFA_Croak",
     "CFA_Dolphin",
+    "CFA_Dolphin$DolphinSwimToTreasureGoal",
     "CFA_DolphinJumpGoal",
     "CFA_Drowned",
     "CFA_Drowned$DrownedGoToBeachGoal",
@@ -88,8 +89,7 @@
     "CFA_WaterAvoidingRandomStrollGoal",
     "CFA_WaterBoundPathNavigation",
     "CFA_Wolf",
-    "CFA_Zombie",
-    "Dolphin$DolphinSwimToTreasureGoal"
+    "CFA_Zombie"
   ],
   "client": [
     "CFA_BubbleParticle",
@@ -100,6 +100,7 @@
     "CFA_Minecraft",
     "CFA_RidingEntitySoundInstance",
     "CFA_RidingMinecartSoundInstance",
+    "CFA_ScreenEffectRenderer",
     "CFA_UnderwaterAmbientSoundHandler",
     "CFA_UnderwaterAmbientSoundInstances$SubSound",
     "CFA_UnderwaterAmbientSoundInstances$UnderwaterAmbientSoundInstance"

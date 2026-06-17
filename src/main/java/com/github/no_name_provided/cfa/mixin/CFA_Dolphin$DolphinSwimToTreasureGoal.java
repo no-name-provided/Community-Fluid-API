@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(targets = "net.minecraft.world.entity.animal.dolphin.Dolphin$DolphinSwimToTreasureGoal")
-abstract class Dolphin$DolphinSwimToTreasureGoal extends Goal {
+abstract class CFA_Dolphin$DolphinSwimToTreasureGoal extends Goal {
     @Shadow @Final
     private Dolphin dolphin;
     
