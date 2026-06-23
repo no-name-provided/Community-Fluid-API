@@ -53,6 +53,7 @@
     "CFA_Mob",
     "CFA_MoveControl",
     "CFA_Nautilus",
+    "CFA_NautilusAI",
     "CFA_NewMinecartBehavior",
     "CFA_OldMinecartBehavior",
     "CFA_PanicGoal",
@@ -103,7 +104,8 @@
     "CFA_ScreenEffectRenderer",
     "CFA_UnderwaterAmbientSoundHandler",
     "CFA_UnderwaterAmbientSoundInstances$SubSound",
-    "CFA_UnderwaterAmbientSoundInstances$UnderwaterAmbientSoundInstance"
+    "CFA_UnderwaterAmbientSoundInstances$UnderwaterAmbientSoundInstance",
+    "CFA_WeatherEffectRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
