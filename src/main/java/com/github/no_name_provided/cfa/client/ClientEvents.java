@@ -15,7 +15,9 @@ public class ClientEvents {
     
     @SubscribeEvent
     private static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(), TintedSplashParticle.Provider::new);
-        event.registerSpriteSet(CFAParticleTypes.TINTED_WAKE_PARTICLE.get(), TintedWakeParticle.Provider::new);
+        event.registerSpriteSet(CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(), TintedSplashParticle.ArbitraryTintProvider::new);
+        event.registerSpriteSet(CFAParticleTypes.TINTED_SPLASH_PARTICLE_FROM_FLUID.get(), TintedSplashParticle.TintFromFluidProvider::new);
+        event.registerSpriteSet(CFAParticleTypes.TINTED_WAKE_PARTICLE.get(), TintedWakeParticle.ArbitraryTintProvider::new);
+        event.registerSpriteSet(CFAParticleTypes.TINTED_WAKE_PARTICLE_FROM_FLUID.get(), TintedWakeParticle.TintFromFluidProvider::new);
     }
 }

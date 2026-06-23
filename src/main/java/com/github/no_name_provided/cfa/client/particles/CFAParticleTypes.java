@@ -1,5 +1,6 @@
 package com.github.no_name_provided.cfa.client.particles;
 
+import com.github.no_name_provided.cfa.client.particles.options.FluidParticleOption;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleType;
@@ -36,6 +37,21 @@ public class CFAParticleTypes {
             }
     );
     @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the IDE to properly parse the "this"
+    public static final DeferredHolder<ParticleType<?>, ParticleType<FluidParticleOption>> TINTED_SPLASH_PARTICLE_FROM_FLUID = PARTICLE_TYPES.register(
+            "tinted_splash_particle_from_fluid",
+            () -> new ParticleType<FluidParticleOption>(false) {
+                @Override
+                public @NonNull MapCodec<FluidParticleOption> codec() {
+                    return FluidParticleOption.codec(this);
+                }
+                
+                @Override
+                public @NonNull StreamCodec<? super RegistryFriendlyByteBuf, FluidParticleOption> streamCodec() {
+                    return FluidParticleOption.streamCodec(this);
+                }
+            }
+    );
+    @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the IDE to properly parse the "this"
     public static final DeferredHolder<ParticleType<?>, ParticleType<ColorParticleOption>> TINTED_WAKE_PARTICLE = PARTICLE_TYPES.register(
             "tinted_wake_particle",
             () -> new ParticleType<ColorParticleOption>(false) {
@@ -47,6 +63,21 @@ public class CFAParticleTypes {
                 @Override
                 public @NonNull StreamCodec<? super RegistryFriendlyByteBuf, ColorParticleOption> streamCodec() {
                     return ColorParticleOption.streamCodec(this);
+                }
+            }
+    );
+    @SuppressWarnings("Convert2Diamond") // We actually need explicit typing for the IDE to properly parse the "this"
+    public static final DeferredHolder<ParticleType<?>, ParticleType<FluidParticleOption>> TINTED_WAKE_PARTICLE_FROM_FLUID = PARTICLE_TYPES.register(
+            "tinted_wake_particle_from_fluid",
+            () -> new ParticleType<FluidParticleOption>(false) {
+                @Override
+                public @NonNull MapCodec<FluidParticleOption> codec() {
+                    return FluidParticleOption.codec(this);
+                }
+                
+                @Override
+                public @NonNull StreamCodec<? super RegistryFriendlyByteBuf, FluidParticleOption> streamCodec() {
+                    return FluidParticleOption.streamCodec(this);
                 }
             }
     );

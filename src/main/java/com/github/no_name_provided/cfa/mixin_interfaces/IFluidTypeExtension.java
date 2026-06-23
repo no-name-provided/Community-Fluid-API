@@ -1,6 +1,7 @@
 package com.github.no_name_provided.cfa.mixin_interfaces;
 
 import com.github.no_name_provided.cfa.client.particles.CFAParticleTypes;
+import com.github.no_name_provided.cfa.client.particles.options.FluidParticleOption;
 import com.github.no_name_provided.cfa.common.ClientWrappers;
 import com.github.no_name_provided.cfa.common.tags.CFAFluid;
 import com.mojang.logging.LogUtils;
@@ -141,21 +142,24 @@ public interface IFluidTypeExtension {
      * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the client.
      */
     default void createSplashParticleOnClient(Fluid fluid, Level level, double x, double y, double z, double xAux, double yAux, double zAux) {
-        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
-        if (tint.isPresent()) {
-            level.addParticle(
-                    ColorParticleOption.create(
-                            CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(),
-                            tint.get()
-                    ), x,
-                    y,
-                    z,
-                    xAux,
-                    yAux,
-                    zAux
-            );
-        } else {
-            level.addParticle(ParticleTypes.SPLASH, x, y, z, xAux, yAux, zAux);
+        // ServerLevel no ops on this, so that's what we do here
+        if (level.isClientSide()) {
+            Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
+            if (tint.isPresent()) {
+                level.addParticle(
+                        ColorParticleOption.create(
+                                CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(),
+                                tint.get()
+                        ), x,
+                        y,
+                        z,
+                        xAux,
+                        yAux,
+                        zAux
+                );
+            } else {
+                level.addParticle(ParticleTypes.SPLASH, x, y, z, xAux, yAux, zAux);
+            }
         }
     }
     
@@ -163,12 +167,12 @@ public interface IFluidTypeExtension {
      * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the server side.
      */
     default int createSplashParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
-        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
-        if (tint.isPresent() && !fluid.getFluidType().isVanilla()) {
+        if (!fluid.getFluidType().isVanilla()) {
             return level.sendParticles(
-                    ColorParticleOption.create(
-                            CFAParticleTypes.TINTED_SPLASH_PARTICLE.get(),
-                            tint.get()
+                    // The server can't look up the tint, so we send the fluid instead
+                    new FluidParticleOption(
+                            CFAParticleTypes.TINTED_SPLASH_PARTICLE_FROM_FLUID.get(),
+                            fluid
                     ), x,
                     y,
                     z,
@@ -187,12 +191,11 @@ public interface IFluidTypeExtension {
      * Create the particle we use for wake effects (fish approaching fishing bob) on the server side.
      */
     default int createWakeParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
-        Optional<Integer> tint = ClientWrappers.getFluidTint(fluid);
-        if (tint.isPresent() && !fluid.getFluidType().isVanilla()) {
+        if (!fluid.getFluidType().isVanilla()) {
             return level.sendParticles(
-                    ColorParticleOption.create(
-                            CFAParticleTypes.TINTED_WAKE_PARTICLE.get(),
-                            tint.get()
+                    new FluidParticleOption(
+                            CFAParticleTypes.TINTED_WAKE_PARTICLE_FROM_FLUID.get(),
+                            fluid
                     ), x,
                     y,
                     z,

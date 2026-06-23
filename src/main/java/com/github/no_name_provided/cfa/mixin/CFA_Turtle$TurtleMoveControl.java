@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(targets = "net.minecraft.world.entity.animal.turtle.Turtle.TurtleMoveControl")
+@Mixin(targets = "net.minecraft.world.entity.animal.turtle.Turtle$TurtleMoveControl")
 abstract class CFA_Turtle$TurtleMoveControl extends MoveControl {
     
     @Shadow @Final

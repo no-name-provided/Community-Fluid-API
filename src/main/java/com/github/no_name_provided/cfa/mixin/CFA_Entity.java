@@ -141,7 +141,7 @@ abstract class CFA_Entity implements CFA_IEntityExtension {
     }
     
     /**
-     * Despite its name, this  method is actually used to determine whether a speed debuff should be applied to players.
+     * Despite its name, this method is actually used to determine whether a speed debuff should be applied to players.
      * Without this mixin, swimsprinting players will experience a speed debuff almost exactly equal to the speed buff
      * they get for "sprinting" underwater.
      *
