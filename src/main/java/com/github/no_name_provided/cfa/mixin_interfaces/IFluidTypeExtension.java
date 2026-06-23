@@ -139,7 +139,8 @@ public interface IFluidTypeExtension {
     }
     
     /**
-     * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the client.
+     * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the client. May be called from
+     * common code. Typically no-ops on server threads.
      */
     default void createSplashParticleOnClient(Fluid fluid, Level level, double x, double y, double z, double xAux, double yAux, double zAux) {
         // ServerLevel no ops on this, so that's what we do here
@@ -164,7 +165,7 @@ public interface IFluidTypeExtension {
     }
     
     /**
-     * Create the particle we use for splash effects (wolf shake, water entry, etc.) on the server side.
+     * Create the particle we use for splash effects (wolf shake, water entry, etc.) from the server side.
      */
     default int createSplashParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
         if (!fluid.getFluidType().isVanilla()) {
@@ -188,7 +189,7 @@ public interface IFluidTypeExtension {
     }
     
     /**
-     * Create the particle we use for wake effects (fish approaching fishing bob) on the server side.
+     * Create the particle we use for wake effects (fish approaching fishing bob) from the server side.
      */
     default int createWakeParticleOnServer(Fluid fluid, ServerLevel level, double x, double y, double z, int count, double xDist, double yDist, double zDist, double speed) {
         if (!fluid.getFluidType().isVanilla()) {

@@ -8,6 +8,8 @@ import java.util.Optional;
 
 /**
  * This code exists to allow common code to reference client classes in conditional code without actually loading them.
+ * No method in this class should actually be called on a dedicated server, but they can be referenced in classes loaded
+ * on dedicated servers.
  */
 public class ClientWrappers {
     /**

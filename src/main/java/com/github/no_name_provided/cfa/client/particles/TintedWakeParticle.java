@@ -8,8 +8,9 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.WakeParticle;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import org.jspecify.annotations.Nullable;
 
@@ -61,7 +62,8 @@ public class TintedWakeParticle extends WakeParticle {
                     this.sprites,
                     ColorParticleOption.create(
                             CFAParticleTypes.TINTED_WAKE_PARTICLE.get(),
-                            ClientWrappers.getFluidTint(options.getFluid()).orElse(ARGB.color(255, 0))
+                            // We default to the vanilla water color calcs here if no tint was provided
+                            ClientWrappers.getFluidTint(options.getFluid()).orElse(level.getBlockTint(BlockPos.containing(x, y, z), BiomeColors.WATER_COLOR_RESOLVER))
                     )
             );
         }

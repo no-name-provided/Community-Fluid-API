@@ -43,7 +43,7 @@ abstract class CFA_FishingHook extends Projectile {
         // This should never be null, because fluids are checked beforehand, but the check is cheap and modders mess up
         ResourceKey<LootTable> key = ((IFluidTypeExtension) hook.getInBlockState().getFluidState().getFluidType()).getFishingLootTableKey(level(), blockPosition());
         if (key == null) {
-            Logger.getLogger(MODID).warning("Missing loot table key for fluid. Defaulting to BuiltInLootTables.FISHING.");
+            Logger.getLogger(MODID).warning("Fluid [" + getInBlockState().getFluidState().getFluidType() + "] is missing loot table key for fluid. Defaulting to BuiltInLootTables.FISHING.");
             return BuiltInLootTables.FISHING;
         } else {
             return key;
