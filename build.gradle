@@ -34,7 +34,8 @@ repositories {
         name = "jitpack.io"
         url = "https://jitpack.io"
         content {
-            includeGroup "com.github.no-name-provided" }
+            includeGroup "com.github.no-name-provided"
+        }
     }
 }
 
@@ -42,7 +43,19 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+javadoc {
+    options {
+        tags = ["reason:a:\"Justification\""]
+    }
+}
 
 neoForge {
     // Specify the version of NeoForge to use.
